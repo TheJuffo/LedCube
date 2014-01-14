@@ -49,6 +49,7 @@ x64/
 build/
 [Bb]in/
 [Oo]bj/
+.[Dd]ep/
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -77,6 +78,12 @@ build/
 *.pidb
 *.log
 *.scc
+*.zip
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
+
 
 # Visual C++ cache files
 ipch/
