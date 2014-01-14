@@ -62,7 +62,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = $(TARGET).c command_line.c debug.c draw.c effect.c font.c gameoflife.c launch_effect.c  uart.c util.c
+SRC = $(TARGET).c command_line.c debug.c draw.c effect.c font.c gameoflife.c launch_effect.c music.c uart.c util.c
 
 
 # List Assembler source files here.
