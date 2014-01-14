@@ -1,0 +1,135 @@
+   1               		.file	"debug.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               	.global	InitDebug
+  18               	InitDebug:
+  19               	.LFB2:
+  20               	.LM1:
+  21               	/* prologue: function */
+  22               	/* frame size = 0 */
+  23               	.LM2:
+  24 0000 81E0      		ldi r24,lo8(1)
+  25 0002 8093 0000 		sts debug_active,r24
+  26               	.LM3:
+  27 0006 8093 0000 		sts last_debug_mode,r24
+  28               	/* epilogue start */
+  29               	.LM4:
+  30 000a 0895      		ret
+  31               	.LFE2:
+  33               	.global	ChangeDebugMode
+  35               	ChangeDebugMode:
+  36               	.LFB3:
+  37               	.LM5:
+  38               	/* prologue: function */
+  39               	/* frame size = 0 */
+  40               	.LM6:
+  41 000c 8091 0000 		lds r24,debug_mode
+  42 0010 90E0      		ldi r25,lo8(0)
+  43 0012 0196      		adiw r24,1
+  44 0014 8370      		andi r24,lo8(3)
+  45 0016 9070      		andi r25,hi8(3)
+  46 0018 8093 0000 		sts debug_mode,r24
+  47               	/* epilogue start */
+  48               	.LM7:
+  49 001c 0895      		ret
+  50               	.LFE3:
+  52               	.global	DebugTick
+  54               	DebugTick:
+  55               	.LFB4:
+  56               	.LM8:
+  57               	/* prologue: function */
+  58               	/* frame size = 0 */
+  59               	.LM9:
+  60 001e 9091 0000 		lds r25,debug_mode
+  61 0022 8091 0000 		lds r24,last_debug_mode
+  62 0026 9817      		cp r25,r24
+  63 0028 01F0      		breq .L6
+  64               	.LM10:
+  65 002a 1092 0000 		sts debug_active,__zero_reg__
+  66               	.LM11:
+  67 002e 8091 0000 		lds r24,debug_mode
+  68 0032 8093 0000 		sts last_debug_mode,r24
+  69               	.LM12:
+  70 0036 80ED      		ldi r24,lo8(-48)
+  71 0038 8093 0000 		sts debug_mode_counter,r24
+  72               	.L6:
+  73               	.LM13:
+  74 003c 8091 0000 		lds r24,debug_active
+  75 0040 8823      		tst r24
+  76 0042 01F4      		brne .L8
+  77               	.LM14:
+  78 0044 8091 0000 		lds r24,debug_mode_counter
+  79 0048 8150      		subi r24,lo8(-(-1))
+  80 004a 8093 0000 		sts debug_mode_counter,r24
+  81               	.LM15:
+  82 004e 8091 0000 		lds r24,debug_mode_counter
+  83 0052 8823      		tst r24
+  84 0054 01F4      		brne .L8
+  85               	.LM16:
+  86 0056 81E0      		ldi r24,lo8(1)
+  87 0058 8093 0000 		sts debug_active,r24
+  88               	.L8:
+  89 005c 0895      		ret
+  90               	.LFE4:
+  92               	.global	DebugBlink
+  94               	DebugBlink:
+  95               	.LFB6:
+  96               	.LM17:
+  97               	.LVL0:
+  98               	/* prologue: function */
+  99               	/* frame size = 0 */
+ 100               	/* epilogue start */
+ 101               	.LM18:
+ 102 005e 0895      		ret
+ 103               	.LFE6:
+ 105               	.global	SendDebugInfo
+ 107               	SendDebugInfo:
+ 108               	.LFB5:
+ 109               	.LM19:
+ 110               	.LVL1:
+ 111               	/* prologue: function */
+ 112               	/* frame size = 0 */
+ 113               	.LM20:
+ 114 0060 0E94 0000 		call SendString
+ 115               	.LVL2:
+ 116               	/* epilogue start */
+ 117               	.LM21:
+ 118 0064 0895      		ret
+ 119               	.LFE5:
+ 121               		.comm debug_mode,1,1
+ 122               		.comm debug_active,1,1
+ 123               		.comm last_debug_mode,1,1
+ 124               		.comm debug_mode_counter,1,1
+ 125               		.comm RXFifo,140,1
+ 126               		.comm TXFifo,140,1
+ 127               		.comm m_Echo,1,1
+ 184               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 debug.c
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:2      *ABS*:0000003f __SREG__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:5      *ABS*:00000034 __CCP__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:18     .text:00000000 InitDebug
+                            *COM*:00000001 debug_active
+                            *COM*:00000001 last_debug_mode
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:35     .text:0000000c ChangeDebugMode
+                            *COM*:00000001 debug_mode
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:54     .text:0000001e DebugTick
+                            *COM*:00000001 debug_mode_counter
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:94     .text:0000005e DebugBlink
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:107    .text:00000060 SendDebugInfo
+                            *COM*:0000008c RXFifo
+                            *COM*:0000008c TXFifo
+                            *COM*:00000001 m_Echo
+
+UNDEFINED SYMBOLS
+SendString
+__do_clear_bss

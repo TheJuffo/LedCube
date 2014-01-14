@@ -1,0 +1,1049 @@
+   1               		.file	"launch_effect.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+  15               	.Ltext0:
+  16               		.data
+  17               	.LC0:
+  18 0000 5447 00   		.string	"TG"
+  19               		.text
+  20               	.global	launch_effect
+  22               	launch_effect:
+  23               	.LFB2:
+  24               	.LM1:
+  25               	.LVL0:
+  26 0000 EF92      		push r14
+  27 0002 FF92      		push r15
+  28 0004 0F93      		push r16
+  29 0006 1F93      		push r17
+  30 0008 CF93      		push r28
+  31 000a DF93      		push r29
+  32               	/* prologue: function */
+  33               	/* frame size = 0 */
+  34 000c 182F      		mov r17,r24
+  35 000e 092F      		mov r16,r25
+  36               	.LVL1:
+  37               	.LM2:
+  38 0010 80E0      		ldi r24,lo8(0)
+  39               	.LVL2:
+  40 0012 0E94 0000 		call fill
+  41               	.LVL3:
+  42               	.LM3:
+  43 0016 E12F      		mov r30,r17
+  44 0018 F02F      		mov r31,r16
+  45 001a EB31      		cpi r30,27
+  46 001c F105      		cpc r31,__zero_reg__
+  47 001e 00F0      		brlo .+2
+  48 0020 00C0      		rjmp .L2
+  49               	.LVL4:
+  50 0022 E050      		subi r30,lo8(-(gs(.L30)))
+  51 0024 F040      		sbci r31,hi8(-(gs(.L30)))
+  52               	.LVL5:
+  53 0026 EE0F      		lsl r30
+  54 0028 FF1F      		rol r31
+  55 002a 0590      		lpm __tmp_reg__,Z+
+  56 002c F491      		lpm r31,Z
+  57 002e E02D      		mov r30,__tmp_reg__
+  58 0030 0994      		ijmp
+  59               	.LVL6:
+  60               		.data
+  61               		.section .progmem.gcc_sw_table, "a", @progbits
+  62               		.p2align 1
+  63               	.L30:
+  64               		.data
+  65               		.section .progmem.gcc_sw_table, "a", @progbits
+  66               		.p2align 1
+  67 0000 0000      		.word gs(.L3)
+  68 0002 0000      		.word gs(.L4)
+  69 0004 0000      		.word gs(.L5)
+  70 0006 0000      		.word gs(.L6)
+  71 0008 0000      		.word gs(.L7)
+  72 000a 0000      		.word gs(.L8)
+  73 000c 0000      		.word gs(.L9)
+  74 000e 0000      		.word gs(.L10)
+  75 0010 0000      		.word gs(.L11)
+  76 0012 0000      		.word gs(.L12)
+  77 0014 0000      		.word gs(.L13)
+  78 0016 0000      		.word gs(.L14)
+  79 0018 0000      		.word gs(.L15)
+  80 001a 0000      		.word gs(.L16)
+  81 001c 0000      		.word gs(.L17)
+  82 001e 0000      		.word gs(.L18)
+  83 0020 0000      		.word gs(.L19)
+  84 0022 0000      		.word gs(.L20)
+  85 0024 0000      		.word gs(.L21)
+  86 0026 0000      		.word gs(.L22)
+  87 0028 0000      		.word gs(.L23)
+  88 002a 0000      		.word gs(.L24)
+  89 002c 0000      		.word gs(.L25)
+  90 002e 0000      		.word gs(.L26)
+  91 0030 0000      		.word gs(.L27)
+  92 0032 0000      		.word gs(.L28)
+  93 0034 0000      		.word gs(.L29)
+  94               		.text
+  95               	.L3:
+  96               	.LM4:
+  97 0032 80E0      		ldi r24,lo8(__c.1696)
+  98 0034 90E0      		ldi r25,hi8(__c.1696)
+  99 0036 61E0      		ldi r22,lo8(1)
+ 100 0038 0E94 0000 		call SendDebugInfo
+ 101               	.LVL7:
+ 102               	.LM5:
+ 103 003c 84E6      		ldi r24,lo8(100)
+ 104 003e 90E0      		ldi r25,hi8(100)
+ 105 0040 0E94 0000 		call effect_rain
+ 106 0044 00C0      		rjmp .L34
+ 107               	.LVL8:
+ 108               	.L4:
+ 109               	.LM6:
+ 110 0046 80E0      		ldi r24,lo8(__c.1700)
+ 111 0048 90E0      		ldi r25,hi8(__c.1700)
+ 112 004a 61E0      		ldi r22,lo8(1)
+ 113 004c 0E94 0000 		call SendDebugInfo
+ 114               	.LVL9:
+ 115               	.LM7:
+ 116 0050 84E1      		ldi r24,lo8(20)
+ 117 0052 90E0      		ldi r25,hi8(20)
+ 118 0054 6CED      		ldi r22,lo8(220)
+ 119 0056 70E0      		ldi r23,hi8(220)
+ 120 0058 40ED      		ldi r20,lo8(2000)
+ 121 005a 57E0      		ldi r21,hi8(2000)
+ 122 005c 0E94 0000 		call sendvoxels_rand_z
+ 123 0060 00C0      		rjmp .L34
+ 124               	.LVL10:
+ 125               	.L5:
+ 126               	.LM8:
+ 127 0062 80E0      		ldi r24,lo8(__c.1703)
+ 128 0064 90E0      		ldi r25,hi8(__c.1703)
+ 129 0066 61E0      		ldi r22,lo8(1)
+ 130 0068 0E94 0000 		call SendDebugInfo
+ 131               	.LVL11:
+ 132               	.LM9:
+ 133 006c 85E0      		ldi r24,lo8(5)
+ 134 006e 90E0      		ldi r25,hi8(5)
+ 135 0070 61E0      		ldi r22,lo8(1)
+ 136 0072 70E0      		ldi r23,hi8(1)
+ 137 0074 0E94 0000 		call effect_random_filler
+ 138               	.LM10:
+ 139 0078 85E0      		ldi r24,lo8(5)
+ 140 007a 90E0      		ldi r25,hi8(5)
+ 141 007c 60E0      		ldi r22,lo8(0)
+ 142 007e 70E0      		ldi r23,hi8(0)
+ 143 0080 0E94 0000 		call effect_random_filler
+ 144               	.LM11:
+ 145 0084 85E0      		ldi r24,lo8(5)
+ 146 0086 90E0      		ldi r25,hi8(5)
+ 147 0088 61E0      		ldi r22,lo8(1)
+ 148 008a 70E0      		ldi r23,hi8(1)
+ 149 008c 0E94 0000 		call effect_random_filler
+ 150               	.LM12:
+ 151 0090 85E0      		ldi r24,lo8(5)
+ 152 0092 90E0      		ldi r25,hi8(5)
+ 153 0094 60E0      		ldi r22,lo8(0)
+ 154 0096 70E0      		ldi r23,hi8(0)
+ 155 0098 0E94 0000 		call effect_random_filler
+ 156 009c 00C0      		rjmp .L34
+ 157               	.LVL12:
+ 158               	.L6:
+ 159               	.LM13:
+ 160 009e 80E0      		ldi r24,lo8(__c.1706)
+ 161 00a0 90E0      		ldi r25,hi8(__c.1706)
+ 162 00a2 61E0      		ldi r22,lo8(1)
+ 163 00a4 0E94 0000 		call SendDebugInfo
+ 164               	.LVL13:
+ 165               	.LM14:
+ 166 00a8 84E1      		ldi r24,lo8(20)
+ 167 00aa 90E0      		ldi r25,hi8(20)
+ 168 00ac 68EE      		ldi r22,lo8(1000)
+ 169 00ae 73E0      		ldi r23,hi8(1000)
+ 170 00b0 0E94 0000 		call effect_z_updown
+ 171 00b4 00C0      		rjmp .L34
+ 172               	.LVL14:
+ 173               	.L7:
+ 174               	.LM15:
+ 175 00b6 80E0      		ldi r24,lo8(__c.1709)
+ 176 00b8 90E0      		ldi r25,hi8(__c.1709)
+ 177 00ba 61E0      		ldi r22,lo8(1)
+ 178 00bc 0E94 0000 		call SendDebugInfo
+ 179               	.LVL15:
+ 180               	.LM16:
+ 181 00c0 82E0      		ldi r24,lo8(2)
+ 182 00c2 90E0      		ldi r25,hi8(2)
+ 183 00c4 00C0      		rjmp .L37
+ 184               	.LVL16:
+ 185               	.L8:
+ 186               	.LM17:
+ 187 00c6 80E0      		ldi r24,lo8(__c.1712)
+ 188 00c8 90E0      		ldi r25,hi8(__c.1712)
+ 189 00ca 61E0      		ldi r22,lo8(1)
+ 190 00cc 0E94 0000 		call SendDebugInfo
+ 191               	.LVL17:
+ 192               	.LM18:
+ 193 00d0 0E94 0000 		call effect_blinky2
+ 194 00d4 00C0      		rjmp .L34
+ 195               	.LVL18:
+ 196               	.L9:
+ 197               	.LM19:
+ 198 00d6 80E0      		ldi r24,lo8(__c.1715)
+ 199 00d8 90E0      		ldi r25,hi8(__c.1715)
+ 200 00da 61E0      		ldi r22,lo8(1)
+ 201 00dc 0E94 0000 		call SendDebugInfo
+ 202               	.LVL19:
+ 203 00e0 00E0      		ldi r16,lo8(0)
+ 204 00e2 10E0      		ldi r17,hi8(0)
+ 205               	.LVL20:
+ 206               	.L32:
+ 207               	.LM20:
+ 208 00e4 B801      		movw r22,r16
+ 209 00e6 6370      		andi r22,lo8(3)
+ 210 00e8 7070      		andi r23,hi8(3)
+ 211 00ea A801      		movw r20,r16
+ 212 00ec 4470      		andi r20,lo8(4)
+ 213 00ee 5070      		andi r21,hi8(4)
+ 214 00f0 81E0      		ldi r24,lo8(1)
+ 215 00f2 90E0      		ldi r25,hi8(1)
+ 216 00f4 22EC      		ldi r18,lo8(450)
+ 217 00f6 31E0      		ldi r19,hi8(450)
+ 218 00f8 0E94 0000 		call effect_box_shrink_grow
+ 219 00fc 0F5F      		subi r16,lo8(-(1))
+ 220 00fe 1F4F      		sbci r17,hi8(-(1))
+ 221               	.LM21:
+ 222 0100 0830      		cpi r16,8
+ 223 0102 1105      		cpc r17,__zero_reg__
+ 224 0104 01F4      		brne .L32
+ 225               	.LM22:
+ 226 0106 80E2      		ldi r24,lo8(800)
+ 227 0108 93E0      		ldi r25,hi8(800)
+ 228 010a 60E0      		ldi r22,lo8(0)
+ 229 010c 70E0      		ldi r23,hi8(0)
+ 230 010e 0E94 0000 		call effect_box_woopwoop
+ 231               	.LM23:
+ 232 0112 80E2      		ldi r24,lo8(800)
+ 233 0114 93E0      		ldi r25,hi8(800)
+ 234 0116 61E0      		ldi r22,lo8(1)
+ 235 0118 70E0      		ldi r23,hi8(1)
+ 236 011a 0E94 0000 		call effect_box_woopwoop
+ 237               	.LM24:
+ 238 011e 80E2      		ldi r24,lo8(800)
+ 239 0120 93E0      		ldi r25,hi8(800)
+ 240 0122 60E0      		ldi r22,lo8(0)
+ 241 0124 70E0      		ldi r23,hi8(0)
+ 242 0126 0E94 0000 		call effect_box_woopwoop
+ 243               	.LM25:
+ 244 012a 80E2      		ldi r24,lo8(800)
+ 245 012c 93E0      		ldi r25,hi8(800)
+ 246 012e 61E0      		ldi r22,lo8(1)
+ 247 0130 70E0      		ldi r23,hi8(1)
+ 248 0132 0E94 0000 		call effect_box_woopwoop
+ 249 0136 00C0      		rjmp .L34
+ 250               	.LVL21:
+ 251               	.L10:
+ 252               	.LM26:
+ 253 0138 80E0      		ldi r24,lo8(__c.1721)
+ 254 013a 90E0      		ldi r25,hi8(__c.1721)
+ 255 013c 61E0      		ldi r22,lo8(1)
+ 256 013e 0E94 0000 		call SendDebugInfo
+ 257               	.LVL22:
+ 258               	.LM27:
+ 259 0142 8AE7      		ldi r24,lo8(122)
+ 260 0144 90E0      		ldi r25,hi8(122)
+ 261 0146 60E9      		ldi r22,lo8(400)
+ 262 0148 71E0      		ldi r23,hi8(400)
+ 263 014a 0E94 0000 		call effect_planboing
+ 264               	.LM28:
+ 265 014e 88E7      		ldi r24,lo8(120)
+ 266 0150 90E0      		ldi r25,hi8(120)
+ 267 0152 60E9      		ldi r22,lo8(400)
+ 268 0154 71E0      		ldi r23,hi8(400)
+ 269 0156 0E94 0000 		call effect_planboing
+ 270               	.LM29:
+ 271 015a 89E7      		ldi r24,lo8(121)
+ 272 015c 90E0      		ldi r25,hi8(121)
+ 273 015e 60E9      		ldi r22,lo8(400)
+ 274 0160 71E0      		ldi r23,hi8(400)
+ 275 0162 0E94 0000 		call effect_planboing
+ 276               	.LM30:
+ 277 0166 8AE7      		ldi r24,lo8(122)
+ 278 0168 90E0      		ldi r25,hi8(122)
+ 279 016a 60E9      		ldi r22,lo8(400)
+ 280 016c 71E0      		ldi r23,hi8(400)
+ 281 016e 0E94 0000 		call effect_planboing
+ 282               	.LM31:
+ 283 0172 88E7      		ldi r24,lo8(120)
+ 284 0174 90E0      		ldi r25,hi8(120)
+ 285 0176 60E9      		ldi r22,lo8(400)
+ 286 0178 71E0      		ldi r23,hi8(400)
+ 287 017a 0E94 0000 		call effect_planboing
+ 288               	.LM32:
+ 289 017e 89E7      		ldi r24,lo8(121)
+ 290 0180 90E0      		ldi r25,hi8(121)
+ 291 0182 60E9      		ldi r22,lo8(400)
+ 292 0184 71E0      		ldi r23,hi8(400)
+ 293 0186 0E94 0000 		call effect_planboing
+ 294 018a 00C0      		rjmp .L34
+ 295               	.LVL23:
+ 296               	.L11:
+ 297               	.LM33:
+ 298 018c 80E0      		ldi r24,lo8(__c.1724)
+ 299 018e 90E0      		ldi r25,hi8(__c.1724)
+ 300 0190 61E0      		ldi r22,lo8(1)
+ 301 0192 0E94 0000 		call SendDebugInfo
+ 302               	.LVL24:
+ 303               	.LM34:
+ 304 0196 80E0      		ldi r24,lo8(0)
+ 305 0198 90E0      		ldi r25,hi8(0)
+ 306 019a 60E2      		ldi r22,lo8(800)
+ 307 019c 73E0      		ldi r23,hi8(800)
+ 308 019e 4FEF      		ldi r20,lo8(255)
+ 309 01a0 50E0      		ldi r21,hi8(255)
+ 310 01a2 0E94 0000 		call effect_telcstairs
+ 311               	.LM35:
+ 312 01a6 80E0      		ldi r24,lo8(0)
+ 313 01a8 90E0      		ldi r25,hi8(0)
+ 314 01aa 60E2      		ldi r22,lo8(800)
+ 315 01ac 73E0      		ldi r23,hi8(800)
+ 316 01ae 40E0      		ldi r20,lo8(0)
+ 317 01b0 50E0      		ldi r21,hi8(0)
+ 318 01b2 0E94 0000 		call effect_telcstairs
+ 319               	.LM36:
+ 320 01b6 81E0      		ldi r24,lo8(1)
+ 321 01b8 90E0      		ldi r25,hi8(1)
+ 322 01ba 60E2      		ldi r22,lo8(800)
+ 323 01bc 73E0      		ldi r23,hi8(800)
+ 324 01be 4FEF      		ldi r20,lo8(255)
+ 325 01c0 50E0      		ldi r21,hi8(255)
+ 326 01c2 0E94 0000 		call effect_telcstairs
+ 327               	.LM37:
+ 328 01c6 81E0      		ldi r24,lo8(1)
+ 329 01c8 90E0      		ldi r25,hi8(1)
+ 330 01ca 60E2      		ldi r22,lo8(800)
+ 331 01cc 73E0      		ldi r23,hi8(800)
+ 332 01ce 4FEF      		ldi r20,lo8(255)
+ 333 01d0 50E0      		ldi r21,hi8(255)
+ 334 01d2 0E94 0000 		call effect_telcstairs
+ 335 01d6 00C0      		rjmp .L34
+ 336               	.LVL25:
+ 337               	.L12:
+ 338               	.LM38:
+ 339 01d8 80E0      		ldi r24,lo8(__c.1727)
+ 340 01da 90E0      		ldi r25,hi8(__c.1727)
+ 341 01dc 61E0      		ldi r22,lo8(1)
+ 342 01de 0E94 0000 		call SendDebugInfo
+ 343               	.LVL26:
+ 344               	.LM39:
+ 345 01e2 8AE7      		ldi r24,lo8(122)
+ 346 01e4 66E2      		ldi r22,lo8(550)
+ 347 01e6 72E0      		ldi r23,hi8(550)
+ 348 01e8 48E8      		ldi r20,lo8(5000)
+ 349 01ea 53E1      		ldi r21,hi8(5000)
+ 350 01ec 20E0      		ldi r18,lo8(0)
+ 351 01ee 30E0      		ldi r19,hi8(0)
+ 352 01f0 0E94 0000 		call effect_axis_updown_randsuspend
+ 353               	.LM40:
+ 354 01f4 8AE7      		ldi r24,lo8(122)
+ 355 01f6 66E2      		ldi r22,lo8(550)
+ 356 01f8 72E0      		ldi r23,hi8(550)
+ 357 01fa 48E8      		ldi r20,lo8(5000)
+ 358 01fc 53E1      		ldi r21,hi8(5000)
+ 359 01fe 21E0      		ldi r18,lo8(1)
+ 360 0200 30E0      		ldi r19,hi8(1)
+ 361 0202 0E94 0000 		call effect_axis_updown_randsuspend
+ 362               	.LM41:
+ 363 0206 8AE7      		ldi r24,lo8(122)
+ 364 0208 66E2      		ldi r22,lo8(550)
+ 365 020a 72E0      		ldi r23,hi8(550)
+ 366 020c 48E8      		ldi r20,lo8(5000)
+ 367 020e 53E1      		ldi r21,hi8(5000)
+ 368 0210 20E0      		ldi r18,lo8(0)
+ 369 0212 30E0      		ldi r19,hi8(0)
+ 370 0214 0E94 0000 		call effect_axis_updown_randsuspend
+ 371               	.LM42:
+ 372 0218 8AE7      		ldi r24,lo8(122)
+ 373 021a 66E2      		ldi r22,lo8(550)
+ 374 021c 72E0      		ldi r23,hi8(550)
+ 375 021e 48E8      		ldi r20,lo8(5000)
+ 376 0220 53E1      		ldi r21,hi8(5000)
+ 377 0222 21E0      		ldi r18,lo8(1)
+ 378 0224 30E0      		ldi r19,hi8(1)
+ 379 0226 0E94 0000 		call effect_axis_updown_randsuspend
+ 380               	.LM43:
+ 381 022a 88E7      		ldi r24,lo8(120)
+ 382 022c 66E2      		ldi r22,lo8(550)
+ 383 022e 72E0      		ldi r23,hi8(550)
+ 384 0230 48E8      		ldi r20,lo8(5000)
+ 385 0232 53E1      		ldi r21,hi8(5000)
+ 386 0234 20E0      		ldi r18,lo8(0)
+ 387 0236 30E0      		ldi r19,hi8(0)
+ 388 0238 0E94 0000 		call effect_axis_updown_randsuspend
+ 389               	.LM44:
+ 390 023c 88E7      		ldi r24,lo8(120)
+ 391 023e 66E2      		ldi r22,lo8(550)
+ 392 0240 72E0      		ldi r23,hi8(550)
+ 393 0242 48E8      		ldi r20,lo8(5000)
+ 394 0244 53E1      		ldi r21,hi8(5000)
+ 395 0246 21E0      		ldi r18,lo8(1)
+ 396 0248 30E0      		ldi r19,hi8(1)
+ 397 024a 0E94 0000 		call effect_axis_updown_randsuspend
+ 398               	.LM45:
+ 399 024e 89E7      		ldi r24,lo8(121)
+ 400 0250 66E2      		ldi r22,lo8(550)
+ 401 0252 72E0      		ldi r23,hi8(550)
+ 402 0254 48E8      		ldi r20,lo8(5000)
+ 403 0256 53E1      		ldi r21,hi8(5000)
+ 404 0258 20E0      		ldi r18,lo8(0)
+ 405 025a 30E0      		ldi r19,hi8(0)
+ 406 025c 0E94 0000 		call effect_axis_updown_randsuspend
+ 407               	.LM46:
+ 408 0260 89E7      		ldi r24,lo8(121)
+ 409 0262 66E2      		ldi r22,lo8(550)
+ 410 0264 72E0      		ldi r23,hi8(550)
+ 411 0266 48E8      		ldi r20,lo8(5000)
+ 412 0268 53E1      		ldi r21,hi8(5000)
+ 413 026a 21E0      		ldi r18,lo8(1)
+ 414 026c 30E0      		ldi r19,hi8(1)
+ 415 026e 0E94 0000 		call effect_axis_updown_randsuspend
+ 416 0272 00C0      		rjmp .L34
+ 417               	.LVL27:
+ 418               	.L13:
+ 419               	.LM47:
+ 420 0274 80E0      		ldi r24,lo8(__c.1730)
+ 421 0276 90E0      		ldi r25,hi8(__c.1730)
+ 422 0278 61E0      		ldi r22,lo8(1)
+ 423 027a 0E94 0000 		call SendDebugInfo
+ 424               	.LVL28:
+ 425               	.LM48:
+ 426 027e 8CEB      		ldi r24,lo8(700)
+ 427 0280 92E0      		ldi r25,hi8(700)
+ 428 0282 0E94 0000 		call effect_loadbar
+ 429 0286 00C0      		rjmp .L34
+ 430               	.LVL29:
+ 431               	.L14:
+ 432               	.LM49:
+ 433 0288 80E0      		ldi r24,lo8(__c.1733)
+ 434 028a 90E0      		ldi r25,hi8(__c.1733)
+ 435 028c 61E0      		ldi r22,lo8(1)
+ 436 028e 0E94 0000 		call SendDebugInfo
+ 437               	.LVL30:
+ 438               	.LM50:
+ 439 0292 81E0      		ldi r24,lo8(1)
+ 440 0294 90E0      		ldi r25,hi8(1)
+ 441 0296 6AE7      		ldi r22,lo8(122)
+ 442 0298 70E0      		ldi r23,hi8(122)
+ 443 029a 41E0      		ldi r20,lo8(1)
+ 444 029c 50E0      		ldi r21,hi8(1)
+ 445 029e 00C0      		rjmp .L38
+ 446               	.LVL31:
+ 447               	.L15:
+ 448               	.LM51:
+ 449 02a0 80E0      		ldi r24,lo8(__c.1736)
+ 450 02a2 90E0      		ldi r25,hi8(__c.1736)
+ 451 02a4 61E0      		ldi r22,lo8(1)
+ 452 02a6 0E94 0000 		call SendDebugInfo
+ 453               	.LVL32:
+ 454               	.LM52:
+ 455 02aa 80E0      		ldi r24,lo8(__c.1738)
+ 456 02ac 90E0      		ldi r25,hi8(__c.1738)
+ 457 02ae 00C0      		rjmp .L39
+ 458               	.LVL33:
+ 459               	.L16:
+ 460               	.LM53:
+ 461 02b0 80E0      		ldi r24,lo8(__c.1741)
+ 462 02b2 90E0      		ldi r25,hi8(__c.1741)
+ 463 02b4 61E0      		ldi r22,lo8(1)
+ 464 02b6 0E94 0000 		call SendDebugInfo
+ 465               	.LVL34:
+ 466 02ba C0E0      		ldi r28,lo8(0)
+ 467 02bc D0E0      		ldi r29,hi8(0)
+ 468               	.LVL35:
+ 469               	.L33:
+ 470               	.LM54:
+ 471 02be 0E94 0000 		call rand
+ 472 02c2 8C01      		movw r16,r24
+ 473               	.LVL36:
+ 474 02c4 0E94 0000 		call rand
+ 475 02c8 7C01      		movw r14,r24
+ 476 02ca 0E94 0000 		call rand
+ 477 02ce FC01      		movw r30,r24
+ 478 02d0 C801      		movw r24,r16
+ 479 02d2 64E0      		ldi r22,lo8(4)
+ 480 02d4 70E0      		ldi r23,hi8(4)
+ 481 02d6 0E94 0000 		call __divmodhi4
+ 482 02da 8C01      		movw r16,r24
+ 483 02dc C701      		movw r24,r14
+ 484 02de 64E0      		ldi r22,lo8(4)
+ 485 02e0 70E0      		ldi r23,hi8(4)
+ 486 02e2 0E94 0000 		call __divmodhi4
+ 487 02e6 9C01      		movw r18,r24
+ 488 02e8 CF01      		movw r24,r30
+ 489 02ea 64E0      		ldi r22,lo8(4)
+ 490 02ec 70E0      		ldi r23,hi8(4)
+ 491 02ee 0E94 0000 		call __divmodhi4
+ 492 02f2 AC01      		movw r20,r24
+ 493 02f4 C801      		movw r24,r16
+ 494 02f6 B901      		movw r22,r18
+ 495 02f8 0E94 0000 		call setvoxel
+ 496               	.LM55:
+ 497 02fc 2196      		adiw r28,1
+ 498 02fe C431      		cpi r28,20
+ 499 0300 D105      		cpc r29,__zero_reg__
+ 500 0302 01F4      		brne .L33
+ 501               	.LM56:
+ 502 0304 84E1      		ldi r24,lo8(20)
+ 503 0306 90E0      		ldi r25,hi8(20)
+ 504 0308 60E9      		ldi r22,lo8(400)
+ 505 030a 71E0      		ldi r23,hi8(400)
+ 506 030c 0E94 0000 		call gol_play
+ 507 0310 00C0      		rjmp .L34
+ 508               	.LVL37:
+ 509               	.L17:
+ 510               	.LM57:
+ 511 0312 80E0      		ldi r24,lo8(__c.1747)
+ 512 0314 90E0      		ldi r25,hi8(__c.1747)
+ 513 0316 61E0      		ldi r22,lo8(1)
+ 514 0318 0E94 0000 		call SendDebugInfo
+ 515               	.LVL38:
+ 516               	.LM58:
+ 517 031c 8AE7      		ldi r24,lo8(122)
+ 518 031e 60E0      		ldi r22,lo8(0)
+ 519 0320 70E0      		ldi r23,hi8(0)
+ 520 0322 48EC      		ldi r20,lo8(200)
+ 521 0324 50E0      		ldi r21,hi8(200)
+ 522 0326 21E0      		ldi r18,lo8(1)
+ 523 0328 30E0      		ldi r19,hi8(1)
+ 524 032a 0E94 0000 		call effect_boxside_randsend_parallel
+ 525               	.LM59:
+ 526 032e 8CED      		ldi r24,lo8(1500)
+ 527 0330 95E0      		ldi r25,hi8(1500)
+ 528 0332 0E94 0000 		call delay_ms
+ 529               	.LM60:
+ 530 0336 8AE7      		ldi r24,lo8(122)
+ 531 0338 61E0      		ldi r22,lo8(1)
+ 532 033a 70E0      		ldi r23,hi8(1)
+ 533 033c 48EC      		ldi r20,lo8(200)
+ 534 033e 50E0      		ldi r21,hi8(200)
+ 535 0340 21E0      		ldi r18,lo8(1)
+ 536 0342 30E0      		ldi r19,hi8(1)
+ 537 0344 0E94 0000 		call effect_boxside_randsend_parallel
+ 538               	.LM61:
+ 539 0348 8CED      		ldi r24,lo8(1500)
+ 540 034a 95E0      		ldi r25,hi8(1500)
+ 541 034c 0E94 0000 		call delay_ms
+ 542               	.LM62:
+ 543 0350 8AE7      		ldi r24,lo8(122)
+ 544 0352 60E0      		ldi r22,lo8(0)
+ 545 0354 70E0      		ldi r23,hi8(0)
+ 546 0356 48EC      		ldi r20,lo8(200)
+ 547 0358 50E0      		ldi r21,hi8(200)
+ 548 035a 22E0      		ldi r18,lo8(2)
+ 549 035c 30E0      		ldi r19,hi8(2)
+ 550 035e 0E94 0000 		call effect_boxside_randsend_parallel
+ 551               	.LM63:
+ 552 0362 8CED      		ldi r24,lo8(1500)
+ 553 0364 95E0      		ldi r25,hi8(1500)
+ 554 0366 0E94 0000 		call delay_ms
+ 555               	.LM64:
+ 556 036a 8AE7      		ldi r24,lo8(122)
+ 557 036c 61E0      		ldi r22,lo8(1)
+ 558 036e 70E0      		ldi r23,hi8(1)
+ 559 0370 48EC      		ldi r20,lo8(200)
+ 560 0372 50E0      		ldi r21,hi8(200)
+ 561 0374 22E0      		ldi r18,lo8(2)
+ 562 0376 30E0      		ldi r19,hi8(2)
+ 563 0378 0E94 0000 		call effect_boxside_randsend_parallel
+ 564               	.LM65:
+ 565 037c 8CED      		ldi r24,lo8(1500)
+ 566 037e 95E0      		ldi r25,hi8(1500)
+ 567 0380 0E94 0000 		call delay_ms
+ 568               	.LM66:
+ 569 0384 89E7      		ldi r24,lo8(121)
+ 570 0386 60E0      		ldi r22,lo8(0)
+ 571 0388 70E0      		ldi r23,hi8(0)
+ 572 038a 48EC      		ldi r20,lo8(200)
+ 573 038c 50E0      		ldi r21,hi8(200)
+ 574 038e 21E0      		ldi r18,lo8(1)
+ 575 0390 30E0      		ldi r19,hi8(1)
+ 576 0392 0E94 0000 		call effect_boxside_randsend_parallel
+ 577               	.LM67:
+ 578 0396 8CED      		ldi r24,lo8(1500)
+ 579 0398 95E0      		ldi r25,hi8(1500)
+ 580 039a 0E94 0000 		call delay_ms
+ 581               	.LM68:
+ 582 039e 89E7      		ldi r24,lo8(121)
+ 583 03a0 61E0      		ldi r22,lo8(1)
+ 584 03a2 70E0      		ldi r23,hi8(1)
+ 585 03a4 48EC      		ldi r20,lo8(200)
+ 586 03a6 50E0      		ldi r21,hi8(200)
+ 587 03a8 21E0      		ldi r18,lo8(1)
+ 588 03aa 30E0      		ldi r19,hi8(1)
+ 589 03ac 0E94 0000 		call effect_boxside_randsend_parallel
+ 590               	.LM69:
+ 591 03b0 8CED      		ldi r24,lo8(1500)
+ 592 03b2 95E0      		ldi r25,hi8(1500)
+ 593 03b4 0E94 0000 		call delay_ms
+ 594 03b8 00C0      		rjmp .L34
+ 595               	.LVL39:
+ 596               	.L18:
+ 597               	.LM70:
+ 598 03ba 80E0      		ldi r24,lo8(__c.1750)
+ 599 03bc 90E0      		ldi r25,hi8(__c.1750)
+ 600 03be 61E0      		ldi r22,lo8(1)
+ 601 03c0 0E94 0000 		call SendDebugInfo
+ 602               	.LVL40:
+ 603               	.LM71:
+ 604 03c4 8AEF      		ldi r24,lo8(250)
+ 605 03c6 90E0      		ldi r25,hi8(250)
+ 606 03c8 68E5      		ldi r22,lo8(600)
+ 607 03ca 72E0      		ldi r23,hi8(600)
+ 608 03cc 41E0      		ldi r20,lo8(1)
+ 609 03ce 22E0      		ldi r18,lo8(2)
+ 610 03d0 00C0      		rjmp .L40
+ 611               	.LVL41:
+ 612               	.L19:
+ 613               	.LM72:
+ 614 03d2 80E0      		ldi r24,lo8(__c.1753)
+ 615 03d4 90E0      		ldi r25,hi8(__c.1753)
+ 616 03d6 61E0      		ldi r22,lo8(1)
+ 617 03d8 0E94 0000 		call SendDebugInfo
+ 618               	.LVL42:
+ 619               	.LM73:
+ 620 03dc 82E0      		ldi r24,lo8(2)
+ 621 03de 90E0      		ldi r25,hi8(2)
+ 622 03e0 68EE      		ldi r22,lo8(1000)
+ 623 03e2 73E0      		ldi r23,hi8(1000)
+ 624 03e4 40E0      		ldi r20,lo8(0)
+ 625 03e6 00C0      		rjmp .L41
+ 626               	.LVL43:
+ 627               	.L20:
+ 628               	.LM74:
+ 629 03e8 80E0      		ldi r24,lo8(__c.1756)
+ 630 03ea 90E0      		ldi r25,hi8(__c.1756)
+ 631 03ec 61E0      		ldi r22,lo8(1)
+ 632 03ee 0E94 0000 		call SendDebugInfo
+ 633               	.LVL44:
+ 634               	.LM75:
+ 635 03f2 84E6      		ldi r24,lo8(100)
+ 636 03f4 90E0      		ldi r25,hi8(100)
+ 637 03f6 64EF      		ldi r22,lo8(500)
+ 638 03f8 71E0      		ldi r23,hi8(500)
+ 639 03fa 0E94 0000 		call effect_pathspiral
+ 640 03fe 00C0      		rjmp .L34
+ 641               	.LVL45:
+ 642               	.L21:
+ 643               	.LM76:
+ 644 0400 80E0      		ldi r24,lo8(__c.1759)
+ 645 0402 90E0      		ldi r25,hi8(__c.1759)
+ 646 0404 61E0      		ldi r22,lo8(1)
+ 647 0406 0E94 0000 		call SendDebugInfo
+ 648               	.LVL46:
+ 649               	.LM77:
+ 650 040a 8CEB      		ldi r24,lo8(700)
+ 651 040c 92E0      		ldi r25,hi8(700)
+ 652 040e 62E0      		ldi r22,lo8(2)
+ 653 0410 43E0      		ldi r20,lo8(3)
+ 654 0412 50E0      		ldi r21,hi8(3)
+ 655 0414 0E94 0000 		call effect_path_bitmap
+ 656 0418 00C0      		rjmp .L34
+ 657               	.LVL47:
+ 658               	.L22:
+ 659               	.LM78:
+ 660 041a 80E0      		ldi r24,lo8(__c.1762)
+ 661 041c 90E0      		ldi r25,hi8(__c.1762)
+ 662 041e 61E0      		ldi r22,lo8(1)
+ 663 0420 0E94 0000 		call SendDebugInfo
+ 664               	.LVL48:
+ 665               	.LM79:
+ 666 0424 82E0      		ldi r24,lo8(2)
+ 667 0426 90E0      		ldi r25,hi8(2)
+ 668 0428 68EE      		ldi r22,lo8(1000)
+ 669 042a 73E0      		ldi r23,hi8(1000)
+ 670 042c 41E0      		ldi r20,lo8(1)
+ 671 042e 00C0      		rjmp .L41
+ 672               	.LVL49:
+ 673               	.L23:
+ 674               	.LM80:
+ 675 0430 80E0      		ldi r24,lo8(__c.1765)
+ 676 0432 90E0      		ldi r25,hi8(__c.1765)
+ 677 0434 61E0      		ldi r22,lo8(1)
+ 678 0436 0E94 0000 		call SendDebugInfo
+ 679               	.LVL50:
+ 680               	.LM81:
+ 681 043a 88EE      		ldi r24,lo8(1000)
+ 682 043c 93E0      		ldi r25,hi8(1000)
+ 683 043e 60E0      		ldi r22,lo8(.LC0)
+ 684 0440 70E0      		ldi r23,hi8(.LC0)
+ 685 0442 40E0      		ldi r20,lo8(0)
+ 686 0444 0E94 0000 		call effect_path_text
+ 687 0448 00C0      		rjmp .L34
+ 688               	.LVL51:
+ 689               	.L24:
+ 690               	.LM82:
+ 691 044a 80E0      		ldi r24,lo8(__c.1768)
+ 692 044c 90E0      		ldi r25,hi8(__c.1768)
+ 693 044e 61E0      		ldi r22,lo8(1)
+ 694 0450 0E94 0000 		call SendDebugInfo
+ 695               	.LVL52:
+ 696               	.LM83:
+ 697 0454 88EC      		ldi r24,lo8(200)
+ 698 0456 90E0      		ldi r25,hi8(200)
+ 699 0458 64EF      		ldi r22,lo8(500)
+ 700 045a 71E0      		ldi r23,hi8(500)
+ 701 045c 0E94 0000 		call effect_rand_patharound
+ 702 0460 00C0      		rjmp .L34
+ 703               	.LVL53:
+ 704               	.L25:
+ 705               	.LM84:
+ 706 0462 80E0      		ldi r24,lo8(__c.1771)
+ 707 0464 90E0      		ldi r25,hi8(__c.1771)
+ 708 0466 00C0      		rjmp .L42
+ 709               	.L26:
+ 710               	.LM85:
+ 711 0468 80E0      		ldi r24,lo8(__c.1774)
+ 712 046a 90E0      		ldi r25,hi8(__c.1774)
+ 713 046c 61E0      		ldi r22,lo8(1)
+ 714 046e 0E94 0000 		call SendDebugInfo
+ 715               	.LVL54:
+ 716               	.LM86:
+ 717 0472 82E0      		ldi r24,lo8(2)
+ 718 0474 90E0      		ldi r25,hi8(2)
+ 719 0476 68EE      		ldi r22,lo8(1000)
+ 720 0478 73E0      		ldi r23,hi8(1000)
+ 721 047a 42E0      		ldi r20,lo8(2)
+ 722               	.L41:
+ 723 047c 0E94 0000 		call effect_smileyspin
+ 724 0480 00C0      		rjmp .L34
+ 725               	.LVL55:
+ 726               	.L27:
+ 727               	.LM87:
+ 728 0482 80E0      		ldi r24,lo8(__c.1777)
+ 729 0484 90E0      		ldi r25,hi8(__c.1777)
+ 730 0486 61E0      		ldi r22,lo8(1)
+ 731 0488 0E94 0000 		call SendDebugInfo
+ 732               	.LVL56:
+ 733               	.LM88:
+ 734 048c 0E94 0000 		call effect_random_sparkle
+ 735 0490 00C0      		rjmp .L34
+ 736               	.LVL57:
+ 737               	.L28:
+ 738               	.LM89:
+ 739 0492 80E0      		ldi r24,lo8(__c.1780)
+ 740 0494 90E0      		ldi r25,hi8(__c.1780)
+ 741               	.L42:
+ 742 0496 61E0      		ldi r22,lo8(1)
+ 743 0498 0E94 0000 		call SendDebugInfo
+ 744               	.LVL58:
+ 745               	.LM90:
+ 746 049c 81E0      		ldi r24,lo8(1)
+ 747 049e 90E0      		ldi r25,hi8(1)
+ 748               	.L37:
+ 749 04a0 6AE7      		ldi r22,lo8(122)
+ 750 04a2 70E0      		ldi r23,hi8(122)
+ 751 04a4 4FEF      		ldi r20,lo8(-1)
+ 752 04a6 5FEF      		ldi r21,hi8(-1)
+ 753               	.L38:
+ 754 04a8 24E6      		ldi r18,lo8(100)
+ 755 04aa 30E0      		ldi r19,hi8(100)
+ 756 04ac 08EE      		ldi r16,lo8(1000)
+ 757 04ae 13E0      		ldi r17,hi8(1000)
+ 758               	.LVL59:
+ 759 04b0 0E94 0000 		call effect_wormsqueeze
+ 760 04b4 00C0      		rjmp .L34
+ 761               	.LVL60:
+ 762               	.L29:
+ 763               	.LM91:
+ 764 04b6 80E0      		ldi r24,lo8(__c.1783)
+ 765 04b8 90E0      		ldi r25,hi8(__c.1783)
+ 766 04ba 61E0      		ldi r22,lo8(1)
+ 767 04bc 0E94 0000 		call SendDebugInfo
+ 768               	.LVL61:
+ 769               	.LM92:
+ 770 04c0 8AEF      		ldi r24,lo8(250)
+ 771 04c2 90E0      		ldi r25,hi8(250)
+ 772 04c4 68E5      		ldi r22,lo8(600)
+ 773 04c6 72E0      		ldi r23,hi8(600)
+ 774 04c8 41E0      		ldi r20,lo8(1)
+ 775 04ca 23E0      		ldi r18,lo8(3)
+ 776               	.L40:
+ 777 04cc 0E94 0000 		call boingboing
+ 778 04d0 00C0      		rjmp .L34
+ 779               	.LVL62:
+ 780               	.L2:
+ 781               	.LM93:
+ 782 04d2 80E0      		ldi r24,lo8(__c.1786)
+ 783 04d4 90E0      		ldi r25,hi8(__c.1786)
+ 784 04d6 61E0      		ldi r22,lo8(1)
+ 785 04d8 0E94 0000 		call SendDebugInfo
+ 786               	.LVL63:
+ 787               	.LM94:
+ 788 04dc 80E0      		ldi r24,lo8(__c.1788)
+ 789 04de 90E0      		ldi r25,hi8(__c.1788)
+ 790               	.L39:
+ 791 04e0 61E0      		ldi r22,lo8(1)
+ 792 04e2 0E94 0000 		call effect_stringfly2
+ 793               	.LVL64:
+ 794               	.L34:
+ 795               	/* epilogue start */
+ 796               	.LM95:
+ 797 04e6 DF91      		pop r29
+ 798 04e8 CF91      		pop r28
+ 799               	.LVL65:
+ 800 04ea 1F91      		pop r17
+ 801               	.LVL66:
+ 802 04ec 0F91      		pop r16
+ 803               	.LVL67:
+ 804 04ee FF90      		pop r15
+ 805 04f0 EF90      		pop r14
+ 806 04f2 0895      		ret
+ 807               	.LFE2:
+ 809               		.section	.progmem.data,"a",@progbits
+ 812               	__c.1788:
+ 813 0000 4641 494C 		.string	"FAIL"
+ 813      00
+ 816               	__c.1786:
+ 817 0005 4661 696C 		.string	"Fail\r\n"
+ 817      0D0A 00
+ 820               	__c.1783:
+ 821 000c 3236 3A20 		.string	"26: Boing boing\r\n"
+ 821      426F 696E 
+ 821      6720 626F 
+ 821      696E 670D 
+ 821      0A00 
+ 824               	__c.1780:
+ 825 001e 3235 3A20 		.string	"25: Worm squeeze\r\n"
+ 825      576F 726D 
+ 825      2073 7175 
+ 825      6565 7A65 
+ 825      0D0A 00
+ 828               	__c.1777:
+ 829 0031 3234 3A20 		.string	"24: Random sparkle\r\n"
+ 829      5261 6E64 
+ 829      6F6D 2073 
+ 829      7061 726B 
+ 829      6C65 0D0A 
+ 832               	__c.1774:
+ 833 0046 3233 3A20 		.string	"23: Smiley spin\r\n"
+ 833      536D 696C 
+ 833      6579 2073 
+ 833      7069 6E0D 
+ 833      0A00 
+ 836               	__c.1771:
+ 837 0058 3232 3A20 		.string	"22: Worm squeeze\r\n"
+ 837      576F 726D 
+ 837      2073 7175 
+ 837      6565 7A65 
+ 837      0D0A 00
+ 840               	__c.1768:
+ 841 006b 3231 3A20 		.string	"21: Path text\r\n"
+ 841      5061 7468 
+ 841      2074 6578 
+ 841      740D 0A00 
+ 844               	__c.1765:
+ 845 007b 3230 3A20 		.string	"20: Path text\r\n"
+ 845      5061 7468 
+ 845      2074 6578 
+ 845      740D 0A00 
+ 848               	__c.1762:
+ 849 008b 3139 3A20 		.string	"19: Smiley spin\r\n"
+ 849      536D 696C 
+ 849      6579 2073 
+ 849      7069 6E0D 
+ 849      0A00 
+ 852               	__c.1759:
+ 853 009d 3138 3A20 		.string	"18: Path bitmap\r\n"
+ 853      5061 7468 
+ 853      2062 6974 
+ 853      6D61 700D 
+ 853      0A00 
+ 856               	__c.1756:
+ 857 00af 3137 3A20 		.string	"17: Path spiral\r\n"
+ 857      5061 7468 
+ 857      2073 7069 
+ 857      7261 6C0D 
+ 857      0A00 
+ 860               	__c.1753:
+ 861 00c1 3136 3A20 		.string	"16: Smiley spin\r\n"
+ 861      536D 696C 
+ 861      6579 2073 
+ 861      7069 6E0D 
+ 861      0A00 
+ 864               	__c.1750:
+ 865 00d3 3135 3A20 		.string	"15: Boing boing\r\n"
+ 865      426F 696E 
+ 865      6720 626F 
+ 865      696E 670D 
+ 865      0A00 
+ 868               	__c.1747:
+ 869 00e5 3134 3A20 		.string	"14: Flying boxes?\r\n"
+ 869      466C 7969 
+ 869      6E67 2062 
+ 869      6F78 6573 
+ 869      3F0D 0A00 
+ 872               	__c.1741:
+ 873 00f9 3133 3A20 		.string	"13: Game of Life\r\n"
+ 873      4761 6D65 
+ 873      206F 6620 
+ 873      4C69 6665 
+ 873      0D0A 00
+ 876               	__c.1738:
+ 877 010c 494E 5354 		.string	"INSTRUCTABLES"
+ 877      5255 4354 
+ 877      4142 4C45 
+ 877      5300 
+ 880               	__c.1736:
+ 881 011a 3132 3A20 		.string	"12: String fly\r\n"
+ 881      5374 7269 
+ 881      6E67 2066 
+ 881      6C79 0D0A 
+ 881      00
+ 884               	__c.1733:
+ 885 012b 3131 3A20 		.string	"11: Worm squeeze\r\n"
+ 885      576F 726D 
+ 885      2073 7175 
+ 885      6565 7A65 
+ 885      0D0A 00
+ 888               	__c.1730:
+ 889 013e 3130 3A20 		.string	"10: Load bar\r\n"
+ 889      4C6F 6164 
+ 889      2062 6172 
+ 889      0D0A 00
+ 892               	__c.1727:
+ 893 014d 393A 2053 		.string	"9: Suspend random\r\n"
+ 893      7573 7065 
+ 893      6E64 2072 
+ 893      616E 646F 
+ 893      6D0D 0A00 
+ 896               	__c.1724:
+ 897 0161 383A 2054 		.string	"8: Telc stairs\r\n"
+ 897      656C 6320 
+ 897      7374 6169 
+ 897      7273 0D0A 
+ 897      00
+ 900               	__c.1721:
+ 901 0172 373A 2050 		.string	"7: Planboing\r\n"
+ 901      6C61 6E62 
+ 901      6F69 6E67 
+ 901      0D0A 00
+ 904               	__c.1715:
+ 905 0181 363A 2042 		.string	"6: Boxes\r\n"
+ 905      6F78 6573 
+ 905      0D0A 00
+ 908               	__c.1712:
+ 909 018c 353A 2042 		.string	"5: Blinky\r\n"
+ 909      6C69 6E6B 
+ 909      790D 0A00 
+ 912               	__c.1709:
+ 913 0198 343A 2057 		.string	"4: Wormsqueeze\r\n"
+ 913      6F72 6D73 
+ 913      7175 6565 
+ 913      7A65 0D0A 
+ 913      00
+ 916               	__c.1706:
+ 917 01a9 333A 205A 		.string	"3: Z axis up/down\r\n"
+ 917      2061 7869 
+ 917      7320 7570 
+ 917      2F64 6F77 
+ 917      6E0D 0A00 
+ 920               	__c.1703:
+ 921 01bd 323A 2052 		.string	"2: Random filler\r\n"
+ 921      616E 646F 
+ 921      6D20 6669 
+ 921      6C6C 6572 
+ 921      0D0A 00
+ 924               	__c.1700:
+ 925 01d0 313A 2052 		.string	"1: Random voxels\r\n"
+ 925      616E 646F 
+ 925      6D20 766F 
+ 925      7865 6C73 
+ 925      0D0A 00
+ 928               	__c.1696:
+ 929 01e3 303A 2052 		.string	"0: Rain\r\n"
+ 929      6169 6E0D 
+ 929      0A00 
+ 930               		.comm cube,64,1
+ 931               		.comm fb,64,1
+ 932               		.comm m_override_delay,1,1
+ 933               		.comm debug_mode,1,1
+ 934               		.comm debug_active,1,1
+ 935               		.comm last_debug_mode,1,1
+ 936               		.comm debug_mode_counter,1,1
+ 961               	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 launch_effect.c
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:2      *ABS*:0000003f __SREG__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:3      *ABS*:0000003e __SP_H__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:4      *ABS*:0000003d __SP_L__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:5      *ABS*:00000034 __CCP__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:22     .text:00000000 launch_effect
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:928    .progmem.data:000001e3 __c.1696
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:924    .progmem.data:000001d0 __c.1700
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:920    .progmem.data:000001bd __c.1703
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:916    .progmem.data:000001a9 __c.1706
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:912    .progmem.data:00000198 __c.1709
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:908    .progmem.data:0000018c __c.1712
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:904    .progmem.data:00000181 __c.1715
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:900    .progmem.data:00000172 __c.1721
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:896    .progmem.data:00000161 __c.1724
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:892    .progmem.data:0000014d __c.1727
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:888    .progmem.data:0000013e __c.1730
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:884    .progmem.data:0000012b __c.1733
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:880    .progmem.data:0000011a __c.1736
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:876    .progmem.data:0000010c __c.1738
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:872    .progmem.data:000000f9 __c.1741
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:868    .progmem.data:000000e5 __c.1747
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:864    .progmem.data:000000d3 __c.1750
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:860    .progmem.data:000000c1 __c.1753
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:856    .progmem.data:000000af __c.1756
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:852    .progmem.data:0000009d __c.1759
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:848    .progmem.data:0000008b __c.1762
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:844    .progmem.data:0000007b __c.1765
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:840    .progmem.data:0000006b __c.1768
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:836    .progmem.data:00000058 __c.1771
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:832    .progmem.data:00000046 __c.1774
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:828    .progmem.data:00000031 __c.1777
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:824    .progmem.data:0000001e __c.1780
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:820    .progmem.data:0000000c __c.1783
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:816    .progmem.data:00000005 __c.1786
+C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccLwwdky.s:812    .progmem.data:00000000 __c.1788
+                            *COM*:00000040 cube
+                            *COM*:00000040 fb
+                            *COM*:00000001 m_override_delay
+                            *COM*:00000001 debug_mode
+                            *COM*:00000001 debug_active
+                            *COM*:00000001 last_debug_mode
+                            *COM*:00000001 debug_mode_counter
+
+UNDEFINED SYMBOLS
+fill
+SendDebugInfo
+effect_rain
+sendvoxels_rand_z
+effect_random_filler
+effect_z_updown
+effect_blinky2
+effect_box_shrink_grow
+effect_box_woopwoop
+effect_planboing
+effect_telcstairs
+effect_axis_updown_randsuspend
+effect_loadbar
+rand
+__divmodhi4
+setvoxel
+gol_play
+effect_boxside_randsend_parallel
+delay_ms
+effect_pathspiral
+effect_path_bitmap
+effect_path_text
+effect_rand_patharound
+effect_smileyspin
+effect_random_sparkle
+effect_wormsqueeze
+boingboing
+effect_stringfly2
+__do_copy_data
+__do_clear_bss
