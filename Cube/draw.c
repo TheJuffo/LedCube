@@ -398,23 +398,6 @@ void line(int x1, int y1, int z1, int x2, int y2, int z2)
 	
 }
 
-// Delay loop.
-// This is not calibrated to milliseconds,
-// but we had allready made to many effects using this
-// calibration when we figured it might be a good idea
-// to calibrate it.
-/*void delay_ms(uint16_t x)
-{
-  uint8_t y, z;
-  for ( ; x > 0 ; x--){
-    for ( y = 0 ; y < 90 ; y++){
-      for ( z = 0 ; z < 6 ; z++){
-        asm volatile ("nop");
-      }
-    }
-  }
-}
-*/
 // Copies the contents of fb (temp cube buffer) into the rendering buffer
 void tmp2cube (void)
 {	

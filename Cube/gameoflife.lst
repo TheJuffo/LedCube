@@ -2,417 +2,762 @@
    2               	__SREG__ = 0x3f
    3               	__SP_H__ = 0x3e
    4               	__SP_L__ = 0x3d
-   5               	__CCP__  = 0x34
+   5               	__CCP__ = 0x34
    6               	__tmp_reg__ = 0
    7               	__zero_reg__ = 1
-  15               	.Ltext0:
-  16               	.global	gol_count_changes
-  18               	gol_count_changes:
-  19               	.LFB5:
-  20               	.LM1:
-  21 0000 CF93      		push r28
-  22 0002 DF93      		push r29
-  23               	/* prologue: function */
-  24               	/* frame size = 0 */
-  25               	.LM2:
-  26 0004 60E0      		ldi r22,lo8(0)
-  27 0006 70E0      		ldi r23,hi8(0)
-  28               	.LVL0:
-  29 0008 40E0      		ldi r20,lo8(0)
-  30 000a 50E0      		ldi r21,hi8(0)
-  31               	.LVL1:
-  32 000c 00C0      		rjmp .L2
-  33               	.LVL2:
-  34               	.L4:
-  35               	.LM3:
-  36 000e FE01      		movw r30,r28
-  37 0010 E20F      		add r30,r18
-  38 0012 F31F      		adc r31,r19
-  39 0014 DF01      		movw r26,r30
-  40 0016 A050      		subi r26,lo8(-(fb))
-  41 0018 B040      		sbci r27,hi8(-(fb))
-  42 001a 9C91      		ld r25,X
-  43 001c E050      		subi r30,lo8(-(cube))
-  44 001e F040      		sbci r31,hi8(-(cube))
-  45 0020 8081      		ld r24,Z
-  46 0022 9817      		cp r25,r24
-  47 0024 01F0      		breq .L3
-  48               	.LM4:
-  49 0026 6F5F      		subi r22,lo8(-(1))
-  50 0028 7F4F      		sbci r23,hi8(-(1))
-  51               	.L3:
-  52               	.LM5:
-  53 002a 2F5F      		subi r18,lo8(-(1))
-  54 002c 3F4F      		sbci r19,hi8(-(1))
-  55 002e 2830      		cpi r18,8
-  56 0030 3105      		cpc r19,__zero_reg__
-  57 0032 01F4      		brne .L4
-  58               	.LM6:
-  59 0034 4F5F      		subi r20,lo8(-(1))
-  60 0036 5F4F      		sbci r21,hi8(-(1))
-  61 0038 4830      		cpi r20,8
-  62 003a 5105      		cpc r21,__zero_reg__
-  63 003c 01F0      		breq .L5
-  64               	.L2:
-  65 003e 20E0      		ldi r18,lo8(0)
-  66 0040 30E0      		ldi r19,hi8(0)
-  67               	.LM7:
-  68 0042 EA01      		movw r28,r20
-  69 0044 83E0      		ldi r24,3
-  70 0046 CC0F      	1:	lsl r28
-  71 0048 DD1F      		rol r29
-  72 004a 8A95      		dec r24
-  73 004c 01F4      		brne 1b
-  74 004e 00C0      		rjmp .L4
-  75               	.L5:
-  76               	.LM8:
-  77 0050 CB01      		movw r24,r22
-  78               	.LVL3:
-  79               	/* epilogue start */
-  80 0052 DF91      		pop r29
-  81 0054 CF91      		pop r28
-  82 0056 0895      		ret
-  83               	.LFE5:
-  85               	.global	gol_count_neighbors
-  87               	gol_count_neighbors:
-  88               	.LFB4:
-  89               	.LM9:
-  90               	.LVL4:
-  91 0058 3F92      		push r3
-  92 005a 4F92      		push r4
-  93 005c 5F92      		push r5
-  94 005e 6F92      		push r6
-  95 0060 7F92      		push r7
-  96 0062 8F92      		push r8
-  97 0064 9F92      		push r9
-  98 0066 AF92      		push r10
-  99 0068 BF92      		push r11
- 100 006a CF92      		push r12
- 101 006c DF92      		push r13
- 102 006e EF92      		push r14
- 103 0070 FF92      		push r15
- 104 0072 0F93      		push r16
- 105 0074 1F93      		push r17
- 106 0076 CF93      		push r28
- 107 0078 DF93      		push r29
- 108               	/* prologue: function */
- 109               	/* frame size = 0 */
- 110 007a 3C01      		movw r6,r24
- 111 007c 4B01      		movw r8,r22
- 112 007e 5A01      		movw r10,r20
- 113               	.LM10:
- 114 0080 DD24      		clr r13
- 115               	.LVL5:
- 116 0082 EE24      		clr r14
- 117 0084 EA94      		dec r14
- 118 0086 FE2C      		mov r15,r14
- 119               	.LVL6:
- 120 0088 00C0      		rjmp .L9
- 121               	.LVL7:
- 122               	.L12:
- 123               	.LM11:
- 124 008a E114      		cp r14,__zero_reg__
- 125 008c F104      		cpc r15,__zero_reg__
- 126 008e 01F4      		brne .L10
- 127 0090 0115      		cp r16,__zero_reg__
- 128 0092 1105      		cpc r17,__zero_reg__
- 129 0094 01F4      		brne .L10
- 130 0096 2097      		sbiw r28,0
- 131 0098 01F0      		breq .L11
- 132               	.L10:
- 133               	.LM12:
- 134 009a CE01      		movw r24,r28
- 135 009c 8A0D      		add r24,r10
- 136 009e 9B1D      		adc r25,r11
- 137 00a0 68E0      		ldi r22,lo8(8)
- 138 00a2 70E0      		ldi r23,hi8(8)
- 139 00a4 0E94 0000 		call __divmodhi4
- 140 00a8 AC01      		movw r20,r24
- 141 00aa 832D      		mov r24,r3
- 142 00ac 942D      		mov r25,r4
- 143 00ae 652D      		mov r22,r5
- 144 00b0 7C2D      		mov r23,r12
- 145 00b2 0E94 0000 		call getvoxel
- 146 00b6 8111      		cpse r24,__zero_reg__
- 147               	.LM13:
- 148 00b8 D394      		inc r13
- 149               	.LVL8:
- 150               	.L11:
- 151               	.LM14:
- 152 00ba 2196      		adiw r28,1
- 153 00bc C230      		cpi r28,2
- 154 00be D105      		cpc r29,__zero_reg__
- 155 00c0 01F4      		brne .L12
- 156               	.LM15:
- 157 00c2 0F5F      		subi r16,lo8(-(1))
- 158 00c4 1F4F      		sbci r17,hi8(-(1))
- 159 00c6 0230      		cpi r16,2
- 160 00c8 1105      		cpc r17,__zero_reg__
- 161 00ca 01F0      		breq .L13
- 162               	.L15:
- 163               	.LM16:
- 164 00cc C801      		movw r24,r16
- 165 00ce 880D      		add r24,r8
- 166 00d0 991D      		adc r25,r9
- 167 00d2 68E0      		ldi r22,lo8(8)
- 168 00d4 70E0      		ldi r23,hi8(8)
- 169 00d6 0E94 0000 		call __divmodhi4
- 170 00da 582E      		mov r5,r24
- 171 00dc C92E      		mov r12,r25
- 172 00de CFEF      		ldi r28,lo8(-1)
- 173 00e0 DFEF      		ldi r29,hi8(-1)
- 174 00e2 00C0      		rjmp .L12
- 175               	.L13:
- 176               	.LM17:
- 177 00e4 0894      		sec
- 178 00e6 E11C      		adc r14,__zero_reg__
- 179 00e8 F11C      		adc r15,__zero_reg__
- 180 00ea 82E0      		ldi r24,lo8(2)
- 181 00ec E816      		cp r14,r24
- 182 00ee F104      		cpc r15,__zero_reg__
- 183 00f0 01F0      		breq .L14
- 184               	.LVL9:
- 185               	.L9:
- 186               	.LM18:
- 187 00f2 C701      		movw r24,r14
- 188 00f4 860D      		add r24,r6
- 189 00f6 971D      		adc r25,r7
- 190 00f8 68E0      		ldi r22,lo8(8)
- 191 00fa 70E0      		ldi r23,hi8(8)
- 192 00fc 0E94 0000 		call __divmodhi4
- 193 0100 382E      		mov r3,r24
- 194 0102 492E      		mov r4,r25
- 195 0104 0FEF      		ldi r16,lo8(-1)
- 196 0106 1FEF      		ldi r17,hi8(-1)
- 197 0108 00C0      		rjmp .L15
- 198               	.L14:
- 199               	.LM19:
- 200 010a 8D2D      		mov r24,r13
- 201               	/* epilogue start */
- 202 010c DF91      		pop r29
- 203 010e CF91      		pop r28
- 204               	.LVL10:
- 205 0110 1F91      		pop r17
- 206 0112 0F91      		pop r16
- 207               	.LVL11:
- 208 0114 FF90      		pop r15
- 209 0116 EF90      		pop r14
- 210               	.LVL12:
- 211 0118 DF90      		pop r13
- 212               	.LVL13:
- 213 011a CF90      		pop r12
- 214 011c BF90      		pop r11
- 215 011e AF90      		pop r10
- 216               	.LVL14:
- 217 0120 9F90      		pop r9
- 218 0122 8F90      		pop r8
- 219               	.LVL15:
- 220 0124 7F90      		pop r7
- 221 0126 6F90      		pop r6
- 222               	.LVL16:
- 223 0128 5F90      		pop r5
- 224 012a 4F90      		pop r4
- 225 012c 3F90      		pop r3
- 226 012e 0895      		ret
- 227               	.LFE4:
- 229               	.global	gol_nextgen
- 231               	gol_nextgen:
- 232               	.LFB3:
- 233               	.LM20:
- 234 0130 DF92      		push r13
- 235 0132 EF92      		push r14
- 236 0134 FF92      		push r15
- 237 0136 0F93      		push r16
- 238 0138 1F93      		push r17
- 239 013a CF93      		push r28
- 240 013c DF93      		push r29
- 241               	/* prologue: function */
- 242               	/* frame size = 0 */
- 243               	.LM21:
- 244 013e 80E0      		ldi r24,lo8(0)
- 245 0140 0E94 0000 		call tmpfill
- 246 0144 EE24      		clr r14
- 247 0146 FF24      		clr r15
- 248               	.LVL17:
- 249 0148 00C0      		rjmp .L19
- 250               	.LVL18:
- 251               	.L24:
- 252               	.LM22:
- 253 014a C701      		movw r24,r14
- 254 014c B801      		movw r22,r16
- 255 014e AE01      		movw r20,r28
- 256 0150 0E94 0000 		call gol_count_neighbors
- 257 0154 D82E      		mov r13,r24
- 258               	.LM23:
- 259 0156 C701      		movw r24,r14
- 260 0158 B801      		movw r22,r16
- 261 015a AE01      		movw r20,r28
- 262 015c 0E94 0000 		call getvoxel
- 263 0160 8130      		cpi r24,lo8(1)
- 264 0162 01F4      		brne .L20
- 265               	.LM24:
- 266 0164 8D15      		cp r24,r13
- 267 0166 00F4      		brsh .L30
- 268               	.L21:
- 269               	.LM25:
- 270 0168 83E0      		ldi r24,lo8(3)
- 271 016a 8D15      		cp r24,r13
- 272 016c 00F4      		brsh .L31
- 273               	.L30:
- 274               	.LM26:
- 275 016e C701      		movw r24,r14
- 276 0170 B801      		movw r22,r16
- 277 0172 AE01      		movw r20,r28
- 278 0174 0E94 0000 		call tmpclrvoxel
- 279 0178 00C0      		rjmp .L22
- 280               	.L20:
- 281               	.LM27:
- 282 017a 83E0      		ldi r24,lo8(3)
- 283 017c D816      		cp r13,r24
- 284 017e 01F4      		brne .L22
- 285               	.L31:
- 286               	.LM28:
- 287 0180 C701      		movw r24,r14
- 288 0182 B801      		movw r22,r16
- 289 0184 AE01      		movw r20,r28
- 290 0186 0E94 0000 		call tmpsetvoxel
- 291               	.L22:
- 292               	.LM29:
- 293 018a 2196      		adiw r28,1
- 294 018c C830      		cpi r28,8
- 295 018e D105      		cpc r29,__zero_reg__
- 296 0190 01F4      		brne .L24
- 297               	.LM30:
- 298 0192 0F5F      		subi r16,lo8(-(1))
- 299 0194 1F4F      		sbci r17,hi8(-(1))
- 300 0196 0830      		cpi r16,8
- 301 0198 1105      		cpc r17,__zero_reg__
- 302 019a 01F0      		breq .L25
- 303               	.L27:
- 304 019c C0E0      		ldi r28,lo8(0)
- 305 019e D0E0      		ldi r29,hi8(0)
- 306 01a0 00C0      		rjmp .L24
- 307               	.L25:
- 308               	.LM31:
- 309 01a2 0894      		sec
- 310 01a4 E11C      		adc r14,__zero_reg__
- 311 01a6 F11C      		adc r15,__zero_reg__
- 312 01a8 88E0      		ldi r24,lo8(8)
- 313 01aa E816      		cp r14,r24
- 314 01ac F104      		cpc r15,__zero_reg__
- 315 01ae 01F0      		breq .L28
- 316               	.L19:
- 317 01b0 00E0      		ldi r16,lo8(0)
- 318 01b2 10E0      		ldi r17,hi8(0)
- 319 01b4 00C0      		rjmp .L27
- 320               	.L28:
- 321               	/* epilogue start */
- 322               	.LM32:
- 323 01b6 DF91      		pop r29
- 324 01b8 CF91      		pop r28
- 325               	.LVL19:
- 326 01ba 1F91      		pop r17
- 327 01bc 0F91      		pop r16
- 328               	.LVL20:
- 329 01be FF90      		pop r15
- 330 01c0 EF90      		pop r14
- 331               	.LVL21:
- 332 01c2 DF90      		pop r13
- 333               	.LVL22:
- 334 01c4 0895      		ret
- 335               	.LFE3:
- 337               	.global	gol_play
- 339               	gol_play:
- 340               	.LFB2:
- 341               	.LM33:
- 342               	.LVL23:
- 343 01c6 EF92      		push r14
- 344 01c8 FF92      		push r15
- 345 01ca 0F93      		push r16
- 346 01cc 1F93      		push r17
- 347 01ce CF93      		push r28
- 348 01d0 DF93      		push r29
- 349               	/* prologue: function */
- 350               	/* frame size = 0 */
- 351 01d2 7C01      		movw r14,r24
- 352 01d4 8B01      		movw r16,r22
- 353               	.LM34:
- 354 01d6 C0E0      		ldi r28,lo8(0)
- 355 01d8 D0E0      		ldi r29,hi8(0)
- 356               	.LVL24:
- 357 01da 00C0      		rjmp .L33
- 358               	.LVL25:
- 359               	.L35:
- 360               	.LM35:
- 361 01dc 80E2      		ldi r24,lo8(32)
- 362 01de 0E94 0000 		call DebugBlink
- 363               	.LM36:
- 364 01e2 0E94 0000 		call gol_nextgen
- 365               	.LM37:
- 366 01e6 0E94 0000 		call gol_count_changes
- 367 01ea 892B      		or r24,r25
- 368 01ec 01F0      		breq .L36
- 369               	.LM38:
- 370 01ee 0E94 0000 		call tmp2cube
- 371               	.LM39:
- 372 01f2 C801      		movw r24,r16
- 373 01f4 0E94 0000 		call delay_ms
- 374               	.LM40:
- 375 01f8 2196      		adiw r28,1
- 376               	.LVL26:
- 377               	.L33:
- 378 01fa CE15      		cp r28,r14
- 379 01fc DF05      		cpc r29,r15
- 380 01fe 04F0      		brlt .L35
- 381               	.L36:
- 382               	/* epilogue start */
- 383               	.LM41:
- 384 0200 DF91      		pop r29
- 385 0202 CF91      		pop r28
- 386               	.LVL27:
- 387 0204 1F91      		pop r17
- 388 0206 0F91      		pop r16
- 389               	.LVL28:
- 390 0208 FF90      		pop r15
- 391 020a EF90      		pop r14
- 392               	.LVL29:
- 393 020c 0895      		ret
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  12               		.cfi_sections	.debug_frame
+  13               	.global	gol_count_neighbors
+  15               	gol_count_neighbors:
+  16               	.LFB3:
+  17               		.file 1 "gameoflife.c"
+   1:gameoflife.c  **** #include <avr/io.h>
+   2:gameoflife.c  **** #include "gameoflife.h"
+   3:gameoflife.c  **** #include "debug.h"
+   4:gameoflife.c  **** #include "cube.h"
+   5:gameoflife.c  **** #include "draw.h"
+   6:gameoflife.c  **** #include "util.h"
+   7:gameoflife.c  **** 
+   8:gameoflife.c  **** // Game of Life for the 4x4x4 and 8x8x8 led cube
+   9:gameoflife.c  **** 
+  10:gameoflife.c  **** #define GOL_CREATE_MIN 3
+  11:gameoflife.c  **** #define GOL_CREATE_MAX 3
+  12:gameoflife.c  **** 
+  13:gameoflife.c  **** #define GOL_TERMINATE_LONELY 1
+  14:gameoflife.c  **** #define GOL_TERMINATE_CROWDED 4
+  15:gameoflife.c  **** 
+  16:gameoflife.c  **** #define GOL_X 8
+  17:gameoflife.c  **** #define GOL_Y 8
+  18:gameoflife.c  **** #define GOL_Z 8
+  19:gameoflife.c  **** 
+  20:gameoflife.c  **** #define GOL_WRAP 0x01
+  21:gameoflife.c  **** 
+  22:gameoflife.c  **** 
+  23:gameoflife.c  **** unsigned char gol_count_neighbors (int x, int y, int z);
+  24:gameoflife.c  **** void gol_nextgen (void);
+  25:gameoflife.c  **** int gol_count_changes (void);
+  26:gameoflife.c  **** 
+  27:gameoflife.c  **** 
+  28:gameoflife.c  **** void gol_play (int iterations, uint16_t delay)
+  29:gameoflife.c  **** {
+  30:gameoflife.c  **** 	int i;
+  31:gameoflife.c  **** 	
+  32:gameoflife.c  **** 	for (i = 0; i < iterations; i++)
+  33:gameoflife.c  **** 	{
+  34:gameoflife.c  **** 		debug_blink(LED_GREEN);
+  35:gameoflife.c  **** 	
+  36:gameoflife.c  **** 		gol_nextgen();
+  37:gameoflife.c  **** 		
+  38:gameoflife.c  **** 		if (gol_count_changes() == 0)
+  39:gameoflife.c  **** 			return;
+  40:gameoflife.c  **** 		
+  41:gameoflife.c  **** 		tmp2cube();
+  42:gameoflife.c  **** 		
+  43:gameoflife.c  **** 		delay_ms(delay);
+  44:gameoflife.c  **** 		
+  45:gameoflife.c  **** 		//led_red(1);
+  46:gameoflife.c  **** 	}
+  47:gameoflife.c  **** }
+  48:gameoflife.c  **** 
+  49:gameoflife.c  **** void gol_nextgen (void)
+  50:gameoflife.c  **** {
+  51:gameoflife.c  **** 	int x,y,z;
+  52:gameoflife.c  **** 	unsigned char neigh;
+  53:gameoflife.c  **** 	
+  54:gameoflife.c  **** 	tmpfill(0x00);
+  55:gameoflife.c  **** 	
+  56:gameoflife.c  **** 	for (x = 0; x < GOL_X; x++)
+  57:gameoflife.c  **** 	{
+  58:gameoflife.c  **** 		for (y = 0; y < GOL_Y; y++)
+  59:gameoflife.c  **** 		{
+  60:gameoflife.c  **** 			for (z = 0; z < GOL_Z; z++)
+  61:gameoflife.c  **** 			{
+  62:gameoflife.c  **** 				neigh = gol_count_neighbors(x, y, z);
+  63:gameoflife.c  **** 				
+  64:gameoflife.c  **** 				// Current voxel is alive.
+  65:gameoflife.c  **** 				if (getvoxel(x,y,z) == 0x01)
+  66:gameoflife.c  **** 				{
+  67:gameoflife.c  **** 					if (neigh <= GOL_TERMINATE_LONELY)
+  68:gameoflife.c  **** 					{
+  69:gameoflife.c  **** 						tmpclrvoxel(x,y,z);
+  70:gameoflife.c  **** 					} else if(neigh >= GOL_TERMINATE_CROWDED)
+  71:gameoflife.c  **** 					{
+  72:gameoflife.c  **** 						tmpclrvoxel(x,y,z);
+  73:gameoflife.c  **** 					} else
+  74:gameoflife.c  **** 					{
+  75:gameoflife.c  **** 						tmpsetvoxel(x,y,z);
+  76:gameoflife.c  **** 					}
+  77:gameoflife.c  **** 				// Current voxel is dead.
+  78:gameoflife.c  **** 				} else
+  79:gameoflife.c  **** 				{
+  80:gameoflife.c  **** 					if (neigh >= GOL_CREATE_MIN && neigh <= GOL_CREATE_MAX)
+  81:gameoflife.c  **** 						tmpsetvoxel(x,y,z);
+  82:gameoflife.c  **** 				}
+  83:gameoflife.c  **** 			}
+  84:gameoflife.c  **** 		}
+  85:gameoflife.c  **** 	}
+  86:gameoflife.c  **** }
+  87:gameoflife.c  **** 
+  88:gameoflife.c  **** unsigned char gol_count_neighbors (int x, int y, int z)
+  89:gameoflife.c  **** {
+  18               		.loc 1 89 0
+  19               		.cfi_startproc
+  20               	.LVL0:
+  21 0000 2F92      		push r2
+  22               	.LCFI0:
+  23               		.cfi_def_cfa_offset 3
+  24               		.cfi_offset 2, -2
+  25 0002 3F92      		push r3
+  26               	.LCFI1:
+  27               		.cfi_def_cfa_offset 4
+  28               		.cfi_offset 3, -3
+  29 0004 4F92      		push r4
+  30               	.LCFI2:
+  31               		.cfi_def_cfa_offset 5
+  32               		.cfi_offset 4, -4
+  33 0006 5F92      		push r5
+  34               	.LCFI3:
+  35               		.cfi_def_cfa_offset 6
+  36               		.cfi_offset 5, -5
+  37 0008 7F92      		push r7
+  38               	.LCFI4:
+  39               		.cfi_def_cfa_offset 7
+  40               		.cfi_offset 7, -6
+  41 000a 8F92      		push r8
+  42               	.LCFI5:
+  43               		.cfi_def_cfa_offset 8
+  44               		.cfi_offset 8, -7
+  45 000c 9F92      		push r9
+  46               	.LCFI6:
+  47               		.cfi_def_cfa_offset 9
+  48               		.cfi_offset 9, -8
+  49 000e AF92      		push r10
+  50               	.LCFI7:
+  51               		.cfi_def_cfa_offset 10
+  52               		.cfi_offset 10, -9
+  53 0010 BF92      		push r11
+  54               	.LCFI8:
+  55               		.cfi_def_cfa_offset 11
+  56               		.cfi_offset 11, -10
+  57 0012 CF92      		push r12
+  58               	.LCFI9:
+  59               		.cfi_def_cfa_offset 12
+  60               		.cfi_offset 12, -11
+  61 0014 DF92      		push r13
+  62               	.LCFI10:
+  63               		.cfi_def_cfa_offset 13
+  64               		.cfi_offset 13, -12
+  65 0016 EF92      		push r14
+  66               	.LCFI11:
+  67               		.cfi_def_cfa_offset 14
+  68               		.cfi_offset 14, -13
+  69 0018 FF92      		push r15
+  70               	.LCFI12:
+  71               		.cfi_def_cfa_offset 15
+  72               		.cfi_offset 15, -14
+  73 001a 0F93      		push r16
+  74               	.LCFI13:
+  75               		.cfi_def_cfa_offset 16
+  76               		.cfi_offset 16, -15
+  77 001c 1F93      		push r17
+  78               	.LCFI14:
+  79               		.cfi_def_cfa_offset 17
+  80               		.cfi_offset 17, -16
+  81 001e CF93      		push r28
+  82               	.LCFI15:
+  83               		.cfi_def_cfa_offset 18
+  84               		.cfi_offset 28, -17
+  85 0020 DF93      		push r29
+  86               	.LCFI16:
+  87               		.cfi_def_cfa_offset 19
+  88               		.cfi_offset 29, -18
+  89 0022 00D0      		rcall .
+  90 0024 00D0      		rcall .
+  91               	.LCFI17:
+  92               		.cfi_def_cfa_offset 23
+  93 0026 CDB7      		in r28,__SP_L__
+  94 0028 DEB7      		in r29,__SP_H__
+  95               	.LCFI18:
+  96               		.cfi_def_cfa_register 28
+  97               	/* prologue: function */
+  98               	/* frame size = 4 */
+  99               	/* stack size = 21 */
+ 100               	.L__stack_usage = 21
+ 101 002a 2C01      		movw r4,r24
+ 102 002c 1B01      		movw r2,r22
+ 103 002e 9A01      		movw r18,r20
+ 104               	.LVL1:
+  90:gameoflife.c  **** 	int ix, iy, iz; // offset 1 in each direction in each dimension
+  91:gameoflife.c  **** 	int nx, ny, nz; // neighbours address.
+  92:gameoflife.c  **** 	
+  93:gameoflife.c  **** 	unsigned char neigh = 0; // number of alive neighbours.
+  94:gameoflife.c  **** 	
+  95:gameoflife.c  **** 	for (ix = -1; ix < 2; ix++)
+ 105               		.loc 1 95 0
+ 106 0030 EE24      		clr r14
+ 107 0032 EA94      		dec r14
+ 108 0034 FE2C      		mov r15,r14
+  93:gameoflife.c  **** 	unsigned char neigh = 0; // number of alive neighbours.
+ 109               		.loc 1 93 0
+ 110 0036 DD24      		clr r13
+  96:gameoflife.c  **** 	{
+  97:gameoflife.c  **** 		for (iy = -1; iy < 2; iy++)
+  98:gameoflife.c  **** 		{
+  99:gameoflife.c  **** 			for (iz = -1; iz < 2; iz++)
+ 100:gameoflife.c  **** 			{
+ 101:gameoflife.c  **** 				// Your not your own neighbour, exclude 0,0,0, offset.
+ 102:gameoflife.c  **** 				if ( !(ix == 0 && iy == 0 && iz == 0) )
+ 103:gameoflife.c  **** 				{
+ 104:gameoflife.c  **** 					if (GOL_WRAP == 0x01)
+ 105:gameoflife.c  **** 					{
+ 106:gameoflife.c  **** 						nx = (x+ix)%GOL_X;
+ 111               		.loc 1 106 0
+ 112 0038 E8E0      		ldi r30,lo8(8)
+ 113 003a AE2E      		mov r10,r30
+ 114 003c B12C      		mov r11,__zero_reg__
+ 115 003e 00C0      		rjmp .L2
+ 116               	.LVL2:
+ 117               	.L5:
+ 102:gameoflife.c  **** 				if ( !(ix == 0 && iy == 0 && iz == 0) )
+ 118               		.loc 1 102 0
+ 119 0040 E114      		cp r14,__zero_reg__
+ 120 0042 F104      		cpc r15,__zero_reg__
+ 121 0044 01F4      		brne .L3
+ 102:gameoflife.c  **** 				if ( !(ix == 0 && iy == 0 && iz == 0) )
+ 122               		.loc 1 102 0 is_stmt 0 discriminator 1
+ 123 0046 0115      		cp r16,__zero_reg__
+ 124 0048 1105      		cpc r17,__zero_reg__
+ 125 004a 01F4      		brne .L3
+ 126 004c 8B81      		ldd r24,Y+3
+ 127 004e 9C81      		ldd r25,Y+4
+ 128 0050 0097      		sbiw r24,0
+ 129 0052 01F0      		breq .L4
+ 130               	.L3:
+ 131               	.LVL3:
+  88:gameoflife.c  **** unsigned char gol_count_neighbors (int x, int y, int z)
+ 132               		.loc 1 88 0 is_stmt 1
+ 133 0054 8B81      		ldd r24,Y+3
+ 134 0056 9C81      		ldd r25,Y+4
+ 135 0058 820F      		add r24,r18
+ 136 005a 931F      		adc r25,r19
+ 107:gameoflife.c  **** 						ny = (y+iy)%GOL_Y;
+ 108:gameoflife.c  **** 						nz = (z+iz)%GOL_Z;
+ 137               		.loc 1 108 0
+ 138 005c B501      		movw r22,r10
+ 139 005e 0E94 0000 		call __divmodhi4
+ 140 0062 AC01      		movw r20,r24
+ 109:gameoflife.c  **** 					} else
+ 110:gameoflife.c  **** 					{
+ 111:gameoflife.c  **** 						nx = x+ix;
+ 112:gameoflife.c  **** 						ny = y+iy;
+ 113:gameoflife.c  **** 						nz = z+iz;
+ 114:gameoflife.c  **** 					}
+ 115:gameoflife.c  **** 					
+ 116:gameoflife.c  **** 					if ( getvoxel(nx, ny, nz) )
+ 141               		.loc 1 116 0
+ 142 0064 882D      		mov r24,r8
+ 143 0066 972D      		mov r25,r7
+ 144 0068 6C2D      		mov r22,r12
+ 145 006a 792D      		mov r23,r9
+ 146 006c 2983      		std Y+1,r18
+ 147 006e 3A83      		std Y+2,r19
+ 148 0070 0E94 0000 		call getvoxel
+ 149               	.LVL4:
+ 150 0074 2981      		ldd r18,Y+1
+ 151 0076 3A81      		ldd r19,Y+2
+ 152 0078 8111      		cpse r24,__zero_reg__
+ 117:gameoflife.c  **** 						neigh++;
+ 153               		.loc 1 117 0
+ 154 007a D394      		inc r13
+ 155               	.LVL5:
+ 156               	.L4:
+  99:gameoflife.c  **** 			for (iz = -1; iz < 2; iz++)
+ 157               		.loc 1 99 0
+ 158 007c EB81      		ldd r30,Y+3
+ 159 007e FC81      		ldd r31,Y+4
+ 160 0080 3196      		adiw r30,1
+ 161 0082 FC83      		std Y+4,r31
+ 162 0084 EB83      		std Y+3,r30
+ 163               	.LVL6:
+ 164 0086 E230      		cpi r30,2
+ 165 0088 F105      		cpc r31,__zero_reg__
+ 166 008a 01F4      		brne .L5
+  97:gameoflife.c  **** 		for (iy = -1; iy < 2; iy++)
+ 167               		.loc 1 97 0
+ 168 008c 0F5F      		subi r16,lo8(-(1))
+ 169 008e 1F4F      		sbci r17,hi8(-(1))
+ 170               	.LVL7:
+ 171 0090 0230      		cpi r16,2
+ 172 0092 1105      		cpc r17,__zero_reg__
+ 173 0094 01F0      		breq .L6
+ 174               	.LVL8:
+ 175               	.L8:
+  88:gameoflife.c  **** unsigned char gol_count_neighbors (int x, int y, int z)
+ 176               		.loc 1 88 0 discriminator 1
+ 177 0096 C801      		movw r24,r16
+ 178 0098 820D      		add r24,r2
+ 179 009a 931D      		adc r25,r3
+ 107:gameoflife.c  **** 						ny = (y+iy)%GOL_Y;
+ 180               		.loc 1 107 0 discriminator 1
+ 181 009c B501      		movw r22,r10
+ 182 009e 0E94 0000 		call __divmodhi4
+ 183 00a2 C82E      		mov r12,r24
+ 184 00a4 992E      		mov r9,r25
+ 185 00a6 8FEF      		ldi r24,lo8(-1)
+ 186 00a8 9FEF      		ldi r25,hi8(-1)
+ 187 00aa 9C83      		std Y+4,r25
+ 188 00ac 8B83      		std Y+3,r24
+ 189 00ae 00C0      		rjmp .L5
+ 190               	.LVL9:
+ 191               	.L6:
+  95:gameoflife.c  **** 	for (ix = -1; ix < 2; ix++)
+ 192               		.loc 1 95 0
+ 193 00b0 0894      		sec
+ 194 00b2 E11C      		adc r14,__zero_reg__
+ 195 00b4 F11C      		adc r15,__zero_reg__
+ 196               	.LVL10:
+ 197 00b6 92E0      		ldi r25,lo8(2)
+ 198 00b8 E916      		cp r14,r25
+ 199 00ba F104      		cpc r15,__zero_reg__
+ 200 00bc 01F0      		breq .L7
+ 201               	.LVL11:
+ 202               	.L2:
+  88:gameoflife.c  **** unsigned char gol_count_neighbors (int x, int y, int z)
+ 203               		.loc 1 88 0 discriminator 1
+ 204 00be C701      		movw r24,r14
+ 205 00c0 840D      		add r24,r4
+ 206 00c2 951D      		adc r25,r5
+ 106:gameoflife.c  **** 						nx = (x+ix)%GOL_X;
+ 207               		.loc 1 106 0 discriminator 1
+ 208 00c4 B501      		movw r22,r10
+ 209 00c6 0E94 0000 		call __divmodhi4
+ 210 00ca 882E      		mov r8,r24
+ 211 00cc 792E      		mov r7,r25
+ 212 00ce 0FEF      		ldi r16,lo8(-1)
+ 213 00d0 1FEF      		ldi r17,hi8(-1)
+ 214 00d2 00C0      		rjmp .L8
+ 215               	.LVL12:
+ 216               	.L7:
+ 118:gameoflife.c  **** 				}
+ 119:gameoflife.c  **** 			}
+ 120:gameoflife.c  **** 		}
+ 121:gameoflife.c  **** 	}
+ 122:gameoflife.c  **** 	return neigh;
+ 123:gameoflife.c  **** }
+ 217               		.loc 1 123 0
+ 218 00d4 8D2D      		mov r24,r13
+ 219               	/* epilogue start */
+ 220 00d6 0F90      		pop __tmp_reg__
+ 221 00d8 0F90      		pop __tmp_reg__
+ 222 00da 0F90      		pop __tmp_reg__
+ 223 00dc 0F90      		pop __tmp_reg__
+ 224 00de DF91      		pop r29
+ 225 00e0 CF91      		pop r28
+ 226 00e2 1F91      		pop r17
+ 227 00e4 0F91      		pop r16
+ 228               	.LVL13:
+ 229 00e6 FF90      		pop r15
+ 230 00e8 EF90      		pop r14
+ 231               	.LVL14:
+ 232 00ea DF90      		pop r13
+ 233               	.LVL15:
+ 234 00ec CF90      		pop r12
+ 235 00ee BF90      		pop r11
+ 236 00f0 AF90      		pop r10
+ 237 00f2 9F90      		pop r9
+ 238 00f4 8F90      		pop r8
+ 239 00f6 7F90      		pop r7
+ 240 00f8 5F90      		pop r5
+ 241 00fa 4F90      		pop r4
+ 242               	.LVL16:
+ 243 00fc 3F90      		pop r3
+ 244 00fe 2F90      		pop r2
+ 245               	.LVL17:
+ 246 0100 0895      		ret
+ 247               		.cfi_endproc
+ 248               	.LFE3:
+ 250               	.global	gol_nextgen
+ 252               	gol_nextgen:
+ 253               	.LFB2:
+  50:gameoflife.c  **** {
+ 254               		.loc 1 50 0
+ 255               		.cfi_startproc
+ 256 0102 CF92      		push r12
+ 257               	.LCFI19:
+ 258               		.cfi_def_cfa_offset 3
+ 259               		.cfi_offset 12, -2
+ 260 0104 DF92      		push r13
+ 261               	.LCFI20:
+ 262               		.cfi_def_cfa_offset 4
+ 263               		.cfi_offset 13, -3
+ 264 0106 EF92      		push r14
+ 265               	.LCFI21:
+ 266               		.cfi_def_cfa_offset 5
+ 267               		.cfi_offset 14, -4
+ 268 0108 FF92      		push r15
+ 269               	.LCFI22:
+ 270               		.cfi_def_cfa_offset 6
+ 271               		.cfi_offset 15, -5
+ 272 010a 1F93      		push r17
+ 273               	.LCFI23:
+ 274               		.cfi_def_cfa_offset 7
+ 275               		.cfi_offset 17, -6
+ 276 010c CF93      		push r28
+ 277               	.LCFI24:
+ 278               		.cfi_def_cfa_offset 8
+ 279               		.cfi_offset 28, -7
+ 280 010e DF93      		push r29
+ 281               	.LCFI25:
+ 282               		.cfi_def_cfa_offset 9
+ 283               		.cfi_offset 29, -8
+ 284               	/* prologue: function */
+ 285               	/* frame size = 0 */
+ 286               	/* stack size = 7 */
+ 287               	.L__stack_usage = 7
+  54:gameoflife.c  **** 	tmpfill(0x00);
+ 288               		.loc 1 54 0
+ 289 0110 80E0      		ldi r24,lo8(0)
+ 290 0112 0E94 0000 		call tmpfill
+ 291               	.LVL18:
+  56:gameoflife.c  **** 	for (x = 0; x < GOL_X; x++)
+ 292               		.loc 1 56 0
+ 293 0116 CC24      		clr r12
+ 294 0118 DD24      		clr r13
+ 295 011a 00C0      		rjmp .L11
+ 296               	.LVL19:
+ 297               	.L16:
+  62:gameoflife.c  **** 				neigh = gol_count_neighbors(x, y, z);
+ 298               		.loc 1 62 0
+ 299 011c C601      		movw r24,r12
+ 300 011e B701      		movw r22,r14
+ 301 0120 AE01      		movw r20,r28
+ 302 0122 0E94 0000 		call gol_count_neighbors
+ 303 0126 182F      		mov r17,r24
+ 304               	.LVL20:
+  65:gameoflife.c  **** 				if (getvoxel(x,y,z) == 0x01)
+ 305               		.loc 1 65 0
+ 306 0128 C601      		movw r24,r12
+ 307               	.LVL21:
+ 308 012a B701      		movw r22,r14
+ 309 012c AE01      		movw r20,r28
+ 310 012e 0E94 0000 		call getvoxel
+ 311 0132 8130      		cpi r24,lo8(1)
+ 312 0134 01F4      		brne .L12
+  69:gameoflife.c  **** 						tmpclrvoxel(x,y,z);
+ 313               		.loc 1 69 0
+ 314 0136 C601      		movw r24,r12
+ 315 0138 B701      		movw r22,r14
+ 316 013a AE01      		movw r20,r28
+  67:gameoflife.c  **** 					if (neigh <= GOL_TERMINATE_LONELY)
+ 317               		.loc 1 67 0
+ 318 013c 1230      		cpi r17,lo8(2)
+ 319 013e 00F0      		brlo .L21
+ 320               	.L13:
+  70:gameoflife.c  **** 					} else if(neigh >= GOL_TERMINATE_CROWDED)
+ 321               		.loc 1 70 0
+ 322 0140 1430      		cpi r17,lo8(4)
+ 323 0142 00F0      		brlo .L22
+ 324               	.L21:
+  72:gameoflife.c  **** 						tmpclrvoxel(x,y,z);
+ 325               		.loc 1 72 0
+ 326 0144 0E94 0000 		call tmpclrvoxel
+ 327 0148 00C0      		rjmp .L14
+ 328               	.L12:
+  80:gameoflife.c  **** 					if (neigh >= GOL_CREATE_MIN && neigh <= GOL_CREATE_MAX)
+ 329               		.loc 1 80 0
+ 330 014a 1330      		cpi r17,lo8(3)
+ 331 014c 01F4      		brne .L14
+  81:gameoflife.c  **** 						tmpsetvoxel(x,y,z);
+ 332               		.loc 1 81 0
+ 333 014e C601      		movw r24,r12
+ 334 0150 B701      		movw r22,r14
+ 335 0152 AE01      		movw r20,r28
+ 336               	.L22:
+ 337 0154 0E94 0000 		call tmpsetvoxel
+ 338               	.L14:
+  60:gameoflife.c  **** 			for (z = 0; z < GOL_Z; z++)
+ 339               		.loc 1 60 0
+ 340 0158 2196      		adiw r28,1
+ 341               	.LVL22:
+ 342 015a C830      		cpi r28,8
+ 343 015c D105      		cpc r29,__zero_reg__
+ 344 015e 01F4      		brne .L16
+  58:gameoflife.c  **** 		for (y = 0; y < GOL_Y; y++)
+ 345               		.loc 1 58 0
+ 346 0160 0894      		sec
+ 347 0162 E11C      		adc r14,__zero_reg__
+ 348 0164 F11C      		adc r15,__zero_reg__
+ 349               	.LVL23:
+ 350 0166 88E0      		ldi r24,lo8(8)
+ 351 0168 E816      		cp r14,r24
+ 352 016a F104      		cpc r15,__zero_reg__
+ 353 016c 01F0      		breq .L17
+ 354               	.LVL24:
+ 355               	.L19:
+  50:gameoflife.c  **** {
+ 356               		.loc 1 50 0 discriminator 1
+ 357 016e C0E0      		ldi r28,lo8(0)
+ 358 0170 D0E0      		ldi r29,hi8(0)
+ 359 0172 00C0      		rjmp .L16
+ 360               	.LVL25:
+ 361               	.L17:
+  56:gameoflife.c  **** 	for (x = 0; x < GOL_X; x++)
+ 362               		.loc 1 56 0
+ 363 0174 0894      		sec
+ 364 0176 C11C      		adc r12,__zero_reg__
+ 365 0178 D11C      		adc r13,__zero_reg__
+ 366               	.LVL26:
+ 367 017a 88E0      		ldi r24,lo8(8)
+ 368 017c C816      		cp r12,r24
+ 369 017e D104      		cpc r13,__zero_reg__
+ 370 0180 01F0      		breq .L10
+ 371               	.LVL27:
+ 372               	.L11:
+  50:gameoflife.c  **** {
+ 373               		.loc 1 50 0 discriminator 1
+ 374 0182 EE24      		clr r14
+ 375 0184 FF24      		clr r15
+ 376 0186 00C0      		rjmp .L19
+ 377               	.LVL28:
+ 378               	.L10:
+ 379               	/* epilogue start */
+  86:gameoflife.c  **** }
+ 380               		.loc 1 86 0
+ 381 0188 DF91      		pop r29
+ 382 018a CF91      		pop r28
+ 383               	.LVL29:
+ 384 018c 1F91      		pop r17
+ 385               	.LVL30:
+ 386 018e FF90      		pop r15
+ 387 0190 EF90      		pop r14
+ 388               	.LVL31:
+ 389 0192 DF90      		pop r13
+ 390 0194 CF90      		pop r12
+ 391               	.LVL32:
+ 392 0196 0895      		ret
+ 393               		.cfi_endproc
  394               	.LFE2:
- 396               		.comm debug_mode,1,1
- 397               		.comm debug_active,1,1
- 398               		.comm last_debug_mode,1,1
- 399               		.comm debug_mode_counter,1,1
- 400               		.comm cube,64,1
- 401               		.comm fb,64,1
- 402               		.comm m_override_delay,1,1
- 451               	.Letext0:
+ 396               	.global	gol_count_changes
+ 398               	gol_count_changes:
+ 399               	.LFB4:
+ 124:gameoflife.c  **** 
+ 125:gameoflife.c  **** int gol_count_changes (void)
+ 126:gameoflife.c  **** {
+ 400               		.loc 1 126 0
+ 401               		.cfi_startproc
+ 402 0198 CF93      		push r28
+ 403               	.LCFI26:
+ 404               		.cfi_def_cfa_offset 3
+ 405               		.cfi_offset 28, -2
+ 406               	/* prologue: function */
+ 407               	/* frame size = 0 */
+ 408               	/* stack size = 1 */
+ 409               	.L__stack_usage = 1
+ 410               	.LVL33:
+ 127:gameoflife.c  **** 	int x,y;
+ 128:gameoflife.c  **** 	int i = 0;
+ 129:gameoflife.c  **** 	
+ 130:gameoflife.c  **** 	for (x = 0; x < GOL_X; x++)
+ 411               		.loc 1 130 0
+ 412 019a 20E0      		ldi r18,lo8(0)
+ 413 019c 30E0      		ldi r19,hi8(0)
+ 128:gameoflife.c  **** 	int i = 0;
+ 414               		.loc 1 128 0
+ 415 019e 40E0      		ldi r20,lo8(0)
+ 416 01a0 50E0      		ldi r21,hi8(0)
+ 417 01a2 00C0      		rjmp .L24
+ 418               	.LVL34:
+ 419               	.L26:
+ 131:gameoflife.c  **** 	{
+ 132:gameoflife.c  **** 		for (y = 0; y < GOL_Y; y++)
+ 133:gameoflife.c  **** 		{
+ 134:gameoflife.c  **** 			if (fb[x][y] != cube[x][y])
+ 420               		.loc 1 134 0
+ 421 01a4 BD01      		movw r22,r26
+ 422 01a6 680F      		add r22,r24
+ 423 01a8 791F      		adc r23,r25
+ 424 01aa FB01      		movw r30,r22
+ 425 01ac E050      		subi r30,lo8(-(fb))
+ 426 01ae F040      		sbci r31,hi8(-(fb))
+ 427 01b0 C081      		ld r28,Z
+ 428 01b2 FB01      		movw r30,r22
+ 429 01b4 E050      		subi r30,lo8(-(cube))
+ 430 01b6 F040      		sbci r31,hi8(-(cube))
+ 431 01b8 6081      		ld r22,Z
+ 432 01ba C617      		cp r28,r22
+ 433 01bc 01F0      		breq .L25
+ 135:gameoflife.c  **** 				i++;
+ 434               		.loc 1 135 0
+ 435 01be 4F5F      		subi r20,lo8(-(1))
+ 436 01c0 5F4F      		sbci r21,hi8(-(1))
+ 437               	.LVL35:
+ 438               	.L25:
+ 132:gameoflife.c  **** 		for (y = 0; y < GOL_Y; y++)
+ 439               		.loc 1 132 0
+ 440 01c2 0196      		adiw r24,1
+ 441               	.LVL36:
+ 442 01c4 8830      		cpi r24,8
+ 443 01c6 9105      		cpc r25,__zero_reg__
+ 444 01c8 01F4      		brne .L26
+ 130:gameoflife.c  **** 	for (x = 0; x < GOL_X; x++)
+ 445               		.loc 1 130 0
+ 446 01ca 2F5F      		subi r18,lo8(-(1))
+ 447 01cc 3F4F      		sbci r19,hi8(-(1))
+ 448               	.LVL37:
+ 449 01ce 2830      		cpi r18,8
+ 450 01d0 3105      		cpc r19,__zero_reg__
+ 451 01d2 01F0      		breq .L27
+ 452               	.LVL38:
+ 453               	.L24:
+ 126:gameoflife.c  **** {
+ 454               		.loc 1 126 0 discriminator 1
+ 455 01d4 80E0      		ldi r24,lo8(0)
+ 456 01d6 90E0      		ldi r25,hi8(0)
+ 134:gameoflife.c  **** 			if (fb[x][y] != cube[x][y])
+ 457               		.loc 1 134 0 discriminator 1
+ 458 01d8 D901      		movw r26,r18
+ 459 01da F3E0      		ldi r31,3
+ 460 01dc AA0F      	1:	lsl r26
+ 461 01de BB1F      		rol r27
+ 462 01e0 FA95      		dec r31
+ 463 01e2 01F4      		brne 1b
+ 464 01e4 00C0      		rjmp .L26
+ 465               	.LVL39:
+ 466               	.L27:
+ 136:gameoflife.c  **** 		}
+ 137:gameoflife.c  **** 	}
+ 138:gameoflife.c  **** 	
+ 139:gameoflife.c  **** 	return i;
+ 140:gameoflife.c  **** }
+ 467               		.loc 1 140 0
+ 468 01e6 CA01      		movw r24,r20
+ 469               	.LVL40:
+ 470               	/* epilogue start */
+ 471 01e8 CF91      		pop r28
+ 472 01ea 0895      		ret
+ 473               		.cfi_endproc
+ 474               	.LFE4:
+ 476               	.global	gol_play
+ 478               	gol_play:
+ 479               	.LFB1:
+  29:gameoflife.c  **** {
+ 480               		.loc 1 29 0
+ 481               		.cfi_startproc
+ 482               	.LVL41:
+ 483 01ec EF92      		push r14
+ 484               	.LCFI27:
+ 485               		.cfi_def_cfa_offset 3
+ 486               		.cfi_offset 14, -2
+ 487 01ee FF92      		push r15
+ 488               	.LCFI28:
+ 489               		.cfi_def_cfa_offset 4
+ 490               		.cfi_offset 15, -3
+ 491 01f0 0F93      		push r16
+ 492               	.LCFI29:
+ 493               		.cfi_def_cfa_offset 5
+ 494               		.cfi_offset 16, -4
+ 495 01f2 1F93      		push r17
+ 496               	.LCFI30:
+ 497               		.cfi_def_cfa_offset 6
+ 498               		.cfi_offset 17, -5
+ 499 01f4 CF93      		push r28
+ 500               	.LCFI31:
+ 501               		.cfi_def_cfa_offset 7
+ 502               		.cfi_offset 28, -6
+ 503 01f6 DF93      		push r29
+ 504               	.LCFI32:
+ 505               		.cfi_def_cfa_offset 8
+ 506               		.cfi_offset 29, -7
+ 507               	/* prologue: function */
+ 508               	/* frame size = 0 */
+ 509               	/* stack size = 6 */
+ 510               	.L__stack_usage = 6
+ 511 01f8 7C01      		movw r14,r24
+ 512 01fa 8B01      		movw r16,r22
+ 513               	.LVL42:
+  32:gameoflife.c  **** 	for (i = 0; i < iterations; i++)
+ 514               		.loc 1 32 0
+ 515 01fc C0E0      		ldi r28,lo8(0)
+ 516 01fe D0E0      		ldi r29,hi8(0)
+ 517 0200 00C0      		rjmp .L30
+ 518               	.LVL43:
+ 519               	.L32:
+  34:gameoflife.c  **** 		debug_blink(LED_GREEN);
+ 520               		.loc 1 34 0
+ 521 0202 80E2      		ldi r24,lo8(32)
+ 522 0204 0E94 0000 		call debug_blink
+  36:gameoflife.c  **** 		gol_nextgen();
+ 523               		.loc 1 36 0
+ 524 0208 0E94 0000 		call gol_nextgen
+  38:gameoflife.c  **** 		if (gol_count_changes() == 0)
+ 525               		.loc 1 38 0
+ 526 020c 0E94 0000 		call gol_count_changes
+ 527 0210 0097      		sbiw r24,0
+ 528 0212 01F0      		breq .L29
+  41:gameoflife.c  **** 		tmp2cube();
+ 529               		.loc 1 41 0
+ 530 0214 0E94 0000 		call tmp2cube
+  43:gameoflife.c  **** 		delay_ms(delay);
+ 531               		.loc 1 43 0
+ 532 0218 C801      		movw r24,r16
+ 533 021a 0E94 0000 		call delay_ms
+  32:gameoflife.c  **** 	for (i = 0; i < iterations; i++)
+ 534               		.loc 1 32 0
+ 535 021e 2196      		adiw r28,1
+ 536               	.LVL44:
+ 537               	.L30:
+  32:gameoflife.c  **** 	for (i = 0; i < iterations; i++)
+ 538               		.loc 1 32 0 is_stmt 0 discriminator 1
+ 539 0220 CE15      		cp r28,r14
+ 540 0222 DF05      		cpc r29,r15
+ 541 0224 04F0      		brlt .L32
+ 542               	.L29:
+ 543               	/* epilogue start */
+  47:gameoflife.c  **** }
+ 544               		.loc 1 47 0 is_stmt 1
+ 545 0226 DF91      		pop r29
+ 546 0228 CF91      		pop r28
+ 547               	.LVL45:
+ 548 022a 1F91      		pop r17
+ 549 022c 0F91      		pop r16
+ 550               	.LVL46:
+ 551 022e FF90      		pop r15
+ 552 0230 EF90      		pop r14
+ 553               	.LVL47:
+ 554 0232 0895      		ret
+ 555               		.cfi_endproc
+ 556               	.LFE1:
+ 558               		.comm fb,64,1
+ 559               		.comm cube,64,1
+ 560               	.Letext0:
+ 561               		.file 2 "cube.h"
+ 562               		.file 3 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 gameoflife.c
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:2      *ABS*:0000003f __SREG__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:5      *ABS*:00000034 __CCP__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:18     .text:00000000 gol_count_changes
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:2      *ABS*:0000003f __SREG__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:3      *ABS*:0000003e __SP_H__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:4      *ABS*:0000003d __SP_L__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:5      *ABS*:00000034 __CCP__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:15     .text:00000000 gol_count_neighbors
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:252    .text:00000102 gol_nextgen
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:398    .text:00000198 gol_count_changes
                             *COM*:00000040 fb
                             *COM*:00000040 cube
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:87     .text:00000058 gol_count_neighbors
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:231    .text:00000130 gol_nextgen
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccJxIrOq.s:339    .text:000001c6 gol_play
-                            *COM*:00000001 debug_mode
-                            *COM*:00000001 debug_active
-                            *COM*:00000001 last_debug_mode
-                            *COM*:00000001 debug_mode_counter
-                            *COM*:00000001 m_override_delay
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc1xtB55.s:478    .text:000001ec gol_play
 
 UNDEFINED SYMBOLS
+__do_copy_data
+__do_clear_bss
 __divmodhi4
 getvoxel
 tmpfill
 tmpclrvoxel
 tmpsetvoxel
-DebugBlink
+debug_blink
 tmp2cube
 delay_ms
-__do_clear_bss

@@ -28,5 +28,9 @@ volatile unsigned char fb[CUBE_SIZE][CUBE_SIZE];
 #define AXIS_Y 0x79
 #define AXIS_Z 0x7a
 
+
+#define TRUE 1
+#define FALSE 0
+
 #endif
 

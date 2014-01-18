@@ -4,24 +4,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+void util_init(void);
 
-
-volatile uint8_t m_override_delay;
-
-void InitUtil(void);
-
-void DelayTick(void);
-
+void delay_tick(void);
 void delay_ms(uint16_t delay);
 
-void OverrideDelay(uint8_t override_delay);
+void set_timer(unsigned int time_ms);
+bool timer_expired(void);
 
-uint8_t GetChar(const uint8_t *str_ptr, uint8_t prgMem);
+void override_delay(unsigned char override);
 
-unsigned int ADC_Read(unsigned char portNo);
+uint8_t GetChar(const char *str_ptr, uint16_t index, uint8_t prgMem);
 
+unsigned int ADC_Read(unsigned char input);
 void EQ_Read(unsigned int * buffer_ptr);
 
-void DebounceKey(bool *KeyChanged, bool *Key_pressed);
+void DebounceKey(bool *keyChanged, bool *keyPressed);
 
 #endif

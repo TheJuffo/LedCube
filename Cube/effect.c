@@ -25,13 +25,13 @@ void effect_test (void)
 }
 
 
-
 void effect_stringfly2(const char * str, unsigned char prgMem)
 {
 	int x, y, i;
 	unsigned char chr[5];
+    uint16_t pos = 0;
 	
-	unsigned char tempChar = GetChar(str, prgMem);
+	unsigned char tempChar = GetChar(str, 0, prgMem);
 
 	while (tempChar != 0)
 	{
@@ -57,8 +57,8 @@ void effect_stringfly2(const char * str, unsigned char prgMem)
             shift(AXIS_X,-1);
 		}
 
-		*str++;
-		tempChar = GetChar(str, prgMem);
+        pos++;
+        tempChar = GetChar(str, pos, prgMem);
 	}
     // Shift the last character out of the cube.
 	for (i = 0; i < 8; i++)
@@ -904,12 +904,10 @@ void effect_boxside_randsend_parallel (char axis, int origin, int delay, int mod
 		
 		delay_ms(delay);
 		draw_positions_axis(axis, cubepos, 0);
-		DebugBlink(LED_RED);
+		debug_blink(LED_RED);
 	}
 	
 }
-
-
 
 
 // Light all leds layer by layer,
@@ -1252,15 +1250,14 @@ void effect_rand_patharound (int iterations, int delay)
 
 void effect_pathspiral (int iterations, int delay)
 {
-	int z, i;
-	z = 4;
+	int i;
 	unsigned char path[16];
 	
-	font_getpath(1,path,16);
+	font_getpath(1, path, 16);
 	
 	for (i = 0; i < iterations; i++)
 	{
-		setvoxel(4,0,i%8);
+		setvoxel(4, 0, i % 8);
 		delay_ms(delay);
 		effect_pathmove(path, 28);
 		
@@ -1277,7 +1274,7 @@ void effect_path_text (int delay, const char *str, unsigned char prgMem)
 	unsigned char chr[5];
 	unsigned char stripe;
 
-	unsigned char tempChar = GetChar(str, prgMem);
+	unsigned char tempChar = GetChar(str, 0, prgMem);
 	uint8_t pos = 0;
 	
 	while (tempChar != 0)
@@ -1308,7 +1305,7 @@ void effect_path_text (int delay, const char *str, unsigned char prgMem)
 		delay_ms(delay);
 
 		pos++;
-		tempChar = GetChar(&(str[pos]), prgMem);
+		tempChar = GetChar(str, pos, prgMem);
 	}
 
 	for (i = 0; i < 28; i++)

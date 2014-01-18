@@ -2,394 +2,866 @@
    2               	__SREG__ = 0x3f
    3               	__SP_H__ = 0x3e
    4               	__SP_L__ = 0x3d
-   5               	__CCP__  = 0x34
+   5               	__CCP__ = 0x34
    6               	__tmp_reg__ = 0
    7               	__zero_reg__ = 1
-  15               	.Ltext0:
-  16               	.global	InitUtil
-  18               	InitUtil:
-  19               	.LFB9:
-  20               	.LM1:
-  21               	/* prologue: function */
-  22               	/* frame size = 0 */
-  23               	.LM2:
-  24 0000 86B1      		in r24,38-32
-  25 0002 8760      		ori r24,lo8(7)
-  26 0004 86B9      		out 38-32,r24
-  27               	.LM3:
-  28 0006 3E9A      		sbi 39-32,6
-  29               	.LM4:
-  30 0008 379A      		sbi 38-32,7
-  31               	/* epilogue start */
-  32               	.LM5:
-  33 000a 0895      		ret
-  34               	.LFE9:
-  36               	.global	DelayTick
-  38               	DelayTick:
-  39               	.LFB10:
-  40               	.LM6:
-  41               	/* prologue: function */
-  42               	/* frame size = 0 */
-  43               	.LM7:
-  44 000c 8091 0000 		lds r24,m_override_delay
-  45 0010 8130      		cpi r24,lo8(1)
-  46 0012 01F4      		brne .L4
-  47               	.LM8:
-  48 0014 1092 0000 		sts (m_current_delay)+1,__zero_reg__
-  49 0018 1092 0000 		sts m_current_delay,__zero_reg__
-  50 001c 0895      		ret
-  51               	.L4:
-  52               	.LM9:
-  53 001e 8091 0000 		lds r24,m_current_delay
-  54 0022 9091 0000 		lds r25,(m_current_delay)+1
-  55 0026 892B      		or r24,r25
-  56 0028 01F0      		breq .L6
-  57               	.LM10:
-  58 002a 8091 0000 		lds r24,m_current_delay
-  59 002e 9091 0000 		lds r25,(m_current_delay)+1
-  60 0032 0197      		sbiw r24,1
-  61 0034 9093 0000 		sts (m_current_delay)+1,r25
-  62 0038 8093 0000 		sts m_current_delay,r24
-  63               	.L6:
-  64 003c 0895      		ret
-  65               	.LFE10:
-  67               	.global	delay_ms
-  69               	delay_ms:
-  70               	.LFB11:
-  71               	.LM11:
-  72               	.LVL0:
-  73               	/* prologue: function */
-  74               	/* frame size = 0 */
-  75 003e 9C01      		movw r18,r24
-  76               	.LM12:
-  77 0040 8091 0000 		lds r24,m_override_delay
-  78               	.LVL1:
-  79 0044 8823      		tst r24
-  80 0046 01F4      		brne .L10
-  81               	.LM13:
-  82 0048 8FEF      		ldi r24,hi8(-1)
-  83 004a 2F3F      		cpi r18,lo8(-1)
-  84 004c 3807      		cpc r19,r24
-  85 004e 01F0      		breq .L11
-  86               	.LM14:
-  87 0050 2F5F      		subi r18,lo8(-(1))
-  88 0052 3F4F      		sbci r19,hi8(-(1))
-  89 0054 3093 0000 		sts (m_current_delay)+1,r19
-  90 0058 2093 0000 		sts m_current_delay,r18
-  91               	.L11:
-  92               	.LM15:
-  93 005c 8091 0000 		lds r24,m_current_delay
-  94 0060 9091 0000 		lds r25,(m_current_delay)+1
-  95 0064 892B      		or r24,r25
-  96 0066 01F4      		brne .L11
-  97               	.L10:
-  98 0068 0895      		ret
-  99               	.LFE11:
- 101               	.global	OverrideDelay
- 103               	OverrideDelay:
- 104               	.LFB12:
- 105               	.LM16:
- 106               	.LVL2:
- 107               	/* prologue: function */
- 108               	/* frame size = 0 */
- 109               	.LM17:
- 110 006a 8093 0000 		sts m_override_delay,r24
- 111               	/* epilogue start */
- 112               	.LM18:
- 113 006e 0895      		ret
- 114               	.LFE12:
- 116               	.global	GetChar
- 118               	GetChar:
- 119               	.LFB13:
- 120               	.LM19:
- 121               	.LVL3:
- 122               	/* prologue: function */
- 123               	/* frame size = 0 */
- 124 0070 FC01      		movw r30,r24
- 125               	.LM20:
- 126 0072 6623      		tst r22
- 127 0074 01F0      		breq .L16
- 128               	.LVL4:
- 129               	.LBB8:
- 130               	.LM21:
- 131               	/* #APP */
- 132               	 ;  60 "util.c" 1
- 133 0076 8491      		lpm r24, Z
- 134               		
- 135               	 ;  0 "" 2
- 136               	.LVL5:
- 137               	/* #NOAPP */
- 138 0078 0895      		ret
- 139               	.LVL6:
- 140               	.L16:
- 141               	.LBE8:
- 142               	.LM22:
- 143 007a 8081      		ld r24,Z
- 144               	.LVL7:
- 145               	.LVL8:
- 146               	.LM23:
- 147 007c 0895      		ret
- 148               	.LFE13:
- 150               	.global	ADC_Read
- 152               	ADC_Read:
- 153               	.LFB14:
- 154               	.LM24:
- 155               	.LVL9:
- 156               	/* prologue: function */
- 157               	/* frame size = 0 */
- 158               	.LM25:
- 159 007e 97B1      		in r25,39-32
- 160 0080 907E      		andi r25,lo8(-32)
- 161 0082 97B9      		out 39-32,r25
- 162               	.LM26:
- 163 0084 97B1      		in r25,39-32
- 164 0086 982B      		or r25,r24
- 165 0088 97B9      		out 39-32,r25
- 166               	.LM27:
- 167 008a 369A      		sbi 38-32,6
- 168               	.L20:
- 169               	.LM28:
- 170 008c 329B      		sbis 38-32,2
- 171 008e 00C0      		rjmp .L20
- 172               	.LM29:
- 173 0090 84B1      		in r24,36-32
- 174               	.LVL10:
- 175               	.LM30:
- 176 0092 85B1      		in r24,37-32
- 177               	.LM31:
- 178 0094 80E0      		ldi r24,lo8(0)
- 179 0096 90E0      		ldi r25,hi8(0)
- 180               	/* epilogue start */
- 181 0098 0895      		ret
- 182               	.LFE14:
- 184               	.global	EQ_Read
- 186               	EQ_Read:
- 187               	.LFB15:
- 188               	.LM32:
- 189               	.LVL11:
- 190 009a AF92      		push r10
- 191 009c BF92      		push r11
- 192 009e CF92      		push r12
- 193 00a0 DF92      		push r13
- 194 00a2 EF92      		push r14
- 195 00a4 FF92      		push r15
- 196 00a6 0F93      		push r16
- 197 00a8 1F93      		push r17
- 198 00aa CF93      		push r28
- 199 00ac DF93      		push r29
- 200               	/* prologue: function */
- 201               	/* frame size = 0 */
- 202               	.LM33:
- 203 00ae DB9A      		sbi 59-32,3
- 204               	.LM34:
- 205               	/* #APP */
- 206               	 ;  114 "util.c" 1
- 207 00b0 0000      		 nop
- 208               	 ;  0 "" 2
- 209               	.LM35:
- 210               	 ;  115 "util.c" 1
- 211 00b2 0000      		 nop
- 212               	 ;  0 "" 2
- 213               	.LM36:
- 214               	/* #NOAPP */
- 215 00b4 DB98      		cbi 59-32,3
- 216 00b6 EC01      		movw r28,r24
- 217               	.LVL12:
- 218 00b8 00E0      		ldi r16,lo8(0)
- 219 00ba 10E0      		ldi r17,hi8(0)
- 220               	.LVL13:
- 221               	.LBB9:
- 222               	.LBB10:
- 223               	.LM37:
- 224 00bc 2AE0      		ldi r18,lo8(266)
- 225 00be A22E      		mov r10,r18
- 226 00c0 21E0      		ldi r18,hi8(266)
- 227 00c2 B22E      		mov r11,r18
- 228               	.LBE10:
- 229               	.LBE9:
- 230               	.LBB12:
- 231               	.LBB13:
- 232 00c4 98E9      		ldi r25,lo8(664)
- 233 00c6 C92E      		mov r12,r25
- 234 00c8 92E0      		ldi r25,hi8(664)
- 235 00ca D92E      		mov r13,r25
- 236               	.LBE13:
- 237               	.LBE12:
- 238               	.LBB15:
- 239               	.LBB16:
- 240 00cc 80E3      		ldi r24,lo8(1328)
- 241 00ce E82E      		mov r14,r24
- 242 00d0 85E0      		ldi r24,hi8(1328)
- 243 00d2 F82E      		mov r15,r24
- 244               	.L24:
- 245               	.LBE16:
- 246               	.LBE15:
- 247               	.LBB18:
- 248               	.LBB11:
- 249 00d4 C501      		movw r24,r10
- 250               	.LVL14:
- 251               	/* #APP */
- 252               	 ;  105 "c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h" 1
- 253 00d6 0197      		1: sbiw r24,1
- 254 00d8 01F4      		brne 1b
- 255               	 ;  0 "" 2
- 256               	/* #NOAPP */
- 257               	.LBE11:
- 258               	.LBE18:
- 259               	.LM38:
- 260 00da DA9A      		sbi 59-32,2
- 261               	.LBB19:
- 262               	.LBB14:
- 263               	.LM39:
- 264 00dc C601      		movw r24,r12
- 265               	.LVL15:
- 266               	/* #APP */
- 267               	 ;  105 "c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h" 1
- 268 00de 0197      		1: sbiw r24,1
- 269 00e0 01F4      		brne 1b
- 270               	 ;  0 "" 2
- 271               	/* #NOAPP */
- 272               	.LBE14:
- 273               	.LBE19:
- 274               	.LM40:
- 275 00e2 DA98      		cbi 59-32,2
- 276               	.LBB20:
- 277               	.LBB17:
- 278               	.LM41:
- 279 00e4 C701      		movw r24,r14
- 280               	.LVL16:
- 281               	/* #APP */
- 282               	 ;  105 "c:/winavr-20100110/lib/gcc/../../avr/include/util/delay_basic.h" 1
- 283 00e6 0197      		1: sbiw r24,1
- 284 00e8 01F4      		brne 1b
- 285               	 ;  0 "" 2
- 286               	/* #NOAPP */
- 287               	.LBE17:
- 288               	.LBE20:
- 289               	.LM42:
- 290 00ea 81E0      		ldi r24,lo8(1)
- 291               	.LVL17:
- 292 00ec 0E94 0000 		call ADC_Read
- 293 00f0 9983      		std Y+1,r25
- 294 00f2 8883      		st Y,r24
- 295               	.LM43:
- 296 00f4 80E0      		ldi r24,lo8(0)
- 297 00f6 0E94 0000 		call ADC_Read
- 298 00fa 9F87      		std Y+15,r25
- 299 00fc 8E87      		std Y+14,r24
- 300               	.LM44:
- 301 00fe 0F5F      		subi r16,lo8(-(1))
- 302 0100 1F4F      		sbci r17,hi8(-(1))
- 303 0102 2296      		adiw r28,2
- 304 0104 0730      		cpi r16,7
- 305 0106 1105      		cpc r17,__zero_reg__
- 306 0108 01F4      		brne .L24
- 307               	/* epilogue start */
- 308               	.LM45:
- 309 010a DF91      		pop r29
- 310 010c CF91      		pop r28
- 311 010e 1F91      		pop r17
- 312 0110 0F91      		pop r16
- 313               	.LVL18:
- 314 0112 FF90      		pop r15
- 315 0114 EF90      		pop r14
- 316 0116 DF90      		pop r13
- 317 0118 CF90      		pop r12
- 318 011a BF90      		pop r11
- 319 011c AF90      		pop r10
- 320 011e 0895      		ret
- 321               	.LFE15:
- 323               	.global	DebounceKey
- 325               	DebounceKey:
- 326               	.LFB16:
- 327               	.LM46:
- 328               	.LVL19:
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  12               		.cfi_sections	.debug_frame
+  13               	.global	util_init
+  15               	util_init:
+  16               	.LFB3:
+  17               		.file 1 "util.c"
+   1:util.c        **** #include "util.h"
+   2:util.c        **** #include <stdint.h>
+   3:util.c        **** #include <avr/io.h>
+   4:util.c        **** #include <avr/pgmspace.h>
+   5:util.c        **** #include <util/delay_basic.h>
+   6:util.c        **** 
+   7:util.c        **** 
+   8:util.c        **** #define MUX_INPUT_MASK 0x1f
+   9:util.c        **** 
+  10:util.c        **** #define CHECK_MS 1
+  11:util.c        **** #define PRESS_MS 20
+  12:util.c        **** #define RELEASE_MS 50
+  13:util.c        **** #define BUTTON_PORT PORTD
+  14:util.c        **** #define BUTTON0 0x04
+  15:util.c        **** 
+  16:util.c        **** #define EQ_PORT PORTA
+  17:util.c        **** #define EQ_STROBE 0x04
+  18:util.c        **** #define EQ_RESET 0x08
+  19:util.c        **** #define EQ_AD_LEFT 0x01
+  20:util.c        **** #define EQ_AD_RIGHT 0x00
+  21:util.c        **** 
+  22:util.c        **** #define STROBE_TO_STROBE_DELAY (((72 * F_CPU) / 4 / 1000000) + 1)
+  23:util.c        **** #define STROBE_PULSE_WIDTH (((18 * F_CPU) / 4 / 100000) + 1)
+  24:util.c        **** #define OUTPUT_SETTLING_TIME (((36 * F_CPU) / 4 / 100000) + 1)
+  25:util.c        **** 
+  26:util.c        **** 
+  27:util.c        **** volatile unsigned int m_timer_ms;
+  28:util.c        **** volatile unsigned int m_current_delay;
+  29:util.c        **** volatile unsigned char m_override_delay;
+  30:util.c        **** 
+  31:util.c        **** 
+  32:util.c        **** void util_init()
+  33:util.c        **** {
+  18               		.loc 1 33 0
+  19               		.cfi_startproc
+  20               	/* prologue: function */
+  21               	/* frame size = 0 */
+  22               	/* stack size = 0 */
+  23               	.L__stack_usage = 0
+  34:util.c        ****     ADCSRA = _BV(ADPS2) | _BV(ADPS1) | _BV(ADPS0);  // Sets the prescaler to 128
+  24               		.loc 1 34 0
+  25 0000 87E0      		ldi r24,lo8(7)
+  26 0002 86B9      		out 38-32,r24
+  35:util.c        ****     ADMUX = _BV(REFS0);     // Selects AVCC as reference voltage
+  27               		.loc 1 35 0
+  28 0004 80E4      		ldi r24,lo8(64)
+  29 0006 87B9      		out 39-32,r24
+  36:util.c        ****     ADCSRA = _BV(ADEN);     // Enables the AD converter
+  30               		.loc 1 36 0
+  31 0008 80E8      		ldi r24,lo8(-128)
+  32 000a 86B9      		out 38-32,r24
+  33               	/* epilogue start */
+  37:util.c        **** }
+  34               		.loc 1 37 0
+  35 000c 0895      		ret
+  36               		.cfi_endproc
+  37               	.LFE3:
+  39               	.global	delay_tick
+  41               	delay_tick:
+  42               	.LFB4:
+  38:util.c        **** 
+  39:util.c        **** 
+  40:util.c        **** void delay_tick()
+  41:util.c        **** {
+  43               		.loc 1 41 0
+  44               		.cfi_startproc
+  45               	/* prologue: function */
+  46               	/* frame size = 0 */
+  47               	/* stack size = 0 */
+  48               	.L__stack_usage = 0
+  42:util.c        **** 	if(m_override_delay == 1)
+  49               		.loc 1 42 0
+  50 000e 8091 0000 		lds r24,m_override_delay
+  51 0012 8130      		cpi r24,lo8(1)
+  52 0014 01F4      		brne .L3
+  43:util.c        **** 	{
+  44:util.c        **** 		m_current_delay = 0;
+  53               		.loc 1 44 0
+  54 0016 1092 0000 		sts m_current_delay+1,__zero_reg__
+  55 001a 1092 0000 		sts m_current_delay,__zero_reg__
+  45:util.c        ****         m_timer_ms = 0;
+  56               		.loc 1 45 0
+  57 001e 1092 0000 		sts m_timer_ms+1,__zero_reg__
+  58 0022 1092 0000 		sts m_timer_ms,__zero_reg__
+  59 0026 0895      		ret
+  60               	.L3:
+  46:util.c        **** 	}
+  47:util.c        **** 	else
+  48:util.c        **** 	{
+  49:util.c        **** 		// Count down if there is a delay started
+  50:util.c        **** 		if(m_current_delay > 0)
+  61               		.loc 1 50 0
+  62 0028 8091 0000 		lds r24,m_current_delay
+  63 002c 9091 0000 		lds r25,m_current_delay+1
+  64 0030 0097      		sbiw r24,0
+  65 0032 01F0      		breq .L5
+  51:util.c        **** 		{
+  52:util.c        **** 			m_current_delay--;
+  66               		.loc 1 52 0
+  67 0034 8091 0000 		lds r24,m_current_delay
+  68 0038 9091 0000 		lds r25,m_current_delay+1
+  69 003c 0197      		sbiw r24,1
+  70 003e 9093 0000 		sts m_current_delay+1,r25
+  71 0042 8093 0000 		sts m_current_delay,r24
+  72               	.L5:
+  53:util.c        **** 		}
+  54:util.c        ****         // Count down if there is a timer started
+  55:util.c        ****         if(m_timer_ms > 0)
+  73               		.loc 1 55 0
+  74 0046 8091 0000 		lds r24,m_timer_ms
+  75 004a 9091 0000 		lds r25,m_timer_ms+1
+  76 004e 0097      		sbiw r24,0
+  77 0050 01F0      		breq .L2
+  56:util.c        ****         {
+  57:util.c        ****             m_timer_ms--;
+  78               		.loc 1 57 0
+  79 0052 8091 0000 		lds r24,m_timer_ms
+  80 0056 9091 0000 		lds r25,m_timer_ms+1
+  81 005a 0197      		sbiw r24,1
+  82 005c 9093 0000 		sts m_timer_ms+1,r25
+  83 0060 8093 0000 		sts m_timer_ms,r24
+  84               	.L2:
+  85 0064 0895      		ret
+  86               		.cfi_endproc
+  87               	.LFE4:
+  89               	.global	delay_ms
+  91               	delay_ms:
+  92               	.LFB5:
+  58:util.c        ****         }
+  59:util.c        **** 	}
+  60:util.c        **** 
+  61:util.c        **** }
+  62:util.c        **** 
+  63:util.c        **** void delay_ms(unsigned int delay)
+  64:util.c        **** {
+  93               		.loc 1 64 0
+  94               		.cfi_startproc
+  95               	.LVL0:
+  96               	/* prologue: function */
+  97               	/* frame size = 0 */
+  98               	/* stack size = 0 */
+  99               	.L__stack_usage = 0
+  65:util.c        **** 	if(m_override_delay == 0)
+ 100               		.loc 1 65 0
+ 101 0066 2091 0000 		lds r18,m_override_delay
+ 102 006a 2223      		tst r18
+ 103 006c 01F4      		brne .L6
+  66:util.c        **** 	{
+  67:util.c        **** 		if(delay < UINT16_MAX)
+ 104               		.loc 1 67 0
+ 105 006e 2FEF      		ldi r18,hi8(-1)
+ 106 0070 8F3F      		cpi r24,lo8(-1)
+ 107 0072 9207      		cpc r25,r18
+ 108 0074 01F0      		breq .L8
+  68:util.c        **** 		{
+  69:util.c        **** 			// Adding 1 to ensure that the delay the wait time is at least "delay" ms.
+  70:util.c        **** 			m_current_delay = delay + 1;
+ 109               		.loc 1 70 0
+ 110 0076 0196      		adiw r24,1
+ 111               	.LVL1:
+ 112               	.L8:
+  71:util.c        **** 		}
+  72:util.c        ****         else
+  73:util.c        ****         {
+  74:util.c        ****             m_current_delay = delay;
+ 113               		.loc 1 74 0
+ 114 0078 9093 0000 		sts m_current_delay+1,r25
+ 115 007c 8093 0000 		sts m_current_delay,r24
+ 116               	.L11:
+  75:util.c        ****         }
+  76:util.c        **** 	
+  77:util.c        **** 		while(m_current_delay != 0);
+ 117               		.loc 1 77 0 discriminator 1
+ 118 0080 8091 0000 		lds r24,m_current_delay
+ 119 0084 9091 0000 		lds r25,m_current_delay+1
+ 120 0088 0097      		sbiw r24,0
+ 121 008a 01F4      		brne .L11
+ 122               	.L6:
+ 123 008c 0895      		ret
+ 124               		.cfi_endproc
+ 125               	.LFE5:
+ 127               	.global	set_timer
+ 129               	set_timer:
+ 130               	.LFB6:
+  78:util.c        **** 	}
+  79:util.c        **** }
+  80:util.c        **** 
+  81:util.c        **** void set_timer(unsigned int time_ms)
+  82:util.c        **** {
+ 131               		.loc 1 82 0
+ 132               		.cfi_startproc
+ 133               	.LVL2:
+ 134               	/* prologue: function */
+ 135               	/* frame size = 0 */
+ 136               	/* stack size = 0 */
+ 137               	.L__stack_usage = 0
+  83:util.c        ****     if(m_override_delay== 0)
+ 138               		.loc 1 83 0
+ 139 008e 2091 0000 		lds r18,m_override_delay
+ 140 0092 2223      		tst r18
+ 141 0094 01F4      		brne .L13
+  84:util.c        ****     {
+  85:util.c        ****         if(time_ms < UINT16_MAX)
+ 142               		.loc 1 85 0
+ 143 0096 2FEF      		ldi r18,hi8(-1)
+ 144 0098 8F3F      		cpi r24,lo8(-1)
+ 145 009a 9207      		cpc r25,r18
+ 146 009c 01F0      		breq .L15
+  86:util.c        ****         {
+  87:util.c        ****             m_timer_ms = time_ms + 1;
+ 147               		.loc 1 87 0
+ 148 009e 0196      		adiw r24,1
+ 149               	.LVL3:
+ 150 00a0 9093 0000 		sts m_timer_ms+1,r25
+ 151 00a4 8093 0000 		sts m_timer_ms,r24
+ 152 00a8 0895      		ret
+ 153               	.LVL4:
+ 154               	.L15:
+  88:util.c        ****         }
+  89:util.c        ****         else
+  90:util.c        ****         {
+  91:util.c        ****             m_timer_ms = time_ms;
+ 155               		.loc 1 91 0
+ 156 00aa 9093 0000 		sts m_timer_ms+1,r25
+ 157 00ae 8093 0000 		sts m_timer_ms,r24
+ 158               	.L13:
+ 159 00b2 0895      		ret
+ 160               		.cfi_endproc
+ 161               	.LFE6:
+ 163               	.global	timer_expired
+ 165               	timer_expired:
+ 166               	.LFB7:
+  92:util.c        ****         }
+  93:util.c        ****     }
+  94:util.c        **** }
+  95:util.c        **** 
+  96:util.c        **** 
+  97:util.c        **** bool timer_expired()
+  98:util.c        **** {
+ 167               		.loc 1 98 0
+ 168               		.cfi_startproc
+ 169               	/* prologue: function */
+ 170               	/* frame size = 0 */
+ 171               	/* stack size = 0 */
+ 172               	.L__stack_usage = 0
+  99:util.c        ****     return m_timer_ms == 0;
+ 173               		.loc 1 99 0
+ 174 00b4 2091 0000 		lds r18,m_timer_ms
+ 175 00b8 3091 0000 		lds r19,m_timer_ms+1
+ 176 00bc 81E0      		ldi r24,lo8(1)
+ 177 00be 2115      		cp r18,__zero_reg__
+ 178 00c0 3105      		cpc r19,__zero_reg__
+ 179 00c2 01F0      		breq .L17
+ 180 00c4 80E0      		ldi r24,lo8(0)
+ 181               	.L17:
+ 100:util.c        **** }
+ 182               		.loc 1 100 0
+ 183 00c6 0895      		ret
+ 184               		.cfi_endproc
+ 185               	.LFE7:
+ 187               	.global	override_delay
+ 189               	override_delay:
+ 190               	.LFB8:
+ 101:util.c        **** 
+ 102:util.c        **** 
+ 103:util.c        **** void override_delay(unsigned char override)
+ 104:util.c        **** {
+ 191               		.loc 1 104 0
+ 192               		.cfi_startproc
+ 193               	.LVL5:
+ 194               	/* prologue: function */
+ 195               	/* frame size = 0 */
+ 196               	/* stack size = 0 */
+ 197               	.L__stack_usage = 0
+ 105:util.c        **** 	m_override_delay = override;
+ 198               		.loc 1 105 0
+ 199 00c8 8093 0000 		sts m_override_delay,r24
+ 200               	/* epilogue start */
+ 106:util.c        **** }
+ 201               		.loc 1 106 0
+ 202 00cc 0895      		ret
+ 203               		.cfi_endproc
+ 204               	.LFE8:
+ 206               	.global	GetChar
+ 208               	GetChar:
+ 209               	.LFB9:
+ 107:util.c        **** 
+ 108:util.c        **** 
+ 109:util.c        **** uint8_t GetChar(const char * str_ptr, uint16_t index, uint8_t prgMem)
+ 110:util.c        **** {
+ 210               		.loc 1 110 0
+ 211               		.cfi_startproc
+ 212               	.LVL6:
+ 213               	/* prologue: function */
+ 214               	/* frame size = 0 */
+ 215               	/* stack size = 0 */
+ 216               	.L__stack_usage = 0
+ 217 00ce FB01      		movw r30,r22
+ 218 00d0 E80F      		add r30,r24
+ 219 00d2 F91F      		adc r31,r25
+ 111:util.c        **** 	if(prgMem)
+ 220               		.loc 1 111 0
+ 221 00d4 4423      		tst r20
+ 222 00d6 01F0      		breq .L20
+ 223               	.LBB8:
+ 112:util.c        **** 	{
+ 113:util.c        **** 		return pgm_read_byte(&(str_ptr[index]));
+ 224               		.loc 1 113 0
+ 225               	/* #APP */
+ 226               	 ;  113 "util.c" 1
+ 227 00d8 8491      		lpm r24, Z
+ 228               		
+ 229               	 ;  0 "" 2
+ 230               	.LVL7:
+ 231               	/* #NOAPP */
+ 232               	.LBE8:
+ 233 00da 0895      		ret
+ 234               	.LVL8:
+ 235               	.L20:
+ 114:util.c        **** 	}
+ 115:util.c        **** 	else
+ 116:util.c        **** 	{
+ 117:util.c        **** 		return str_ptr[index];
+ 236               		.loc 1 117 0
+ 237 00dc 8081      		ld r24,Z
+ 238               	.LVL9:
+ 118:util.c        **** 	}
+ 119:util.c        **** }
+ 239               		.loc 1 119 0
+ 240 00de 0895      		ret
+ 241               		.cfi_endproc
+ 242               	.LFE9:
+ 244               	.global	ADC_Read
+ 246               	ADC_Read:
+ 247               	.LFB10:
+ 120:util.c        **** 
+ 121:util.c        **** 
+ 122:util.c        **** unsigned int ADC_Read(unsigned char portNo)
+ 123:util.c        **** {
+ 248               		.loc 1 123 0
+ 249               		.cfi_startproc
+ 250               	.LVL10:
+ 251               	/* prologue: function */
+ 252               	/* frame size = 0 */
+ 253               	/* stack size = 0 */
+ 254               	.L__stack_usage = 0
+ 124:util.c        ****     unsigned int ad_value;
+ 125:util.c        ****     // Clears the input
+ 126:util.c        ****     ADMUX &= ~MUX_INPUT_MASK;
+ 255               		.loc 1 126 0
+ 256 00e0 97B1      		in r25,39-32
+ 257 00e2 907E      		andi r25,lo8(-32)
+ 258 00e4 97B9      		out 39-32,r25
+ 127:util.c        ****     
+ 128:util.c        ****     // Selects input
+ 129:util.c        ****     ADMUX |= portNo;
+ 259               		.loc 1 129 0
+ 260 00e6 97B1      		in r25,39-32
+ 261 00e8 982B      		or r25,r24
+ 262 00ea 97B9      		out 39-32,r25
+ 130:util.c        ****     
+ 131:util.c        ****     // Starts the conversion
+ 132:util.c        ****     ADCSRA |= _BV(ADSC);
+ 263               		.loc 1 132 0
+ 264 00ec 369A      		sbi 38-32,6
+ 265               	.L23:
+ 133:util.c        ****     
+ 134:util.c        ****     // Waits until its don
+ 135:util.c        ****     while(!(ADCSRA & ADIF));
+ 266               		.loc 1 135 0 discriminator 1
+ 267 00ee 329B      		sbis 38-32,2
+ 268 00f0 00C0      		rjmp .L23
+ 136:util.c        ****     
+ 137:util.c        ****     // ADCL must be read before ADCH
+ 138:util.c        ****     ad_value = ADCL;
+ 269               		.loc 1 138 0
+ 270 00f2 84B1      		in r24,36-32
+ 271               	.LVL11:
+ 139:util.c        ****     ad_value = ADCH << 8;
+ 272               		.loc 1 139 0
+ 273 00f4 95B1      		in r25,37-32
+ 274               	.LVL12:
+ 140:util.c        ****     
+ 141:util.c        ****     return ad_value;
+ 142:util.c        **** }
+ 275               		.loc 1 142 0
+ 276 00f6 80E0      		ldi r24,lo8(0)
+ 277               	/* epilogue start */
+ 278 00f8 0895      		ret
+ 279               		.cfi_endproc
+ 280               	.LFE10:
+ 282               	.global	EQ_Read
+ 284               	EQ_Read:
+ 285               	.LFB11:
+ 143:util.c        **** 
+ 144:util.c        **** 
+ 145:util.c        **** // buffer_ptr should be an array of 14 unsigned ints.
+ 146:util.c        **** // Values are entered with the left channel on the first 7 indices and the right on the last 7 indi
+ 147:util.c        **** // Values are entered with the lowest frequency on index 0 and 7 respectively and going up.
+ 148:util.c        **** // Frequencys are in ascending order: 63Hz, 160Hz, 400Hz, 1kHz, 2.5kHz, 6.25kHz and 16kHz.
+ 149:util.c        **** void EQ_Read(unsigned int * buffer_ptr)
+ 150:util.c        **** {
+ 286               		.loc 1 150 0
+ 287               		.cfi_startproc
+ 288               	.LVL13:
+ 289 00fa AF92      		push r10
+ 290               	.LCFI0:
+ 291               		.cfi_def_cfa_offset 3
+ 292               		.cfi_offset 10, -2
+ 293 00fc BF92      		push r11
+ 294               	.LCFI1:
+ 295               		.cfi_def_cfa_offset 4
+ 296               		.cfi_offset 11, -3
+ 297 00fe CF92      		push r12
+ 298               	.LCFI2:
+ 299               		.cfi_def_cfa_offset 5
+ 300               		.cfi_offset 12, -4
+ 301 0100 DF92      		push r13
+ 302               	.LCFI3:
+ 303               		.cfi_def_cfa_offset 6
+ 304               		.cfi_offset 13, -5
+ 305 0102 EF92      		push r14
+ 306               	.LCFI4:
+ 307               		.cfi_def_cfa_offset 7
+ 308               		.cfi_offset 14, -6
+ 309 0104 FF92      		push r15
+ 310               	.LCFI5:
+ 311               		.cfi_def_cfa_offset 8
+ 312               		.cfi_offset 15, -7
+ 313 0106 0F93      		push r16
+ 314               	.LCFI6:
+ 315               		.cfi_def_cfa_offset 9
+ 316               		.cfi_offset 16, -8
+ 317 0108 1F93      		push r17
+ 318               	.LCFI7:
+ 319               		.cfi_def_cfa_offset 10
+ 320               		.cfi_offset 17, -9
+ 321 010a CF93      		push r28
+ 322               	.LCFI8:
+ 323               		.cfi_def_cfa_offset 11
+ 324               		.cfi_offset 28, -10
+ 325 010c DF93      		push r29
+ 326               	.LCFI9:
+ 327               		.cfi_def_cfa_offset 12
+ 328               		.cfi_offset 29, -11
  329               	/* prologue: function */
  330               	/* frame size = 0 */
- 331 0120 FC01      		movw r30,r24
- 332 0122 DB01      		movw r26,r22
- 333               	.LM47:
- 334 0124 1082      		st Z,__zero_reg__
- 335               	.LM48:
- 336 0126 8091 0000 		lds r24,debouncedKeyPress.1465
- 337               	.LVL20:
- 338 012a 8C93      		st X,r24
- 339               	.LM49:
- 340 012c 92B3      		in r25,50-32
- 341               	.LVL21:
- 342 012e 9695      		lsr r25
- 343 0130 9695      		lsr r25
- 344 0132 9095      		com r25
- 345 0134 9170      		andi r25,lo8(1)
- 346               	.LM50:
- 347 0136 9817      		cp r25,r24
- 348 0138 01F4      		brne .L28
- 349               	.LVL22:
- 350               	.LM51:
- 351 013a 9923      		tst r25
- 352 013c 01F4      		brne .L34
- 353               	.L29:
- 354               	.LM52:
- 355 013e 84E1      		ldi r24,lo8(20)
- 356 0140 00C0      		rjmp .L33
- 357               	.L28:
- 358               	.LM53:
- 359 0142 8091 0000 		lds r24,count.1464
- 360 0146 8150      		subi r24,lo8(-(-1))
- 361 0148 8093 0000 		sts count.1464,r24
- 362               	.LM54:
- 363 014c 8823      		tst r24
- 364 014e 01F4      		brne .L32
- 365               	.LM55:
- 366 0150 9093 0000 		sts debouncedKeyPress.1465,r25
- 367               	.LM56:
- 368 0154 81E0      		ldi r24,lo8(1)
- 369 0156 8083      		st Z,r24
- 370               	.LM57:
- 371 0158 9C93      		st X,r25
- 372               	.LM58:
- 373 015a 9923      		tst r25
- 374 015c 01F0      		breq .L31
- 375               	.L34:
- 376               	.LM59:
- 377 015e 82E3      		ldi r24,lo8(50)
- 378               	.L33:
- 379 0160 8093 0000 		sts count.1464,r24
- 380 0164 0895      		ret
- 381               	.L31:
- 382               	.LM60:
- 383 0166 84E1      		ldi r24,lo8(20)
- 384 0168 8093 0000 		sts count.1464,r24
- 385               	.L32:
- 386 016c 0895      		ret
- 387               	.LFE16:
- 389               		.lcomm debouncedKeyPress.1465,1
- 390               		.data
- 393               	count.1464:
- 394 0000 14        		.byte	20
- 395               		.comm m_override_delay,1,1
- 396               		.comm m_current_delay,2,1
- 477               	.Letext0:
+ 331               	/* stack size = 10 */
+ 332               	.L__stack_usage = 10
+ 151:util.c        ****     int i;
+ 152:util.c        ****     
+ 153:util.c        ****     // Resets the control port
+ 154:util.c        ****     EQ_PORT |= EQ_RESET;
+ 333               		.loc 1 154 0
+ 334 010e DB9A      		sbi 59-32,3
+ 155:util.c        ****     // Inserts a couple of nops to ensure that the minimum reset time of 100ns is fulfilled
+ 156:util.c        ****     asm volatile(" nop");
+ 335               		.loc 1 156 0
+ 336               	/* #APP */
+ 337               	 ;  156 "util.c" 1
+ 338 0110 0000      		 nop
+ 339               	 ;  0 "" 2
+ 157:util.c        ****     asm volatile(" nop");
+ 340               		.loc 1 157 0
+ 341               	 ;  157 "util.c" 1
+ 342 0112 0000      		 nop
+ 343               	 ;  0 "" 2
+ 158:util.c        ****     EQ_PORT &= ~EQ_RESET;
+ 344               		.loc 1 158 0
+ 345               	/* #NOAPP */
+ 346 0114 DB98      		cbi 59-32,3
+ 347               	.LVL14:
+ 348 0116 EC01      		movw r28,r24
+ 159:util.c        ****     
+ 160:util.c        ****     for(i = 0; i < 7; i++)
+ 349               		.loc 1 160 0
+ 350 0118 00E0      		ldi r16,lo8(0)
+ 351 011a 10E0      		ldi r17,hi8(0)
+ 352               	.LBB9:
+ 353               	.LBB10:
+ 354               		.file 2 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_ba
+   1:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    Copyright (c) 2007 Joerg Wunsch
+   3:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    All rights reserved.
+   4:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+   5:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    Redistribution and use in source and binary forms, with or without
+   6:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    modification, are permitted provided that the following conditions are met:
+   7:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+   8:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    * Redistributions of source code must retain the above copyright
+   9:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer.
+  10:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  11:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    * Redistributions in binary form must reproduce the above copyright
+  12:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****      notice, this list of conditions and the following disclaimer in
+  13:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****      the documentation and/or other materials provided with the
+  14:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****      distribution.
+  15:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  16:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****    * Neither the name of the copyright holders nor the names of
+  17:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****      contributors may be used to endorse or promote products derived
+  18:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****      from this software without specific prior written permission.
+  19:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  20:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  21:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  22:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  23:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  24:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  25:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  26:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  27:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  28:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  29:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  30:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  31:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  32:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** /* $Id: delay_basic.h 2143 2010-06-08 21:19:51Z joerg_wunsch $ */
+  33:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  34:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** #ifndef _UTIL_DELAY_BASIC_H_
+  35:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** #define _UTIL_DELAY_BASIC_H_ 1
+  36:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  37:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** #include <inttypes.h>
+  38:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  39:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** #if !defined(__DOXYGEN__)
+  40:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** static inline void _delay_loop_1(uint8_t __count) __attribute__((always_inline));
+  41:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** static inline void _delay_loop_2(uint16_t __count) __attribute__((always_inline));
+  42:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** #endif
+  43:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  44:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** /** \file */
+  45:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** /** \defgroup util_delay_basic <util/delay_basic.h>: Basic busy-wait delay loops
+  46:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     \code
+  47:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     #include <util/delay_basic.h>
+  48:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     \endcode
+  49:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  50:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     The functions in this header file implement simple delay loops
+  51:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     that perform a busy-waiting.  They are typically used to
+  52:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     facilitate short delays in the program execution.  They are
+  53:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     implemented as count-down loops with a well-known CPU cycle
+  54:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     count per loop iteration.  As such, no other processing can
+  55:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     occur simultaneously.  It should be kept in mind that the
+  56:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     functions described here do not disable interrupts.
+  57:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  58:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     In general, for long delays, the use of hardware timers is
+  59:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     much preferrable, as they free the CPU, and allow for
+  60:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     concurrent processing of other events while the timer is
+  61:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     running.  However, in particular for very short delays, the
+  62:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     overhead of setting up a hardware timer is too much compared
+  63:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     to the overall delay time.
+  64:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  65:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     Two inline functions are provided for the actual delay algorithms.
+  66:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  67:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** */
+  68:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  69:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  70:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  71:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     Delay loop using an 8-bit counter \c __count, so up to 256
+  72:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     iterations are possible.  (The value 256 would have to be passed
+  73:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     as 0.)  The loop executes three CPU cycles per iteration, not
+  74:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     including the overhead the compiler needs to setup the counter
+  75:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     register.
+  76:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  77:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to 768 microseconds
+  78:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     can be achieved.
+  79:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** */
+  80:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** void
+  81:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** _delay_loop_1(uint8_t __count)
+  82:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** {
+  83:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 	__asm__ volatile (
+  84:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 		"1: dec %0" "\n\t"
+  85:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 		"brne 1b"
+  86:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 		: "=r" (__count)
+  87:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 		: "0" (__count)
+  88:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 	);
+  89:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** }
+  90:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  91:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** /** \ingroup util_delay_basic
+  92:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  93:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     Delay loop using a 16-bit counter \c __count, so up to 65536
+  94:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     iterations are possible.  (The value 65536 would have to be
+  95:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     passed as 0.)  The loop executes four CPU cycles per iteration,
+  96:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     not including the overhead the compiler requires to setup the
+  97:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     counter register pair.
+  98:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 
+  99:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     Thus, at a CPU speed of 1 MHz, delays of up to about 262.1
+ 100:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****     milliseconds can be achieved.
+ 101:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h ****  */
+ 102:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** void
+ 103:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** _delay_loop_2(uint16_t __count)
+ 104:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** {
+ 105:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_basic.h **** 	__asm__ volatile (
+ 355               		.loc 2 105 0
+ 356 011c 8AE0      		ldi r24,lo8(266)
+ 357 011e E82E      		mov r14,r24
+ 358 0120 81E0      		ldi r24,hi8(266)
+ 359 0122 F82E      		mov r15,r24
+ 360               	.LVL15:
+ 361               	.LBE10:
+ 362               	.LBE9:
+ 363               	.LBB12:
+ 364               	.LBB13:
+ 365 0124 98E9      		ldi r25,lo8(664)
+ 366 0126 C92E      		mov r12,r25
+ 367 0128 92E0      		ldi r25,hi8(664)
+ 368 012a D92E      		mov r13,r25
+ 369               	.LBE13:
+ 370               	.LBE12:
+ 371               	.LBB15:
+ 372               	.LBB16:
+ 373 012c 20E3      		ldi r18,lo8(1328)
+ 374 012e A22E      		mov r10,r18
+ 375 0130 25E0      		ldi r18,hi8(1328)
+ 376 0132 B22E      		mov r11,r18
+ 377               	.LVL16:
+ 378               	.L26:
+ 379               	.LBE16:
+ 380               	.LBE15:
+ 381               	.LBB18:
+ 382               	.LBB11:
+ 383 0134 C701      		movw r24,r14
+ 384               	/* #APP */
+ 385               	 ;  105 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_bas
+ 386 0136 0197      		1: sbiw r24,1
+ 387 0138 01F4      		brne 1b
+ 388               	 ;  0 "" 2
+ 389               	.LVL17:
+ 390               	/* #NOAPP */
+ 391               	.LBE11:
+ 392               	.LBE18:
+ 161:util.c        ****     {
+ 162:util.c        ****         // Delays to ensure that the Strobe to Strobe delay is fulfilled (and also the reset to str
+ 163:util.c        ****         _delay_loop_2(STROBE_TO_STROBE_DELAY);
+ 164:util.c        ****         // Pulses the strobe
+ 165:util.c        ****         EQ_PORT |= EQ_STROBE;
+ 393               		.loc 1 165 0
+ 394 013a DA9A      		sbi 59-32,2
+ 395               	.LVL18:
+ 396               	.LBB19:
+ 397               	.LBB14:
+ 398               		.loc 2 105 0
+ 399 013c C601      		movw r24,r12
+ 400               	/* #APP */
+ 401               	 ;  105 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_bas
+ 402 013e 0197      		1: sbiw r24,1
+ 403 0140 01F4      		brne 1b
+ 404               	 ;  0 "" 2
+ 405               	.LVL19:
+ 406               	/* #NOAPP */
+ 407               	.LBE14:
+ 408               	.LBE19:
+ 166:util.c        ****         // Delay to ensure that the minimum pulse width is fulfilled
+ 167:util.c        ****         _delay_loop_2(STROBE_PULSE_WIDTH);
+ 168:util.c        ****         EQ_PORT &= ~EQ_STROBE;
+ 409               		.loc 1 168 0
+ 410 0142 DA98      		cbi 59-32,2
+ 411               	.LVL20:
+ 412               	.LBB20:
+ 413               	.LBB17:
+ 414               		.loc 2 105 0
+ 415 0144 C501      		movw r24,r10
+ 416               	/* #APP */
+ 417               	 ;  105 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/delay_bas
+ 418 0146 0197      		1: sbiw r24,1
+ 419 0148 01F4      		brne 1b
+ 420               	 ;  0 "" 2
+ 421               	.LVL21:
+ 422               	/* #NOAPP */
+ 423               	.LBE17:
+ 424               	.LBE20:
+ 169:util.c        ****         // Delay to get the outputs to settle
+ 170:util.c        ****         _delay_loop_2(OUTPUT_SETTLING_TIME);
+ 171:util.c        ****         // And read the two chips.
+ 172:util.c        ****         buffer_ptr[i] = ADC_Read(EQ_AD_LEFT);
+ 425               		.loc 1 172 0
+ 426 014a 81E0      		ldi r24,lo8(1)
+ 427 014c 0E94 0000 		call ADC_Read
+ 428 0150 8993      		st Y+,r24
+ 429 0152 9993      		st Y+,r25
+ 173:util.c        ****         buffer_ptr[(i + 7)] = ADC_Read(EQ_AD_RIGHT);
+ 430               		.loc 1 173 0
+ 431 0154 80E0      		ldi r24,lo8(0)
+ 432 0156 0E94 0000 		call ADC_Read
+ 433 015a 9D87      		std Y+13,r25
+ 434 015c 8C87      		std Y+12,r24
+ 160:util.c        ****     for(i = 0; i < 7; i++)
+ 435               		.loc 1 160 0
+ 436 015e 0F5F      		subi r16,lo8(-(1))
+ 437 0160 1F4F      		sbci r17,hi8(-(1))
+ 438               	.LVL22:
+ 439 0162 0730      		cpi r16,7
+ 440 0164 1105      		cpc r17,__zero_reg__
+ 441 0166 01F4      		brne .L26
+ 442               	/* epilogue start */
+ 174:util.c        ****     }
+ 175:util.c        **** }
+ 443               		.loc 1 175 0
+ 444 0168 DF91      		pop r29
+ 445 016a CF91      		pop r28
+ 446 016c 1F91      		pop r17
+ 447 016e 0F91      		pop r16
+ 448               	.LVL23:
+ 449 0170 FF90      		pop r15
+ 450 0172 EF90      		pop r14
+ 451 0174 DF90      		pop r13
+ 452 0176 CF90      		pop r12
+ 453 0178 BF90      		pop r11
+ 454 017a AF90      		pop r10
+ 455 017c 0895      		ret
+ 456               		.cfi_endproc
+ 457               	.LFE11:
+ 459               	.global	DebounceKey
+ 461               	DebounceKey:
+ 462               	.LFB12:
+ 176:util.c        **** 
+ 177:util.c        **** 
+ 178:util.c        **** void DebounceKey(bool *keyChanged, bool *keyPressed)
+ 179:util.c        **** {
+ 463               		.loc 1 179 0
+ 464               		.cfi_startproc
+ 465               	.LVL24:
+ 466               	/* prologue: function */
+ 467               	/* frame size = 0 */
+ 468               	/* stack size = 0 */
+ 469               	.L__stack_usage = 0
+ 470 017e FC01      		movw r30,r24
+ 471 0180 DB01      		movw r26,r22
+ 180:util.c        ****     static unsigned char count = PRESS_MS / CHECK_MS;
+ 181:util.c        ****     static bool debouncedKeyPress = false;
+ 182:util.c        ****     
+ 183:util.c        ****     *keyChanged = false;
+ 472               		.loc 1 183 0
+ 473 0182 1082      		st Z,__zero_reg__
+ 184:util.c        ****     *keyPressed = debouncedKeyPress;
+ 474               		.loc 1 184 0
+ 475 0184 9091 0000 		lds r25,debouncedKeyPress.1507
+ 476 0188 9C93      		st X,r25
+ 185:util.c        ****     
+ 186:util.c        ****     bool rawState = !(BUTTON_PORT & BUTTON0);
+ 477               		.loc 1 186 0
+ 478 018a 81E0      		ldi r24,lo8(1)
+ 479               	.LVL25:
+ 480 018c 9299      		sbic 50-32,2
+ 481 018e 80E0      		ldi r24,lo8(0)
+ 482               	.L29:
+ 483               	.LVL26:
+ 187:util.c        ****     
+ 188:util.c        ****     if(rawState == debouncedKeyPress)
+ 484               		.loc 1 188 0
+ 485 0190 8917      		cp r24,r25
+ 486 0192 01F4      		brne .L30
+ 189:util.c        ****     {
+ 190:util.c        ****         if(debouncedKeyPress)
+ 487               		.loc 1 190 0
+ 488 0194 8823      		tst r24
+ 489 0196 01F4      		brne .L35
+ 490               	.L31:
+ 191:util.c        ****         {
+ 192:util.c        ****             count = RELEASE_MS / CHECK_MS;
+ 193:util.c        ****         }
+ 194:util.c        ****         else
+ 195:util.c        ****         {
+ 196:util.c        ****             count = PRESS_MS / CHECK_MS;
+ 491               		.loc 1 196 0
+ 492 0198 84E1      		ldi r24,lo8(20)
+ 493               	.LVL27:
+ 494 019a 00C0      		rjmp .L34
+ 495               	.LVL28:
+ 496               	.L30:
+ 197:util.c        ****         }
+ 198:util.c        ****     }
+ 199:util.c        ****     else
+ 200:util.c        ****     {
+ 201:util.c        ****         count--;
+ 497               		.loc 1 201 0
+ 498 019c 9091 0000 		lds r25,count.1506
+ 499 01a0 9150      		subi r25,lo8(-(-1))
+ 500 01a2 9093 0000 		sts count.1506,r25
+ 202:util.c        ****         if(count == 0)
+ 501               		.loc 1 202 0
+ 502 01a6 9923      		tst r25
+ 503 01a8 01F4      		brne .L28
+ 203:util.c        ****         {
+ 204:util.c        ****             debouncedKeyPress = rawState;
+ 504               		.loc 1 204 0
+ 505 01aa 8093 0000 		sts debouncedKeyPress.1507,r24
+ 205:util.c        ****             *keyChanged = true;
+ 506               		.loc 1 205 0
+ 507 01ae 91E0      		ldi r25,lo8(1)
+ 508 01b0 9083      		st Z,r25
+ 206:util.c        ****             *keyPressed = debouncedKeyPress;
+ 509               		.loc 1 206 0
+ 510 01b2 8C93      		st X,r24
+ 207:util.c        ****             if(debouncedKeyPress)
+ 511               		.loc 1 207 0
+ 512 01b4 8823      		tst r24
+ 513 01b6 01F0      		breq .L33
+ 514               	.L35:
+ 208:util.c        ****             {
+ 209:util.c        ****                 count = RELEASE_MS / CHECK_MS;
+ 515               		.loc 1 209 0
+ 516 01b8 82E3      		ldi r24,lo8(50)
+ 517               	.LVL29:
+ 518               	.L34:
+ 519 01ba 8093 0000 		sts count.1506,r24
+ 520 01be 0895      		ret
+ 521               	.LVL30:
+ 522               	.L33:
+ 210:util.c        ****             }
+ 211:util.c        ****             else
+ 212:util.c        ****             {
+ 213:util.c        ****                 count = PRESS_MS / CHECK_MS;
+ 523               		.loc 1 213 0
+ 524 01c0 84E1      		ldi r24,lo8(20)
+ 525               	.LVL31:
+ 526 01c2 8093 0000 		sts count.1506,r24
+ 527               	.LVL32:
+ 528               	.L28:
+ 529 01c6 0895      		ret
+ 530               		.cfi_endproc
+ 531               	.LFE12:
+ 533               		.comm m_override_delay,1,1
+ 534               		.comm m_current_delay,2,1
+ 535               		.comm m_timer_ms,2,1
+ 536               		.lcomm debouncedKeyPress.1507,1
+ 537               		.data
+ 540               	count.1506:
+ 541 0000 14        		.byte	20
+ 542               		.text
+ 543               	.Letext0:
+ 544               		.file 3 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 util.c
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:2      *ABS*:0000003f __SREG__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:5      *ABS*:00000034 __CCP__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:18     .text:00000000 InitUtil
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:38     .text:0000000c DelayTick
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:2      *ABS*:0000003f __SREG__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:3      *ABS*:0000003e __SP_H__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:4      *ABS*:0000003d __SP_L__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:5      *ABS*:00000034 __CCP__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:15     .text:00000000 util_init
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:41     .text:0000000e delay_tick
                             *COM*:00000001 m_override_delay
                             *COM*:00000002 m_current_delay
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:69     .text:0000003e delay_ms
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:103    .text:0000006a OverrideDelay
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:118    .text:00000070 GetChar
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:152    .text:0000007e ADC_Read
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:186    .text:0000009a EQ_Read
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:325    .text:00000120 DebounceKey
-                             .bss:00000000 debouncedKeyPress.1465
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/ccvYyNGI.s:393    .data:00000000 count.1464
+                            *COM*:00000002 m_timer_ms
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:91     .text:00000066 delay_ms
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:129    .text:0000008e set_timer
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:165    .text:000000b4 timer_expired
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:189    .text:000000c8 override_delay
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:208    .text:000000ce GetChar
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:246    .text:000000e0 ADC_Read
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:284    .text:000000fa EQ_Read
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:461    .text:0000017e DebounceKey
+                             .bss:00000000 debouncedKeyPress.1507
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//ccoNnyuf.s:540    .data:00000000 count.1506
 
 UNDEFINED SYMBOLS
 __do_copy_data

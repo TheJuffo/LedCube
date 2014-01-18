@@ -2,134 +2,274 @@
    2               	__SREG__ = 0x3f
    3               	__SP_H__ = 0x3e
    4               	__SP_L__ = 0x3d
-   5               	__CCP__  = 0x34
+   5               	__CCP__ = 0x34
    6               	__tmp_reg__ = 0
    7               	__zero_reg__ = 1
-  15               	.Ltext0:
-  16               	.global	InitDebug
-  18               	InitDebug:
-  19               	.LFB2:
-  20               	.LM1:
-  21               	/* prologue: function */
-  22               	/* frame size = 0 */
-  23               	.LM2:
-  24 0000 81E0      		ldi r24,lo8(1)
-  25 0002 8093 0000 		sts debug_active,r24
-  26               	.LM3:
-  27 0006 8093 0000 		sts last_debug_mode,r24
-  28               	/* epilogue start */
-  29               	.LM4:
-  30 000a 0895      		ret
-  31               	.LFE2:
-  33               	.global	ChangeDebugMode
-  35               	ChangeDebugMode:
-  36               	.LFB3:
-  37               	.LM5:
-  38               	/* prologue: function */
-  39               	/* frame size = 0 */
-  40               	.LM6:
-  41 000c 8091 0000 		lds r24,debug_mode
-  42 0010 90E0      		ldi r25,lo8(0)
-  43 0012 0196      		adiw r24,1
-  44 0014 8370      		andi r24,lo8(3)
-  45 0016 9070      		andi r25,hi8(3)
-  46 0018 8093 0000 		sts debug_mode,r24
-  47               	/* epilogue start */
-  48               	.LM7:
-  49 001c 0895      		ret
-  50               	.LFE3:
-  52               	.global	DebugTick
-  54               	DebugTick:
-  55               	.LFB4:
-  56               	.LM8:
-  57               	/* prologue: function */
-  58               	/* frame size = 0 */
-  59               	.LM9:
-  60 001e 9091 0000 		lds r25,debug_mode
-  61 0022 8091 0000 		lds r24,last_debug_mode
-  62 0026 9817      		cp r25,r24
-  63 0028 01F0      		breq .L6
-  64               	.LM10:
-  65 002a 1092 0000 		sts debug_active,__zero_reg__
-  66               	.LM11:
-  67 002e 8091 0000 		lds r24,debug_mode
-  68 0032 8093 0000 		sts last_debug_mode,r24
-  69               	.LM12:
-  70 0036 80ED      		ldi r24,lo8(-48)
-  71 0038 8093 0000 		sts debug_mode_counter,r24
-  72               	.L6:
-  73               	.LM13:
-  74 003c 8091 0000 		lds r24,debug_active
-  75 0040 8823      		tst r24
-  76 0042 01F4      		brne .L8
-  77               	.LM14:
-  78 0044 8091 0000 		lds r24,debug_mode_counter
-  79 0048 8150      		subi r24,lo8(-(-1))
-  80 004a 8093 0000 		sts debug_mode_counter,r24
-  81               	.LM15:
-  82 004e 8091 0000 		lds r24,debug_mode_counter
-  83 0052 8823      		tst r24
-  84 0054 01F4      		brne .L8
-  85               	.LM16:
-  86 0056 81E0      		ldi r24,lo8(1)
-  87 0058 8093 0000 		sts debug_active,r24
-  88               	.L8:
-  89 005c 0895      		ret
-  90               	.LFE4:
-  92               	.global	DebugBlink
-  94               	DebugBlink:
-  95               	.LFB6:
-  96               	.LM17:
-  97               	.LVL0:
-  98               	/* prologue: function */
-  99               	/* frame size = 0 */
- 100               	/* epilogue start */
- 101               	.LM18:
- 102 005e 0895      		ret
- 103               	.LFE6:
- 105               	.global	SendDebugInfo
- 107               	SendDebugInfo:
- 108               	.LFB5:
- 109               	.LM19:
- 110               	.LVL1:
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  12               		.cfi_sections	.debug_frame
+  13               	.global	debug_init
+  15               	debug_init:
+  16               	.LFB0:
+  17               		.file 1 "debug.c"
+   1:debug.c       **** #include <avr/io.h>
+   2:debug.c       **** #include "debug.h"
+   3:debug.c       **** #include "uart.h"
+   4:debug.c       **** 
+   5:debug.c       **** 
+   6:debug.c       **** #define LED_START 4
+   7:debug.c       **** // Leds connected to port D
+   8:debug.c       **** //#define LED_PORT PORTD
+   9:debug.c       **** 
+  10:debug.c       **** // Start value of the counter, 2000 = 2s
+  11:debug.c       **** #define DEBUG_MODE_COUNTER_START 2000
+  12:debug.c       **** 
+  13:debug.c       **** 
+  14:debug.c       **** // Show no activity on the debug leds
+  15:debug.c       **** #define DEBUG_MODE_NONE 0x00
+  16:debug.c       **** // Show RS232 activity on the debug leds
+  17:debug.c       **** #define DEBUG_MODE_RS232 0x01
+  18:debug.c       **** // Show Framebuffer activity on the debug leds
+  19:debug.c       **** #define DEBUG_MODE_FRAMEBUFFER 0x02
+  20:debug.c       **** // Show blinking debug leds
+  21:debug.c       **** #define DEBUG_MODE_BLINKING 0x03
+  22:debug.c       **** // Number of debug modes, increment this when adding a new debug mode
+  23:debug.c       **** #define NO_OF_DEBUG_MODES 0x04
+  24:debug.c       **** 
+  25:debug.c       **** 
+  26:debug.c       **** volatile unsigned char debug_mode;
+  27:debug.c       **** volatile unsigned char debug_active;
+  28:debug.c       **** volatile unsigned char last_debug_mode;
+  29:debug.c       **** volatile unsigned char debug_mode_counter;
+  30:debug.c       **** 
+  31:debug.c       **** 
+  32:debug.c       **** void debug_init()
+  33:debug.c       **** {
+  18               		.loc 1 33 0
+  19               		.cfi_startproc
+  20               	/* prologue: function */
+  21               	/* frame size = 0 */
+  22               	/* stack size = 0 */
+  23               	.L__stack_usage = 0
+  34:debug.c       **** 	// This variable specifies what the debug LEDs show, from the start they show nothing
+  35:debug.c       **** 	debug_mode = 0;
+  24               		.loc 1 35 0
+  25 0000 1092 0000 		sts debug_mode,__zero_reg__
+  36:debug.c       **** 
+  37:debug.c       **** 	// This variable specifies whether or not debug leds are active
+  38:debug.c       **** 	debug_active = 1;
+  26               		.loc 1 38 0
+  27 0004 81E0      		ldi r24,lo8(1)
+  28 0006 8093 0000 		sts debug_active,r24
+  39:debug.c       **** 
+  40:debug.c       **** 	// This variable specifies what the last debug mode was, in order to show debug mode on
+  41:debug.c       **** 	// the debug leds
+  42:debug.c       **** 	last_debug_mode = 1;
+  29               		.loc 1 42 0
+  30 000a 8093 0000 		sts last_debug_mode,r24
+  31               	/* epilogue start */
+  43:debug.c       **** }
+  32               		.loc 1 43 0
+  33 000e 0895      		ret
+  34               		.cfi_endproc
+  35               	.LFE0:
+  37               	.global	change_debug_mode
+  39               	change_debug_mode:
+  40               	.LFB1:
+  44:debug.c       **** 
+  45:debug.c       **** 
+  46:debug.c       **** void change_debug_mode()
+  47:debug.c       **** {
+  41               		.loc 1 47 0
+  42               		.cfi_startproc
+  43               	/* prologue: function */
+  44               	/* frame size = 0 */
+  45               	/* stack size = 0 */
+  46               	.L__stack_usage = 0
+  48:debug.c       **** 	debug_mode = (debug_mode + 1) % NO_OF_DEBUG_MODES;
+  47               		.loc 1 48 0
+  48 0010 8091 0000 		lds r24,debug_mode
+  49 0014 90E0      		ldi r25,lo8(0)
+  50 0016 0196      		adiw r24,1
+  51 0018 8370      		andi r24,lo8(3)
+  52 001a 9070      		andi r25,hi8(3)
+  53 001c 8093 0000 		sts debug_mode,r24
+  54               	/* epilogue start */
+  49:debug.c       **** }
+  55               		.loc 1 49 0
+  56 0020 0895      		ret
+  57               		.cfi_endproc
+  58               	.LFE1:
+  60               	.global	debug_tick
+  62               	debug_tick:
+  63               	.LFB2:
+  50:debug.c       **** 
+  51:debug.c       **** void debug_tick()
+  52:debug.c       **** {
+  64               		.loc 1 52 0
+  65               		.cfi_startproc
+  66               	/* prologue: function */
+  67               	/* frame size = 0 */
+  68               	/* stack size = 0 */
+  69               	.L__stack_usage = 0
+  53:debug.c       **** 	// If debug mode changed
+  54:debug.c       **** 	if(debug_mode != last_debug_mode)
+  70               		.loc 1 54 0
+  71 0022 9091 0000 		lds r25,debug_mode
+  72 0026 8091 0000 		lds r24,last_debug_mode
+  73 002a 9817      		cp r25,r24
+  74 002c 01F0      		breq .L4
+  55:debug.c       **** 	{
+  56:debug.c       **** 		// disable showing debug info
+  57:debug.c       **** 		debug_active = 0;
+  75               		.loc 1 57 0
+  76 002e 1092 0000 		sts debug_active,__zero_reg__
+  58:debug.c       **** 
+  59:debug.c       **** 		last_debug_mode = debug_mode;
+  77               		.loc 1 59 0
+  78 0032 8091 0000 		lds r24,debug_mode
+  79 0036 8093 0000 		sts last_debug_mode,r24
+  60:debug.c       **** 
+  61:debug.c       **** 		// Restart debug_mode_counter
+  62:debug.c       **** 		debug_mode_counter = DEBUG_MODE_COUNTER_START;
+  80               		.loc 1 62 0
+  81 003a 80ED      		ldi r24,lo8(-48)
+  82 003c 8093 0000 		sts debug_mode_counter,r24
+  83               	.L4:
+  63:debug.c       **** 
+  64:debug.c       **** 		//Set the leds to show current debug mode
+  65:debug.c       **** 		//LED_PORT = (debug_mode + 1) << LED_START;
+  66:debug.c       **** 	}
+  67:debug.c       **** 
+  68:debug.c       **** 	// If currently showing debug mode instead of debug info
+  69:debug.c       **** 	if(debug_active == 0)
+  84               		.loc 1 69 0
+  85 0040 8091 0000 		lds r24,debug_active
+  86 0044 8823      		tst r24
+  87 0046 01F4      		brne .L3
+  70:debug.c       **** 	{
+  71:debug.c       **** 		debug_mode_counter--;
+  88               		.loc 1 71 0
+  89 0048 8091 0000 		lds r24,debug_mode_counter
+  90 004c 8150      		subi r24,lo8(-(-1))
+  91 004e 8093 0000 		sts debug_mode_counter,r24
+  72:debug.c       **** 		// If we're done showing debug mode
+  73:debug.c       **** 		if(debug_mode_counter == 0)
+  92               		.loc 1 73 0
+  93 0052 8091 0000 		lds r24,debug_mode_counter
+  94 0056 8823      		tst r24
+  95 0058 01F4      		brne .L3
+  74:debug.c       **** 		{
+  75:debug.c       **** 			// Show debug info instead of debug_mode
+  76:debug.c       **** 			debug_active = 1;
+  96               		.loc 1 76 0
+  97 005a 81E0      		ldi r24,lo8(1)
+  98 005c 8093 0000 		sts debug_active,r24
+  99               	.L3:
+ 100 0060 0895      		ret
+ 101               		.cfi_endproc
+ 102               	.LFE2:
+ 104               	.global	send_debug_info
+ 106               	send_debug_info:
+ 107               	.LFB3:
+  77:debug.c       **** 			// Set the leds to show nothing
+  78:debug.c       **** 			//LED_PORT = 0x00;
+  79:debug.c       **** 			
+  80:debug.c       **** 		}
+  81:debug.c       **** 	}
+  82:debug.c       **** }
+  83:debug.c       **** 
+  84:debug.c       **** void send_debug_info(const char * data, uint8_t prgMem)
+  85:debug.c       **** {
+ 108               		.loc 1 85 0
+ 109               		.cfi_startproc
+ 110               	.LVL0:
  111               	/* prologue: function */
  112               	/* frame size = 0 */
- 113               	.LM20:
- 114 0060 0E94 0000 		call SendString
- 115               	.LVL2:
- 116               	/* epilogue start */
- 117               	.LM21:
- 118 0064 0895      		ret
- 119               	.LFE5:
- 121               		.comm debug_mode,1,1
- 122               		.comm debug_active,1,1
- 123               		.comm last_debug_mode,1,1
- 124               		.comm debug_mode_counter,1,1
- 125               		.comm RXFifo,140,1
- 126               		.comm TXFifo,140,1
- 127               		.comm m_Echo,1,1
- 184               	.Letext0:
+ 113               	/* stack size = 0 */
+ 114               	.L__stack_usage = 0
+  86:debug.c       **** 	send_string(data);
+ 115               		.loc 1 86 0
+ 116 0062 0E94 0000 		call send_string
+ 117               	.LVL1:
+ 118               	/* epilogue start */
+  87:debug.c       **** }
+ 119               		.loc 1 87 0
+ 120 0066 0895      		ret
+ 121               		.cfi_endproc
+ 122               	.LFE3:
+ 124               	.global	send_debug_info_p
+ 126               	send_debug_info_p:
+ 127               	.LFB4:
+  88:debug.c       **** 
+  89:debug.c       **** void send_debug_info_p(const char * data)
+  90:debug.c       **** {
+ 128               		.loc 1 90 0
+ 129               		.cfi_startproc
+ 130               	.LVL2:
+ 131               	/* prologue: function */
+ 132               	/* frame size = 0 */
+ 133               	/* stack size = 0 */
+ 134               	.L__stack_usage = 0
+  91:debug.c       ****     send_string_p(data);
+ 135               		.loc 1 91 0
+ 136 0068 0E94 0000 		call send_string_p
+ 137               	.LVL3:
+ 138               	/* epilogue start */
+  92:debug.c       **** }
+ 139               		.loc 1 92 0
+ 140 006c 0895      		ret
+ 141               		.cfi_endproc
+ 142               	.LFE4:
+ 144               	.global	debug_blink
+ 146               	debug_blink:
+ 147               	.LFB5:
+  93:debug.c       **** 
+  94:debug.c       **** void debug_blink(uint8_t LEDS)
+  95:debug.c       **** {
+ 148               		.loc 1 95 0
+ 149               		.cfi_startproc
+ 150               	.LVL4:
+ 151               	/* prologue: function */
+ 152               	/* frame size = 0 */
+ 153               	/* stack size = 0 */
+ 154               	.L__stack_usage = 0
+ 155               	/* epilogue start */
+  96:debug.c       **** 
+  97:debug.c       **** }...
+ 156               		.loc 1 97 0
+ 157 006e 0895      		ret
+ 158               		.cfi_endproc
+ 159               	.LFE5:
+ 161               		.comm debug_mode_counter,1,1
+ 162               		.comm last_debug_mode,1,1
+ 163               		.comm debug_active,1,1
+ 164               		.comm debug_mode,1,1
+ 165               	.Letext0:
+ 166               		.file 2 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 debug.c
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:2      *ABS*:0000003f __SREG__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:5      *ABS*:00000034 __CCP__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:18     .text:00000000 InitDebug
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:2      *ABS*:0000003f __SREG__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:3      *ABS*:0000003e __SP_H__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:4      *ABS*:0000003d __SP_L__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:5      *ABS*:00000034 __CCP__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:15     .text:00000000 debug_init
+                            *COM*:00000001 debug_mode
                             *COM*:00000001 debug_active
                             *COM*:00000001 last_debug_mode
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:35     .text:0000000c ChangeDebugMode
-                            *COM*:00000001 debug_mode
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:54     .text:0000001e DebugTick
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:39     .text:00000010 change_debug_mode
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:62     .text:00000022 debug_tick
                             *COM*:00000001 debug_mode_counter
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:94     .text:0000005e DebugBlink
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cc3SQL1Q.s:107    .text:00000060 SendDebugInfo
-                            *COM*:0000008c RXFifo
-                            *COM*:0000008c TXFifo
-                            *COM*:00000001 m_Echo
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:106    .text:00000062 send_debug_info
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:126    .text:00000068 send_debug_info_p
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cclrvaGi.s:146    .text:0000006e debug_blink
 
 UNDEFINED SYMBOLS
-SendString
+__do_copy_data
 __do_clear_bss
+send_string
+send_string_p

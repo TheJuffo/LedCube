@@ -2,726 +2,1409 @@
    2               	__SREG__ = 0x3f
    3               	__SP_H__ = 0x3e
    4               	__SP_L__ = 0x3d
-   5               	__CCP__  = 0x34
+   5               	__CCP__ = 0x34
    6               	__tmp_reg__ = 0
    7               	__zero_reg__ = 1
-  15               	.Ltext0:
-  16               	.global	USARTInit
-  18               	USARTInit:
-  19               	.LFB7:
-  20               	.LM1:
-  21               	/* prologue: function */
-  22               	/* frame size = 0 */
-  23               	.LM2:
-  24 0000 1092 0000 		sts RXFifo+4,__zero_reg__
-  25 0004 1092 0000 		sts (RXFifo+4)+1,__zero_reg__
-  26 0008 1092 0000 		sts (RXFifo+4)+2,__zero_reg__
-  27 000c 1092 0000 		sts (RXFifo+4)+3,__zero_reg__
-  28 0010 1092 0000 		sts RXFifo+8,__zero_reg__
-  29 0014 1092 0000 		sts (RXFifo+8)+1,__zero_reg__
-  30 0018 1092 0000 		sts (RXFifo+8)+2,__zero_reg__
-  31 001c 1092 0000 		sts (RXFifo+8)+3,__zero_reg__
-  32               	.LM3:
-  33 0020 1092 0000 		sts TXFifo+4,__zero_reg__
-  34 0024 1092 0000 		sts (TXFifo+4)+1,__zero_reg__
-  35 0028 1092 0000 		sts (TXFifo+4)+2,__zero_reg__
-  36 002c 1092 0000 		sts (TXFifo+4)+3,__zero_reg__
-  37 0030 1092 0000 		sts TXFifo+8,__zero_reg__
-  38 0034 1092 0000 		sts (TXFifo+8)+1,__zero_reg__
-  39 0038 1092 0000 		sts (TXFifo+8)+2,__zero_reg__
-  40 003c 1092 0000 		sts (TXFifo+8)+3,__zero_reg__
-  41               	.LM4:
-  42 0040 10BC      		out 64-32,__zero_reg__
-  43               	.LM5:
-  44 0042 87E0      		ldi r24,lo8(7)
-  45 0044 89B9      		out 41-32,r24
-  46               	.LM6:
-  47 0046 86E8      		ldi r24,lo8(-122)
-  48 0048 80BD      		out 64-32,r24
-  49               	.LM7:
-  50 004a 88EB      		ldi r24,lo8(-72)
-  51 004c 8AB9      		out 42-32,r24
-  52               	.LM8:
-  53 004e 81E0      		ldi r24,lo8(1)
-  54 0050 8093 0000 		sts m_Echo,r24
-  55               	/* epilogue start */
-  56               	.LM9:
-  57 0054 0895      		ret
-  58               	.LFE7:
-  60               	.global	SendChar
-  62               	SendChar:
-  63               	.LFB8:
-  64               	.LM10:
-  65               	.LVL0:
-  66 0056 EF92      		push r14
-  67 0058 FF92      		push r15
-  68 005a 0F93      		push r16
-  69 005c 1F93      		push r17
-  70               	/* prologue: function */
-  71               	/* frame size = 0 */
-  72 005e 682F      		mov r22,r24
-  73               	.LM11:
-  74 0060 2091 0000 		lds r18,TXFifo+4
-  75 0064 3091 0000 		lds r19,(TXFifo+4)+1
-  76 0068 4091 0000 		lds r20,(TXFifo+4)+2
-  77 006c 5091 0000 		lds r21,(TXFifo+4)+3
-  78 0070 7901      		movw r14,r18
-  79 0072 8A01      		movw r16,r20
-  80 0074 0894      		sec
-  81 0076 E11C      		adc r14,__zero_reg__
-  82 0078 F11C      		adc r15,__zero_reg__
-  83 007a 011D      		adc r16,__zero_reg__
-  84 007c 111D      		adc r17,__zero_reg__
-  85 007e 8091 0000 		lds r24,TXFifo+8
-  86 0082 9091 0000 		lds r25,(TXFifo+8)+1
-  87 0086 A091 0000 		lds r26,(TXFifo+8)+2
-  88 008a B091 0000 		lds r27,(TXFifo+8)+3
-  89               	.LVL1:
-  90 008e 8E25      		eor r24,r14
-  91 0090 9F25      		eor r25,r15
-  92 0092 A027      		eor r26,r16
-  93 0094 B127      		eor r27,r17
-  94 0096 8F77      		andi r24,lo8(127)
-  95 0098 9070      		andi r25,hi8(127)
-  96 009a A070      		andi r26,hlo8(127)
-  97 009c B070      		andi r27,hhi8(127)
-  98 009e 0097      		sbiw r24,0
-  99 00a0 A105      		cpc r26,__zero_reg__
- 100 00a2 B105      		cpc r27,__zero_reg__
- 101 00a4 01F4      		brne .L4
- 102 00a6 20E0      		ldi r18,lo8(0)
- 103 00a8 30E0      		ldi r19,hi8(0)
- 104 00aa 00C0      		rjmp .L5
- 105               	.L4:
- 106               	.LM12:
- 107 00ac F901      		movw r30,r18
- 108 00ae EF77      		andi r30,lo8(127)
- 109 00b0 F070      		andi r31,hi8(127)
- 110 00b2 E050      		subi r30,lo8(-(TXFifo))
- 111 00b4 F040      		sbci r31,hi8(-(TXFifo))
- 112 00b6 6487      		std Z+12,r22
- 113 00b8 E092 0000 		sts TXFifo+4,r14
- 114 00bc F092 0000 		sts (TXFifo+4)+1,r15
- 115 00c0 0093 0000 		sts (TXFifo+4)+2,r16
- 116 00c4 1093 0000 		sts (TXFifo+4)+3,r17
- 117               	.LBB14:
- 118               	.LBB15:
- 119               	.LBB16:
- 120               	.LM13:
- 121               	/* #APP */
- 122               	 ;  50 "c:/winavr-20100110/lib/gcc/../../avr/include/util/atomic.h" 1
- 123 00c8 F894      		cli
- 124               	 ;  0 "" 2
- 125               	/* #NOAPP */
- 126               	.LBE16:
- 127               	.LBE15:
- 128               	.LM14:
- 129 00ca 559A      		sbi 42-32,5
- 130               	.LBB17:
- 131               	.LBB18:
- 132               	.LM15:
- 133               	/* #APP */
- 134               	 ;  56 "c:/winavr-20100110/lib/gcc/../../avr/include/util/atomic.h" 1
- 135 00cc 7894      		sei
- 136               	 ;  0 "" 2
- 137               	.LM16:
- 138               	/* #NOAPP */
- 139 00ce 21E0      		ldi r18,lo8(1)
- 140 00d0 30E0      		ldi r19,hi8(1)
- 141               	.L5:
- 142               	.LBE18:
- 143               	.LBE17:
- 144               	.LBE14:
- 145               	.LM17:
- 146 00d2 C901      		movw r24,r18
- 147               	/* epilogue start */
- 148 00d4 1F91      		pop r17
- 149 00d6 0F91      		pop r16
- 150 00d8 FF90      		pop r15
- 151 00da EF90      		pop r14
- 152 00dc 0895      		ret
- 153               	.LFE8:
- 155               	.global	SendString
- 157               	SendString:
- 158               	.LFB9:
- 159               	.LM18:
- 160               	.LVL2:
- 161 00de 6F92      		push r6
- 162 00e0 7F92      		push r7
- 163 00e2 8F92      		push r8
- 164 00e4 9F92      		push r9
- 165 00e6 AF92      		push r10
- 166 00e8 BF92      		push r11
- 167 00ea CF92      		push r12
- 168 00ec DF92      		push r13
- 169 00ee EF92      		push r14
- 170 00f0 FF92      		push r15
- 171 00f2 0F93      		push r16
- 172 00f4 1F93      		push r17
- 173 00f6 CF93      		push r28
- 174 00f8 DF93      		push r29
- 175               	/* prologue: function */
- 176               	/* frame size = 0 */
- 177 00fa 6C01      		movw r12,r24
- 178 00fc 762E      		mov r7,r22
- 179               	.LM19:
- 180 00fe 6623      		tst r22
- 181 0100 01F4      		brne .L8
- 182               	.LVL3:
- 183               	.LM20:
- 184 0102 DC01      		movw r26,r24
- 185 0104 6C90      		ld r6,X
- 186               	.LVL4:
- 187               	.L10:
- 188               	.LM21:
- 189 0106 8090 0000 		lds r8,TXFifo+8
- 190 010a 9090 0000 		lds r9,(TXFifo+8)+1
- 191 010e A090 0000 		lds r10,(TXFifo+8)+2
- 192 0112 B090 0000 		lds r11,(TXFifo+8)+3
- 193 0116 E601      		movw r28,r12
- 194 0118 60E0      		ldi r22,lo8(0)
- 195 011a 70E0      		ldi r23,hi8(0)
- 196               	.LVL5:
- 197 011c 00C0      		rjmp .L9
- 198               	.LVL6:
- 199               	.L8:
- 200               	.LBB19:
- 201               	.LM22:
- 202 011e FC01      		movw r30,r24
- 203               	/* #APP */
- 204               	 ;  61 "uart.c" 1
- 205 0120 6490      		lpm r6, Z
- 206               		
- 207               	 ;  0 "" 2
- 208               	.LVL7:
- 209               	/* #NOAPP */
- 210 0122 00C0      		rjmp .L10
- 211               	.LVL8:
- 212               	.L14:
- 213               	.LBE19:
- 214               	.LM23:
- 215 0124 F901      		movw r30,r18
- 216 0126 EF77      		andi r30,lo8(127)
- 217 0128 F070      		andi r31,hi8(127)
- 218 012a E050      		subi r30,lo8(-(TXFifo))
- 219 012c F040      		sbci r31,hi8(-(TXFifo))
- 220 012e 8881      		ld r24,Y
- 221 0130 8487      		std Z+12,r24
- 222 0132 E092 0000 		sts TXFifo+4,r14
- 223 0136 F092 0000 		sts (TXFifo+4)+1,r15
- 224 013a 0093 0000 		sts (TXFifo+4)+2,r16
- 225 013e 1093 0000 		sts (TXFifo+4)+3,r17
- 226               	.LM24:
- 227 0142 6F5F      		subi r22,lo8(-(1))
- 228 0144 7F4F      		sbci r23,hi8(-(1))
- 229               	.LM25:
- 230 0146 7720      		tst r7
- 231 0148 01F4      		brne .L11
- 232               	.LM26:
- 233 014a 6980      		ldd r6,Y+1
- 234 014c 00C0      		rjmp .L12
- 235               	.L11:
- 236               	.LBB20:
- 237               	.LM27:
- 238 014e F601      		movw r30,r12
- 239 0150 E60F      		add r30,r22
- 240 0152 F71F      		adc r31,r23
- 241               	/* #APP */
- 242               	 ;  75 "uart.c" 1
- 243 0154 6490      		lpm r6, Z
- 244               		
- 245               	 ;  0 "" 2
- 246               	/* #NOAPP */
- 247               	.L12:
- 248 0156 2196      		adiw r28,1
- 249               	.LVL9:
- 250               	.L9:
- 251               	.LBE20:
- 252               	.LM28:
- 253 0158 2091 0000 		lds r18,TXFifo+4
- 254 015c 3091 0000 		lds r19,(TXFifo+4)+1
- 255 0160 4091 0000 		lds r20,(TXFifo+4)+2
- 256 0164 5091 0000 		lds r21,(TXFifo+4)+3
- 257 0168 7901      		movw r14,r18
- 258 016a 8A01      		movw r16,r20
- 259 016c 0894      		sec
- 260 016e E11C      		adc r14,__zero_reg__
- 261 0170 F11C      		adc r15,__zero_reg__
- 262 0172 011D      		adc r16,__zero_reg__
- 263 0174 111D      		adc r17,__zero_reg__
- 264 0176 D801      		movw r26,r16
- 265 0178 C701      		movw r24,r14
- 266 017a 8825      		eor r24,r8
- 267 017c 9925      		eor r25,r9
- 268 017e AA25      		eor r26,r10
- 269 0180 BB25      		eor r27,r11
- 270 0182 8F77      		andi r24,lo8(127)
- 271 0184 9070      		andi r25,hi8(127)
- 272 0186 A070      		andi r26,hlo8(127)
- 273 0188 B070      		andi r27,hhi8(127)
- 274 018a 0097      		sbiw r24,0
- 275 018c A105      		cpc r26,__zero_reg__
- 276 018e B105      		cpc r27,__zero_reg__
- 277 0190 01F0      		breq .L13
- 278 0192 6620      		tst r6
- 279 0194 01F4      		brne .L14
- 280               	.L13:
- 281               	.LBB21:
- 282               	.LBB22:
- 283               	.LBB23:
- 284               	.LM29:
- 285               	/* #APP */
- 286               	 ;  50 "c:/winavr-20100110/lib/gcc/../../avr/include/util/atomic.h" 1
- 287 0196 F894      		cli
- 288               	 ;  0 "" 2
- 289               	/* #NOAPP */
- 290               	.LBE23:
- 291               	.LBE22:
- 292               	.LM30:
- 293 0198 559A      		sbi 42-32,5
- 294               	.LBB24:
- 295               	.LBB25:
- 296               	.LM31:
- 297               	/* #APP */
- 298               	 ;  56 "c:/winavr-20100110/lib/gcc/../../avr/include/util/atomic.h" 1
- 299 019a 7894      		sei
- 300               	 ;  0 "" 2
- 301               	.LM32:
- 302               	/* #NOAPP */
- 303               	.LBE25:
- 304               	.LBE24:
- 305               	.LBE21:
- 306               	.LM33:
- 307 019c CB01      		movw r24,r22
- 308               	.LVL10:
- 309               	/* epilogue start */
- 310 019e DF91      		pop r29
- 311 01a0 CF91      		pop r28
- 312 01a2 1F91      		pop r17
- 313 01a4 0F91      		pop r16
- 314 01a6 FF90      		pop r15
- 315 01a8 EF90      		pop r14
- 316 01aa DF90      		pop r13
- 317 01ac CF90      		pop r12
- 318               	.LVL11:
- 319 01ae BF90      		pop r11
- 320 01b0 AF90      		pop r10
- 321 01b2 9F90      		pop r9
- 322 01b4 8F90      		pop r8
- 323 01b6 7F90      		pop r7
- 324               	.LVL12:
- 325 01b8 6F90      		pop r6
- 326               	.LVL13:
- 327 01ba 0895      		ret
- 328               	.LFE9:
- 330               	.global	ReceiveChar
- 332               	ReceiveChar:
- 333               	.LFB10:
- 334               	.LM34:
- 335               	.LVL14:
- 336 01bc CF93      		push r28
- 337 01be DF93      		push r29
- 338               	/* prologue: function */
- 339               	/* frame size = 0 */
- 340 01c0 EC01      		movw r28,r24
- 341               	.LM35:
- 342 01c2 2091 0000 		lds r18,RXFifo+8
- 343 01c6 3091 0000 		lds r19,(RXFifo+8)+1
- 344 01ca 4091 0000 		lds r20,(RXFifo+8)+2
- 345 01ce 5091 0000 		lds r21,(RXFifo+8)+3
- 346 01d2 8091 0000 		lds r24,RXFifo+4
- 347 01d6 9091 0000 		lds r25,(RXFifo+4)+1
- 348 01da A091 0000 		lds r26,(RXFifo+4)+2
- 349 01de B091 0000 		lds r27,(RXFifo+4)+3
- 350               	.LVL15:
- 351 01e2 2817      		cp r18,r24
- 352 01e4 3907      		cpc r19,r25
- 353 01e6 4A07      		cpc r20,r26
- 354 01e8 5B07      		cpc r21,r27
- 355 01ea 01F4      		brne .L17
- 356 01ec 20E0      		ldi r18,lo8(0)
- 357 01ee 30E0      		ldi r19,hi8(0)
- 358 01f0 00C0      		rjmp .L18
- 359               	.L17:
- 360               	.LM36:
- 361 01f2 2F5F      		subi r18,lo8(-(1))
- 362 01f4 3F4F      		sbci r19,hi8(-(1))
- 363 01f6 4F4F      		sbci r20,hlo8(-(1))
- 364 01f8 5F4F      		sbci r21,hhi8(-(1))
- 365 01fa 2093 0000 		sts RXFifo+8,r18
- 366 01fe 3093 0000 		sts (RXFifo+8)+1,r19
- 367 0202 4093 0000 		sts (RXFifo+8)+2,r20
- 368 0206 5093 0000 		sts (RXFifo+8)+3,r21
- 369 020a 2150      		subi r18,lo8(-(-1))
- 370 020c 3040      		sbci r19,hi8(-(-1))
- 371 020e 4040      		sbci r20,hlo8(-(-1))
- 372 0210 5040      		sbci r21,hhi8(-(-1))
- 373               	.LM37:
- 374 0212 F901      		movw r30,r18
- 375 0214 EF77      		andi r30,lo8(127)
- 376 0216 F070      		andi r31,hi8(127)
- 377 0218 E050      		subi r30,lo8(-(RXFifo))
- 378 021a F040      		sbci r31,hi8(-(RXFifo))
- 379 021c 8485      		ldd r24,Z+12
- 380 021e 8883      		st Y,r24
- 381 0220 21E0      		ldi r18,lo8(1)
- 382 0222 30E0      		ldi r19,hi8(1)
- 383               	.L18:
- 384               	.LM38:
- 385 0224 C901      		movw r24,r18
- 386               	/* epilogue start */
- 387 0226 DF91      		pop r29
- 388 0228 CF91      		pop r28
- 389               	.LVL16:
- 390 022a 0895      		ret
- 391               	.LFE10:
- 393               	.global	ReceiveString
- 395               	ReceiveString:
- 396               	.LFB11:
- 397               	.LM39:
- 398               	.LVL17:
- 399 022c 0F93      		push r16
- 400 022e 1F93      		push r17
- 401 0230 CF93      		push r28
- 402 0232 DF93      		push r29
- 403               	/* prologue: function */
- 404               	/* frame size = 0 */
- 405 0234 8C01      		movw r16,r24
- 406               	.LM40:
- 407 0236 C0E0      		ldi r28,lo8(0)
- 408 0238 D0E0      		ldi r29,hi8(0)
- 409               	.LVL18:
- 410               	.LM41:
- 411 023a 70E0      		ldi r23,lo8(0)
- 412               	.LVL19:
- 413 023c 00C0      		rjmp .L21
- 414               	.LVL20:
- 415               	.L23:
- 416               	.LM42:
- 417 023e 2F5F      		subi r18,lo8(-(1))
- 418 0240 3F4F      		sbci r19,hi8(-(1))
- 419 0242 4F4F      		sbci r20,hlo8(-(1))
- 420 0244 5F4F      		sbci r21,hhi8(-(1))
- 421 0246 2093 0000 		sts RXFifo+8,r18
- 422 024a 3093 0000 		sts (RXFifo+8)+1,r19
- 423 024e 4093 0000 		sts (RXFifo+8)+2,r20
- 424 0252 5093 0000 		sts (RXFifo+8)+3,r21
- 425 0256 2150      		subi r18,lo8(-(-1))
- 426 0258 3040      		sbci r19,hi8(-(-1))
- 427 025a 4040      		sbci r20,hlo8(-(-1))
- 428 025c 5040      		sbci r21,hhi8(-(-1))
- 429               	.LM43:
- 430 025e F801      		movw r30,r16
- 431 0260 EC0F      		add r30,r28
- 432 0262 FD1F      		adc r31,r29
- 433 0264 D901      		movw r26,r18
- 434 0266 AF77      		andi r26,lo8(127)
- 435 0268 B070      		andi r27,hi8(127)
- 436 026a A050      		subi r26,lo8(-(RXFifo))
- 437 026c B040      		sbci r27,hi8(-(RXFifo))
- 438 026e 1C96      		adiw r26,12
- 439 0270 8C91      		ld r24,X
- 440 0272 8083      		st Z,r24
- 441               	.LM44:
- 442 0274 2196      		adiw r28,1
- 443               	.LVL21:
- 444               	.L21:
- 445               	.LM45:
- 446 0276 2091 0000 		lds r18,RXFifo+8
- 447 027a 3091 0000 		lds r19,(RXFifo+8)+1
- 448 027e 4091 0000 		lds r20,(RXFifo+8)+2
- 449 0282 5091 0000 		lds r21,(RXFifo+8)+3
- 450 0286 8091 0000 		lds r24,RXFifo+4
- 451 028a 9091 0000 		lds r25,(RXFifo+4)+1
- 452 028e A091 0000 		lds r26,(RXFifo+4)+2
- 453 0292 B091 0000 		lds r27,(RXFifo+4)+3
- 454 0296 2817      		cp r18,r24
- 455 0298 3907      		cpc r19,r25
- 456 029a 4A07      		cpc r20,r26
- 457 029c 5B07      		cpc r21,r27
- 458 029e 01F0      		breq .L22
- 459 02a0 C617      		cp r28,r22
- 460 02a2 D707      		cpc r29,r23
- 461 02a4 04F0      		brlt .L23
- 462               	.L22:
- 463               	.LM46:
- 464 02a6 CE01      		movw r24,r28
- 465               	.LVL22:
- 466               	/* epilogue start */
- 467 02a8 DF91      		pop r29
- 468 02aa CF91      		pop r28
- 469 02ac 1F91      		pop r17
- 470 02ae 0F91      		pop r16
- 471               	.LVL23:
- 472 02b0 0895      		ret
- 473               	.LFE11:
- 475               	.global	SetEcho
- 477               	SetEcho:
- 478               	.LFB12:
- 479               	.LM47:
- 480               	.LVL24:
- 481               	/* prologue: function */
- 482               	/* frame size = 0 */
- 483               	.LM48:
- 484 02b2 8093 0000 		sts m_Echo,r24
- 485               	/* epilogue start */
- 486               	.LM49:
- 487 02b6 0895      		ret
- 488               	.LFE12:
- 490               	.global	HasChars
- 492               	HasChars:
- 493               	.LFB13:
- 494               	.LM50:
- 495               	/* prologue: function */
- 496               	/* frame size = 0 */
- 497               	.LM51:
- 498 02b8 60E0      		ldi r22,lo8(0)
- 499 02ba 2091 0000 		lds r18,RXFifo+8
- 500 02be 3091 0000 		lds r19,(RXFifo+8)+1
- 501 02c2 4091 0000 		lds r20,(RXFifo+8)+2
- 502 02c6 5091 0000 		lds r21,(RXFifo+8)+3
- 503 02ca 8091 0000 		lds r24,RXFifo+4
- 504 02ce 9091 0000 		lds r25,(RXFifo+4)+1
- 505 02d2 A091 0000 		lds r26,(RXFifo+4)+2
- 506 02d6 B091 0000 		lds r27,(RXFifo+4)+3
- 507 02da 2817      		cp r18,r24
- 508 02dc 3907      		cpc r19,r25
- 509 02de 4A07      		cpc r20,r26
- 510 02e0 5B07      		cpc r21,r27
- 511 02e2 01F0      		breq .L28
- 512 02e4 61E0      		ldi r22,lo8(1)
- 513               	.L28:
- 514               	.LM52:
- 515 02e6 862F      		mov r24,r22
- 516               	/* epilogue start */
- 517 02e8 0895      		ret
- 518               	.LFE13:
- 520               	.global	__vector_14
- 522               	__vector_14:
- 523               	.LFB14:
- 524               	.LM53:
- 525 02ea 1F92      		push __zero_reg__
- 526 02ec 0F92      		push r0
- 527 02ee 0FB6      		in r0,__SREG__
- 528 02f0 0F92      		push r0
- 529 02f2 1124      		clr __zero_reg__
- 530 02f4 2F93      		push r18
- 531 02f6 3F93      		push r19
- 532 02f8 4F93      		push r20
- 533 02fa 5F93      		push r21
- 534 02fc 8F93      		push r24
- 535 02fe 9F93      		push r25
- 536 0300 AF93      		push r26
- 537 0302 BF93      		push r27
- 538 0304 EF93      		push r30
- 539 0306 FF93      		push r31
- 540               	/* prologue: Signal */
- 541               	/* frame size = 0 */
- 542               	.LM54:
- 543 0308 8091 0000 		lds r24,TXFifo+8
- 544 030c 9091 0000 		lds r25,(TXFifo+8)+1
- 545 0310 A091 0000 		lds r26,(TXFifo+8)+2
- 546 0314 B091 0000 		lds r27,(TXFifo+8)+3
- 547 0318 2091 0000 		lds r18,TXFifo+4
- 548 031c 3091 0000 		lds r19,(TXFifo+4)+1
- 549 0320 4091 0000 		lds r20,(TXFifo+4)+2
- 550 0324 5091 0000 		lds r21,(TXFifo+4)+3
- 551 0328 8217      		cp r24,r18
- 552 032a 9307      		cpc r25,r19
- 553 032c A407      		cpc r26,r20
- 554 032e B507      		cpc r27,r21
- 555 0330 01F0      		breq .L31
- 556               	.LM55:
- 557 0332 0196      		adiw r24,1
- 558 0334 A11D      		adc r26,__zero_reg__
- 559 0336 B11D      		adc r27,__zero_reg__
- 560 0338 8093 0000 		sts TXFifo+8,r24
- 561 033c 9093 0000 		sts (TXFifo+8)+1,r25
- 562 0340 A093 0000 		sts (TXFifo+8)+2,r26
- 563 0344 B093 0000 		sts (TXFifo+8)+3,r27
- 564 0348 0197      		sbiw r24,1
- 565 034a A109      		sbc r26,__zero_reg__
- 566 034c B109      		sbc r27,__zero_reg__
- 567 034e FC01      		movw r30,r24
- 568 0350 EF77      		andi r30,lo8(127)
- 569 0352 F070      		andi r31,hi8(127)
- 570 0354 E050      		subi r30,lo8(-(TXFifo))
- 571 0356 F040      		sbci r31,hi8(-(TXFifo))
- 572 0358 8485      		ldd r24,Z+12
- 573               	.LVL25:
- 574               	.LM56:
- 575 035a 8CB9      		out 44-32,r24
- 576               	.L31:
- 577               	.LM57:
- 578 035c 8091 0000 		lds r24,TXFifo+8
- 579 0360 9091 0000 		lds r25,(TXFifo+8)+1
- 580 0364 A091 0000 		lds r26,(TXFifo+8)+2
- 581 0368 B091 0000 		lds r27,(TXFifo+8)+3
- 582               	.LVL26:
- 583 036c 8217      		cp r24,r18
- 584 036e 9307      		cpc r25,r19
- 585 0370 A407      		cpc r26,r20
- 586 0372 B507      		cpc r27,r21
- 587 0374 01F4      		brne .L33
- 588               	.LM58:
- 589 0376 5598      		cbi 42-32,5
- 590               	.L33:
- 591               	/* epilogue start */
- 592               	.LM59:
- 593 0378 FF91      		pop r31
- 594 037a EF91      		pop r30
- 595 037c BF91      		pop r27
- 596 037e AF91      		pop r26
- 597 0380 9F91      		pop r25
- 598 0382 8F91      		pop r24
- 599 0384 5F91      		pop r21
- 600 0386 4F91      		pop r20
- 601 0388 3F91      		pop r19
- 602 038a 2F91      		pop r18
- 603 038c 0F90      		pop r0
- 604 038e 0FBE      		out __SREG__,r0
- 605 0390 0F90      		pop r0
- 606 0392 1F90      		pop __zero_reg__
- 607 0394 1895      		reti
- 608               	.LFE14:
- 610               	.global	__vector_13
- 612               	__vector_13:
- 613               	.LFB15:
- 614               	.LM60:
- 615 0396 1F92      		push __zero_reg__
- 616 0398 0F92      		push r0
- 617 039a 0FB6      		in r0,__SREG__
- 618 039c 0F92      		push r0
- 619 039e 1124      		clr __zero_reg__
- 620 03a0 EF92      		push r14
- 621 03a2 FF92      		push r15
- 622 03a4 0F93      		push r16
- 623 03a6 1F93      		push r17
- 624 03a8 2F93      		push r18
- 625 03aa 3F93      		push r19
- 626 03ac 4F93      		push r20
- 627 03ae 5F93      		push r21
- 628 03b0 6F93      		push r22
- 629 03b2 7F93      		push r23
- 630 03b4 8F93      		push r24
- 631 03b6 9F93      		push r25
- 632 03b8 AF93      		push r26
- 633 03ba BF93      		push r27
- 634 03bc EF93      		push r30
- 635 03be FF93      		push r31
- 636               	/* prologue: Signal */
- 637               	/* frame size = 0 */
- 638               	.LM61:
- 639 03c0 8BB1      		in r24,43-32
- 640               	.LVL27:
- 641               	.LM62:
- 642 03c2 6CB1      		in r22,44-32
- 643               	.LVL28:
- 644               	.LM63:
- 645 03c4 84FD      		sbrc r24,4
- 646 03c6 00C0      		rjmp .L36
- 647               	.LVL29:
- 648 03c8 83FD      		sbrc r24,3
- 649 03ca 00C0      		rjmp .L36
- 650 03cc 82FD      		sbrc r24,2
- 651 03ce 00C0      		rjmp .L36
- 652               	.LM64:
- 653 03d0 2091 0000 		lds r18,RXFifo+4
- 654 03d4 3091 0000 		lds r19,(RXFifo+4)+1
- 655 03d8 4091 0000 		lds r20,(RXFifo+4)+2
- 656 03dc 5091 0000 		lds r21,(RXFifo+4)+3
- 657 03e0 7901      		movw r14,r18
- 658 03e2 8A01      		movw r16,r20
- 659 03e4 0894      		sec
- 660 03e6 E11C      		adc r14,__zero_reg__
- 661 03e8 F11C      		adc r15,__zero_reg__
- 662 03ea 011D      		adc r16,__zero_reg__
- 663 03ec 111D      		adc r17,__zero_reg__
- 664 03ee 8091 0000 		lds r24,RXFifo+8
- 665 03f2 9091 0000 		lds r25,(RXFifo+8)+1
- 666 03f6 A091 0000 		lds r26,(RXFifo+8)+2
- 667 03fa B091 0000 		lds r27,(RXFifo+8)+3
- 668 03fe 8E25      		eor r24,r14
- 669 0400 9F25      		eor r25,r15
- 670 0402 A027      		eor r26,r16
- 671 0404 B127      		eor r27,r17
- 672 0406 8F77      		andi r24,lo8(127)
- 673 0408 9070      		andi r25,hi8(127)
- 674 040a A070      		andi r26,hlo8(127)
- 675 040c B070      		andi r27,hhi8(127)
- 676 040e 0097      		sbiw r24,0
- 677 0410 A105      		cpc r26,__zero_reg__
- 678 0412 B105      		cpc r27,__zero_reg__
- 679 0414 01F0      		breq .L36
- 680               	.LM65:
- 681 0416 F901      		movw r30,r18
- 682 0418 EF77      		andi r30,lo8(127)
- 683 041a F070      		andi r31,hi8(127)
- 684 041c E050      		subi r30,lo8(-(RXFifo))
- 685 041e F040      		sbci r31,hi8(-(RXFifo))
- 686 0420 6487      		std Z+12,r22
- 687 0422 E092 0000 		sts RXFifo+4,r14
- 688 0426 F092 0000 		sts (RXFifo+4)+1,r15
- 689 042a 0093 0000 		sts (RXFifo+4)+2,r16
- 690 042e 1093 0000 		sts (RXFifo+4)+3,r17
- 691               	.LM66:
- 692 0432 8091 0000 		lds r24,m_Echo
- 693 0436 8823      		tst r24
- 694 0438 01F0      		breq .L36
- 695               	.LM67:
- 696 043a 862F      		mov r24,r22
- 697 043c 0E94 0000 		call SendChar
- 698               	.LVL30:
- 699               	.L36:
- 700               	/* epilogue start */
- 701               	.LM68:
- 702 0440 FF91      		pop r31
- 703 0442 EF91      		pop r30
- 704 0444 BF91      		pop r27
- 705 0446 AF91      		pop r26
- 706 0448 9F91      		pop r25
- 707 044a 8F91      		pop r24
- 708 044c 7F91      		pop r23
- 709 044e 6F91      		pop r22
- 710               	.LVL31:
- 711 0450 5F91      		pop r21
- 712 0452 4F91      		pop r20
- 713 0454 3F91      		pop r19
- 714 0456 2F91      		pop r18
- 715 0458 1F91      		pop r17
- 716 045a 0F91      		pop r16
- 717 045c FF90      		pop r15
- 718 045e EF90      		pop r14
- 719 0460 0F90      		pop r0
- 720 0462 0FBE      		out __SREG__,r0
- 721 0464 0F90      		pop r0
- 722 0466 1F90      		pop __zero_reg__
- 723 0468 1895      		reti
- 724               	.LFE15:
- 726               		.comm RXFifo,140,1
- 727               		.comm TXFifo,140,1
- 728               		.comm m_Echo,1,1
- 817               	.Letext0:
+   8               		.global __do_copy_data
+   9               		.global __do_clear_bss
+  10               		.text
+  11               	.Ltext0:
+  12               		.cfi_sections	.debug_frame
+  13               	.global	usart_init
+  15               	usart_init:
+  16               	.LFB6:
+  17               		.file 1 "uart.c"
+   1:uart.c        **** #include "uart.h"
+   2:uart.c        **** #include <avr/interrupt.h>
+   3:uart.c        **** #include <avr/pgmspace.h>
+   4:uart.c        **** #include <avr/io.h>
+   5:uart.c        **** #include <util/atomic.h>
+   6:uart.c        **** 
+   7:uart.c        **** // Define USART Baudrate
+   8:uart.c        **** #define BAUD 115200
+   9:uart.c        **** #define MYUBRR (((((F_CPU * 10) / (16L * BAUD)) + 5) / 10) - 1)
+  10:uart.c        **** 
+  11:uart.c        **** #define RINGFIFO_SIZE (128) // serial buffer in bytes (power 2)
+  12:uart.c        **** #define RINGFIFO_MASK (RINGFIFO_SIZE - 1ul) // buffer size mask
+  13:uart.c        **** 
+  14:uart.c        **** // Buffer read / write macros
+  15:uart.c        **** #define RINGFIFO_RESET(ringFifo)      {ringFifo.rdIdx = ringFifo.wrIdx = 0;}
+  16:uart.c        **** #define RINGFIFO_WR(ringFifo, dataIn) {ringFifo.data[RINGFIFO_MASK & ringFifo.wrIdx++] = (dataIn);}
+  17:uart.c        **** #define RINGFIFO_RD(ringFifo, dataOut){ringFifo.rdIdx++; dataOut = ringFifo.data[RINGFIFO_MASK & (r
+  18:uart.c        **** #define RINGFIFO_EMPTY(ringFifo)      (ringFifo.rdIdx == ringFifo.wrIdx)
+  19:uart.c        **** #define RINGFIFO_FULL(ringFifo)       ((RINGFIFO_MASK & ringFifo.rdIdx) == (RINGFIFO_MASK & (ringFi
+  20:uart.c        **** #define RINGFIFO_COUNT(ringFifo)      (RINGFIFO_MASK & (ringFifo.wrIdx - ringFifo.rdIdx))
+  21:uart.c        **** 
+  22:uart.c        **** // buffer type
+  23:uart.c        **** typedef struct{
+  24:uart.c        ****     uint32_t size;
+  25:uart.c        ****     uint32_t wrIdx;
+  26:uart.c        ****     uint32_t rdIdx;
+  27:uart.c        ****     uint8_t data[RINGFIFO_SIZE];
+  28:uart.c        **** } RingFifo_t;
+  29:uart.c        **** 
+  30:uart.c        **** RingFifo_t RXFifo;
+  31:uart.c        **** RingFifo_t TXFifo;
+  32:uart.c        **** 
+  33:uart.c        **** 
+  34:uart.c        **** // Member variables
+  35:uart.c        **** char m_Echo;
+  36:uart.c        **** 
+  37:uart.c        **** void usart_init()
+  38:uart.c        **** {
+  18               		.loc 1 38 0
+  19               		.cfi_startproc
+  20               	/* prologue: function */
+  21               	/* frame size = 0 */
+  22               	/* stack size = 0 */
+  23               	.L__stack_usage = 0
+  39:uart.c        **** 	RINGFIFO_RESET(RXFifo);
+  24               		.loc 1 39 0
+  25 0000 1092 0000 		sts RXFifo+4,__zero_reg__
+  26 0004 1092 0000 		sts RXFifo+4+1,__zero_reg__
+  27 0008 1092 0000 		sts RXFifo+4+2,__zero_reg__
+  28 000c 1092 0000 		sts RXFifo+4+3,__zero_reg__
+  29 0010 1092 0000 		sts RXFifo+8,__zero_reg__
+  30 0014 1092 0000 		sts RXFifo+8+1,__zero_reg__
+  31 0018 1092 0000 		sts RXFifo+8+2,__zero_reg__
+  32 001c 1092 0000 		sts RXFifo+8+3,__zero_reg__
+  40:uart.c        **** 	RINGFIFO_RESET(TXFifo);
+  33               		.loc 1 40 0
+  34 0020 1092 0000 		sts TXFifo+4,__zero_reg__
+  35 0024 1092 0000 		sts TXFifo+4+1,__zero_reg__
+  36 0028 1092 0000 		sts TXFifo+4+2,__zero_reg__
+  37 002c 1092 0000 		sts TXFifo+4+3,__zero_reg__
+  38 0030 1092 0000 		sts TXFifo+8,__zero_reg__
+  39 0034 1092 0000 		sts TXFifo+8+1,__zero_reg__
+  40 0038 1092 0000 		sts TXFifo+8+2,__zero_reg__
+  41 003c 1092 0000 		sts TXFifo+8+3,__zero_reg__
+  41:uart.c        **** 
+  42:uart.c        ****     // Initiate RS232
+  43:uart.c        ****     // USART Baud rate is defined in MYUBRR
+  44:uart.c        ****     UBRRH = MYUBRR >> 8;
+  42               		.loc 1 44 0
+  43 0040 10BC      		out 64-32,__zero_reg__
+  45:uart.c        ****     UBRRL = MYUBRR;
+  44               		.loc 1 45 0
+  45 0042 87E0      		ldi r24,lo8(7)
+  46 0044 89B9      		out 41-32,r24
+  46:uart.c        ****     // UCSRC - USART control register
+  47:uart.c        **** 	// bit 7		register select, must be 1
+  48:uart.c        ****     // bit 6		sync/ascyn 0 = async,  1 = sync
+  49:uart.c        ****     // bit 5-4      parity 00 = disabled
+  50:uart.c        ****     // bit 3        stop bits 0 = 1 bit  1 = 2 bits
+  51:uart.c        ****     // bit 2-1      frame length 11 = 8
+  52:uart.c        ****     // bit 0        clock polarity, should be 0 in asynch mode
+  53:uart.c        ****     UCSRC  = 0b10000110;
+  47               		.loc 1 53 0
+  48 0046 86E8      		ldi r24,lo8(-122)
+  49 0048 80BD      		out 64-32,r24
+  54:uart.c        ****     // Enable RS232, rx, tx, Data Register empty interrupt and rx complete interrupt
+  55:uart.c        ****     UCSRB = _BV(RXEN) | _BV(TXEN) | _BV(UDRIE) | _BV(RXCIE);
+  50               		.loc 1 55 0
+  51 004a 88EB      		ldi r24,lo8(-72)
+  52 004c 8AB9      		out 42-32,r24
+  56:uart.c        ****     //UDR = 0x00; // send an empty byte to indicate powerup.
+  57:uart.c        **** 
+  58:uart.c        **** 
+  59:uart.c        **** 	// Local echo on
+  60:uart.c        **** 	m_Echo = 1;
+  53               		.loc 1 60 0
+  54 004e 81E0      		ldi r24,lo8(1)
+  55 0050 8093 0000 		sts m_Echo,r24
+  56               	/* epilogue start */
+  61:uart.c        **** }
+  57               		.loc 1 61 0
+  58 0054 0895      		ret
+  59               		.cfi_endproc
+  60               	.LFE6:
+  62               	.global	send_char
+  64               	send_char:
+  65               	.LFB7:
+  62:uart.c        **** 
+  63:uart.c        **** 
+  64:uart.c        **** int send_char(char data)
+  65:uart.c        **** {
+  66               		.loc 1 65 0
+  67               		.cfi_startproc
+  68               	.LVL0:
+  69 0056 CF92      		push r12
+  70               	.LCFI0:
+  71               		.cfi_def_cfa_offset 3
+  72               		.cfi_offset 12, -2
+  73 0058 DF92      		push r13
+  74               	.LCFI1:
+  75               		.cfi_def_cfa_offset 4
+  76               		.cfi_offset 13, -3
+  77 005a EF92      		push r14
+  78               	.LCFI2:
+  79               		.cfi_def_cfa_offset 5
+  80               		.cfi_offset 14, -4
+  81 005c FF92      		push r15
+  82               	.LCFI3:
+  83               		.cfi_def_cfa_offset 6
+  84               		.cfi_offset 15, -5
+  85 005e 0F93      		push r16
+  86               	.LCFI4:
+  87               		.cfi_def_cfa_offset 7
+  88               		.cfi_offset 16, -6
+  89 0060 1F93      		push r17
+  90               	.LCFI5:
+  91               		.cfi_def_cfa_offset 8
+  92               		.cfi_offset 17, -7
+  93               	/* prologue: function */
+  94               	/* frame size = 0 */
+  95               	/* stack size = 6 */
+  96               	.L__stack_usage = 6
+  66:uart.c        **** 	if(!RINGFIFO_FULL(TXFifo))
+  97               		.loc 1 66 0
+  98 0062 C090 0000 		lds r12,TXFifo+4
+  99 0066 D090 0000 		lds r13,TXFifo+4+1
+ 100 006a E090 0000 		lds r14,TXFifo+4+2
+ 101 006e F090 0000 		lds r15,TXFifo+4+3
+ 102 0072 9701      		movw r18,r14
+ 103 0074 8601      		movw r16,r12
+ 104 0076 0F5F      		subi r16,lo8(-(1))
+ 105 0078 1F4F      		sbci r17,hi8(-(1))
+ 106 007a 2F4F      		sbci r18,hlo8(-(1))
+ 107 007c 3F4F      		sbci r19,hhi8(-(1))
+ 108 007e 4091 0000 		lds r20,TXFifo+8
+ 109 0082 5091 0000 		lds r21,TXFifo+8+1
+ 110 0086 6091 0000 		lds r22,TXFifo+8+2
+ 111 008a 7091 0000 		lds r23,TXFifo+8+3
+ 112 008e 4027      		eor r20,r16
+ 113 0090 5127      		eor r21,r17
+ 114 0092 6227      		eor r22,r18
+ 115 0094 7327      		eor r23,r19
+ 116 0096 4F77      		andi r20,lo8(127)
+ 117 0098 5070      		andi r21,hi8(127)
+ 118 009a 6070      		andi r22,hlo8(127)
+ 119 009c 7070      		andi r23,hhi8(127)
+ 120 009e 4115      		cp r20,__zero_reg__
+ 121 00a0 5105      		cpc r21,__zero_reg__
+ 122 00a2 6105      		cpc r22,__zero_reg__
+ 123 00a4 7105      		cpc r23,__zero_reg__
+ 124 00a6 01F0      		breq .L4
+  67:uart.c        **** 	{
+  68:uart.c        **** 		RINGFIFO_WR(TXFifo, data);
+ 125               		.loc 1 68 0
+ 126 00a8 B701      		movw r22,r14
+ 127 00aa A601      		movw r20,r12
+ 128 00ac 4F77      		andi r20,lo8(127)
+ 129 00ae 5070      		andi r21,hi8(127)
+ 130 00b0 6070      		andi r22,hlo8(127)
+ 131 00b2 7070      		andi r23,hhi8(127)
+ 132 00b4 4050      		subi r20,lo8(-(TXFifo))
+ 133 00b6 5040      		sbci r21,hi8(-(TXFifo))
+ 134 00b8 FA01      		movw r30,r20
+ 135 00ba 8487      		std Z+12,r24
+ 136 00bc 0093 0000 		sts TXFifo+4,r16
+ 137 00c0 1093 0000 		sts TXFifo+4+1,r17
+ 138 00c4 2093 0000 		sts TXFifo+4+2,r18
+ 139 00c8 3093 0000 		sts TXFifo+4+3,r19
+ 140               	.LVL1:
+ 141               	.LBB19:
+ 142               	.LBB20:
+ 143               	.LBB21:
+ 144               		.file 2 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h
+   1:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** /* Copyright (c) 2007 Dean Camera
+   2:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****    All rights reserved.
+   3:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+   4:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****    Redistribution and use in source and binary forms, with or without
+   5:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****    modification, are permitted provided that the following conditions are met:
+   6:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+   7:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****    * Redistributions of source code must retain the above copyright
+   8:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****      notice, this list of conditions and the following disclaimer.
+   9:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  10:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****    * Redistributions in binary form must reproduce the above copyright
+  11:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****      notice, this list of conditions and the following disclaimer in
+  12:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****      the documentation and/or other materials provided with the
+  13:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****      distribution.
+  14:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  15:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****    * Neither the name of the copyright holders nor the names of
+  16:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****      contributors may be used to endorse or promote products derived
+  17:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****      from this software without specific prior written permission.
+  18:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  19:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  20:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  21:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  22:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  23:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  24:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  25:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  26:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  27:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  28:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  29:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****   POSSIBILITY OF SUCH DAMAGE.
+  30:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** */
+  31:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  32:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** /* $Id: atomic.h 2158 2010-06-10 15:48:28Z joerg_wunsch $ */
+  33:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  34:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** #ifndef _UTIL_ATOMIC_H_
+  35:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** #define _UTIL_ATOMIC_H_ 1
+  36:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  37:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** #include <avr/io.h>
+  38:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** #include <avr/interrupt.h>
+  39:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  40:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** #if !defined(__DOXYGEN__)
+  41:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** /* Internal helper functions. */
+  42:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** static __inline__ uint8_t __iSeiRetVal(void)
+  43:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** {
+  44:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     sei();
+  45:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     return 1;
+  46:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** }
+  47:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  48:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** static __inline__ uint8_t __iCliRetVal(void)
+  49:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** {
+  50:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     cli();
+ 145               		.loc 2 50 0
+ 146               	/* #APP */
+ 147               	 ;  50 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h" 
+ 148 00cc F894      		cli
+ 149               	 ;  0 "" 2
+ 150               	.LVL2:
+ 151               	/* #NOAPP */
+ 152               	.LBE21:
+ 153               	.LBE20:
+  69:uart.c        **** 
+  70:uart.c        **** 		//Ensure that no interrupts can fiddle with the UCSRB while we set the drie flag.
+  71:uart.c        **** 		ATOMIC_BLOCK(ATOMIC_FORCEON)
+  72:uart.c        **** 		{
+  73:uart.c        **** 			UCSRB |= _BV(UDRIE);
+ 154               		.loc 1 73 0
+ 155 00ce 559A      		sbi 42-32,5
+ 156               	.LVL3:
+ 157               	.LBB22:
+ 158               	.LBB23:
+  51:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     return 1;
+  52:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** }
+  53:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** 
+  54:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** static __inline__ void __iSeiParam(const uint8_t *__s)
+  55:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h **** {
+  56:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     sei();
+ 159               		.loc 2 56 0
+ 160               	/* #APP */
+ 161               	 ;  56 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h" 
+ 162 00d0 7894      		sei
+ 163               	 ;  0 "" 2
+  57:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     __asm__ volatile ("" ::: "memory");
+ 164               		.loc 2 57 0
+ 165               	/* #NOAPP */
+ 166               	.LBE23:
+ 167               	.LBE22:
+ 168               	.LBE19:
+  74:uart.c        **** 		}
+  75:uart.c        **** 		return 1;
+ 169               		.loc 1 75 0
+ 170 00d2 81E0      		ldi r24,lo8(1)
+ 171 00d4 90E0      		ldi r25,hi8(1)
+ 172               	.LVL4:
+ 173 00d6 00C0      		rjmp .L3
+ 174               	.LVL5:
+ 175               	.L4:
+  76:uart.c        **** 	}
+  77:uart.c        **** 	else
+  78:uart.c        **** 	{
+  79:uart.c        **** 		return 0;
+ 176               		.loc 1 79 0
+ 177 00d8 80E0      		ldi r24,lo8(0)
+ 178 00da 90E0      		ldi r25,hi8(0)
+ 179               	.LVL6:
+ 180               	.L3:
+ 181               	/* epilogue start */
+  80:uart.c        **** 	}
+  81:uart.c        **** }
+ 182               		.loc 1 81 0
+ 183 00dc 1F91      		pop r17
+ 184 00de 0F91      		pop r16
+ 185 00e0 FF90      		pop r15
+ 186 00e2 EF90      		pop r14
+ 187 00e4 DF90      		pop r13
+ 188 00e6 CF90      		pop r12
+ 189 00e8 0895      		ret
+ 190               		.cfi_endproc
+ 191               	.LFE7:
+ 193               	.global	send_string
+ 195               	send_string:
+ 196               	.LFB8:
+  82:uart.c        **** 
+  83:uart.c        **** 
+  84:uart.c        **** int send_string(const char *data)
+  85:uart.c        **** {
+ 197               		.loc 1 85 0
+ 198               		.cfi_startproc
+ 199               	.LVL7:
+ 200 00ea 8F92      		push r8
+ 201               	.LCFI6:
+ 202               		.cfi_def_cfa_offset 3
+ 203               		.cfi_offset 8, -2
+ 204 00ec 9F92      		push r9
+ 205               	.LCFI7:
+ 206               		.cfi_def_cfa_offset 4
+ 207               		.cfi_offset 9, -3
+ 208 00ee AF92      		push r10
+ 209               	.LCFI8:
+ 210               		.cfi_def_cfa_offset 5
+ 211               		.cfi_offset 10, -4
+ 212 00f0 BF92      		push r11
+ 213               	.LCFI9:
+ 214               		.cfi_def_cfa_offset 6
+ 215               		.cfi_offset 11, -5
+ 216 00f2 EF92      		push r14
+ 217               	.LCFI10:
+ 218               		.cfi_def_cfa_offset 7
+ 219               		.cfi_offset 14, -6
+ 220 00f4 FF92      		push r15
+ 221               	.LCFI11:
+ 222               		.cfi_def_cfa_offset 8
+ 223               		.cfi_offset 15, -7
+ 224 00f6 0F93      		push r16
+ 225               	.LCFI12:
+ 226               		.cfi_def_cfa_offset 9
+ 227               		.cfi_offset 16, -8
+ 228 00f8 1F93      		push r17
+ 229               	.LCFI13:
+ 230               		.cfi_def_cfa_offset 10
+ 231               		.cfi_offset 17, -9
+ 232 00fa CF93      		push r28
+ 233               	.LCFI14:
+ 234               		.cfi_def_cfa_offset 11
+ 235               		.cfi_offset 28, -10
+ 236 00fc DF93      		push r29
+ 237               	.LCFI15:
+ 238               		.cfi_def_cfa_offset 12
+ 239               		.cfi_offset 29, -11
+ 240               	/* prologue: function */
+ 241               	/* frame size = 0 */
+ 242               	/* stack size = 10 */
+ 243               	.L__stack_usage = 10
+ 244               	.LVL8:
+  86:uart.c        **** 	int pos = 0;
+  87:uart.c        **** 	uint8_t tempChar;
+  88:uart.c        **** 
+  89:uart.c        ****     tempChar = data[pos];
+ 245               		.loc 1 89 0
+ 246 00fe DC01      		movw r26,r24
+ 247 0100 EC91      		ld r30,X
+ 248               	.LVL9:
+  90:uart.c        **** 	
+  91:uart.c        **** 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+ 249               		.loc 1 91 0
+ 250 0102 8090 0000 		lds r8,TXFifo+8
+ 251 0106 9090 0000 		lds r9,TXFifo+8+1
+ 252 010a A090 0000 		lds r10,TXFifo+8+2
+ 253 010e B090 0000 		lds r11,TXFifo+8+3
+ 254 0112 7C01      		movw r14,r24
+  86:uart.c        **** 	int pos = 0;
+ 255               		.loc 1 86 0
+ 256 0114 C0E0      		ldi r28,lo8(0)
+ 257 0116 D0E0      		ldi r29,hi8(0)
+ 258               		.loc 1 91 0
+ 259 0118 00C0      		rjmp .L6
+ 260               	.LVL10:
+ 261               	.L8:
+  92:uart.c        **** 	{
+  93:uart.c        **** 		RINGFIFO_WR(TXFifo, data[pos]);
+ 262               		.loc 1 93 0
+ 263 011a F701      		movw r30,r14
+ 264               	.LVL11:
+ 265 011c 8191      		ld r24,Z+
+ 266 011e 7F01      		movw r14,r30
+ 267 0120 4F77      		andi r20,lo8(127)
+ 268 0122 5070      		andi r21,hi8(127)
+ 269 0124 6070      		andi r22,hlo8(127)
+ 270 0126 7070      		andi r23,hhi8(127)
+ 271 0128 FA01      		movw r30,r20
+ 272 012a E050      		subi r30,lo8(-(TXFifo))
+ 273 012c F040      		sbci r31,hi8(-(TXFifo))
+ 274 012e 8487      		std Z+12,r24
+ 275 0130 0093 0000 		sts TXFifo+4,r16
+ 276 0134 1093 0000 		sts TXFifo+4+1,r17
+ 277 0138 2093 0000 		sts TXFifo+4+2,r18
+ 278 013c 3093 0000 		sts TXFifo+4+3,r19
+  94:uart.c        **** 		pos++;
+ 279               		.loc 1 94 0
+ 280 0140 2196      		adiw r28,1
+ 281               	.LVL12:
+  95:uart.c        **** 
+  96:uart.c        ****         tempChar = data[pos];
+ 282               		.loc 1 96 0
+ 283 0142 D701      		movw r26,r14
+ 284 0144 EC91      		ld r30,X
+ 285               	.LVL13:
+ 286               	.L6:
+  91:uart.c        **** 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+ 287               		.loc 1 91 0 discriminator 1
+ 288 0146 4091 0000 		lds r20,TXFifo+4
+ 289 014a 5091 0000 		lds r21,TXFifo+4+1
+ 290 014e 6091 0000 		lds r22,TXFifo+4+2
+ 291 0152 7091 0000 		lds r23,TXFifo+4+3
+ 292 0156 8A01      		movw r16,r20
+ 293 0158 9B01      		movw r18,r22
+ 294 015a 0F5F      		subi r16,lo8(-(1))
+ 295 015c 1F4F      		sbci r17,hi8(-(1))
+ 296 015e 2F4F      		sbci r18,hlo8(-(1))
+ 297 0160 3F4F      		sbci r19,hhi8(-(1))
+ 298 0162 D901      		movw r26,r18
+ 299 0164 C801      		movw r24,r16
+ 300 0166 8825      		eor r24,r8
+ 301 0168 9925      		eor r25,r9
+ 302 016a AA25      		eor r26,r10
+ 303 016c BB25      		eor r27,r11
+ 304 016e 8F77      		andi r24,lo8(127)
+ 305 0170 9070      		andi r25,hi8(127)
+ 306 0172 A070      		andi r26,hlo8(127)
+ 307 0174 B070      		andi r27,hhi8(127)
+ 308 0176 0097      		sbiw r24,0
+ 309 0178 A105      		cpc r26,__zero_reg__
+ 310 017a B105      		cpc r27,__zero_reg__
+ 311 017c 01F0      		breq .L7
+  91:uart.c        **** 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+ 312               		.loc 1 91 0 is_stmt 0 discriminator 2
+ 313 017e EE23      		tst r30
+ 314 0180 01F4      		brne .L8
+ 315               	.L7:
+ 316               	.LVL14:
+ 317               	.LBB24:
+ 318               	.LBB25:
+ 319               	.LBB26:
+  50:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     cli();
+ 320               		.loc 2 50 0 is_stmt 1
+ 321               	/* #APP */
+ 322               	 ;  50 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h" 
+ 323 0182 F894      		cli
+ 324               	 ;  0 "" 2
+ 325               	.LVL15:
+ 326               	/* #NOAPP */
+ 327               	.LBE26:
+ 328               	.LBE25:
+  97:uart.c        **** 	}
+  98:uart.c        **** 
+  99:uart.c        **** 	//Ensure that no interrupts can fiddle with the UCSRB while we set the drie flag.
+ 100:uart.c        **** 	ATOMIC_BLOCK(ATOMIC_FORCEON)
+ 101:uart.c        **** 	{
+ 102:uart.c        **** 		UCSRB |= _BV(UDRIE);
+ 329               		.loc 1 102 0
+ 330 0184 559A      		sbi 42-32,5
+ 331               	.LVL16:
+ 332               	.LBB27:
+ 333               	.LBB28:
+  56:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     sei();
+ 334               		.loc 2 56 0
+ 335               	/* #APP */
+ 336               	 ;  56 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h" 
+ 337 0186 7894      		sei
+ 338               	 ;  0 "" 2
+ 339               		.loc 2 57 0
+ 340               	/* #NOAPP */
+ 341               	.LBE28:
+ 342               	.LBE27:
+ 343               	.LBE24:
+ 103:uart.c        **** 	}
+ 104:uart.c        **** 
+ 105:uart.c        **** 	return pos;
+ 106:uart.c        **** }
+ 344               		.loc 1 106 0
+ 345 0188 CE01      		movw r24,r28
+ 346               	/* epilogue start */
+ 347 018a DF91      		pop r29
+ 348 018c CF91      		pop r28
+ 349               	.LVL17:
+ 350 018e 1F91      		pop r17
+ 351 0190 0F91      		pop r16
+ 352 0192 FF90      		pop r15
+ 353 0194 EF90      		pop r14
+ 354 0196 BF90      		pop r11
+ 355 0198 AF90      		pop r10
+ 356 019a 9F90      		pop r9
+ 357 019c 8F90      		pop r8
+ 358 019e 0895      		ret
+ 359               		.cfi_endproc
+ 360               	.LFE8:
+ 362               	.global	send_string_p
+ 364               	send_string_p:
+ 365               	.LFB9:
+ 107:uart.c        **** 
+ 108:uart.c        **** 
+ 109:uart.c        **** int send_string_p(const char * data)
+ 110:uart.c        **** {
+ 366               		.loc 1 110 0
+ 367               		.cfi_startproc
+ 368               	.LVL18:
+ 369 01a0 8F92      		push r8
+ 370               	.LCFI16:
+ 371               		.cfi_def_cfa_offset 3
+ 372               		.cfi_offset 8, -2
+ 373 01a2 9F92      		push r9
+ 374               	.LCFI17:
+ 375               		.cfi_def_cfa_offset 4
+ 376               		.cfi_offset 9, -3
+ 377 01a4 AF92      		push r10
+ 378               	.LCFI18:
+ 379               		.cfi_def_cfa_offset 5
+ 380               		.cfi_offset 10, -4
+ 381 01a6 BF92      		push r11
+ 382               	.LCFI19:
+ 383               		.cfi_def_cfa_offset 6
+ 384               		.cfi_offset 11, -5
+ 385 01a8 DF92      		push r13
+ 386               	.LCFI20:
+ 387               		.cfi_def_cfa_offset 7
+ 388               		.cfi_offset 13, -6
+ 389 01aa EF92      		push r14
+ 390               	.LCFI21:
+ 391               		.cfi_def_cfa_offset 8
+ 392               		.cfi_offset 14, -7
+ 393 01ac FF92      		push r15
+ 394               	.LCFI22:
+ 395               		.cfi_def_cfa_offset 9
+ 396               		.cfi_offset 15, -8
+ 397 01ae 0F93      		push r16
+ 398               	.LCFI23:
+ 399               		.cfi_def_cfa_offset 10
+ 400               		.cfi_offset 16, -9
+ 401 01b0 1F93      		push r17
+ 402               	.LCFI24:
+ 403               		.cfi_def_cfa_offset 11
+ 404               		.cfi_offset 17, -10
+ 405 01b2 CF93      		push r28
+ 406               	.LCFI25:
+ 407               		.cfi_def_cfa_offset 12
+ 408               		.cfi_offset 28, -11
+ 409 01b4 DF93      		push r29
+ 410               	.LCFI26:
+ 411               		.cfi_def_cfa_offset 13
+ 412               		.cfi_offset 29, -12
+ 413               	/* prologue: function */
+ 414               	/* frame size = 0 */
+ 415               	/* stack size = 11 */
+ 416               	.L__stack_usage = 11
+ 417               	.LVL19:
+ 418               	.LBB29:
+ 111:uart.c        ****     int pos = 0;
+ 112:uart.c        **** 	uint8_t tempChar;
+ 113:uart.c        ****     
+ 114:uart.c        **** 	
+ 115:uart.c        ****     tempChar = pgm_read_byte(&(data[pos]));
+ 419               		.loc 1 115 0
+ 420 01b6 EC01      		movw r28,r24
+ 421               	.LVL20:
+ 422 01b8 FC01      		movw r30,r24
+ 423               	/* #APP */
+ 424               	 ;  115 "uart.c" 1
+ 425 01ba D490      		lpm r13, Z
+ 426               		
+ 427               	 ;  0 "" 2
+ 428               	.LVL21:
+ 429               	/* #NOAPP */
+ 430               	.LBE29:
+ 116:uart.c        **** 	
+ 117:uart.c        **** 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+ 431               		.loc 1 117 0
+ 432 01bc 8090 0000 		lds r8,TXFifo+8
+ 433 01c0 9090 0000 		lds r9,TXFifo+8+1
+ 434 01c4 A090 0000 		lds r10,TXFifo+8+2
+ 435 01c8 B090 0000 		lds r11,TXFifo+8+3
+ 111:uart.c        ****     int pos = 0;
+ 436               		.loc 1 111 0
+ 437 01cc EE24      		clr r14
+ 438 01ce FF24      		clr r15
+ 439               		.loc 1 117 0
+ 440 01d0 00C0      		rjmp .L10
+ 441               	.LVL22:
+ 442               	.L12:
+ 118:uart.c        **** 	{
+ 119:uart.c        **** 		RINGFIFO_WR(TXFifo, data[pos]);
+ 443               		.loc 1 119 0
+ 444 01d2 8991      		ld r24,Y+
+ 445 01d4 4F77      		andi r20,lo8(127)
+ 446 01d6 5070      		andi r21,hi8(127)
+ 447 01d8 6070      		andi r22,hlo8(127)
+ 448 01da 7070      		andi r23,hhi8(127)
+ 449 01dc FA01      		movw r30,r20
+ 450 01de E050      		subi r30,lo8(-(TXFifo))
+ 451 01e0 F040      		sbci r31,hi8(-(TXFifo))
+ 452 01e2 8487      		std Z+12,r24
+ 453 01e4 0093 0000 		sts TXFifo+4,r16
+ 454 01e8 1093 0000 		sts TXFifo+4+1,r17
+ 455 01ec 2093 0000 		sts TXFifo+4+2,r18
+ 456 01f0 3093 0000 		sts TXFifo+4+3,r19
+ 120:uart.c        **** 		pos++;
+ 457               		.loc 1 120 0
+ 458 01f4 0894      		sec
+ 459 01f6 E11C      		adc r14,__zero_reg__
+ 460 01f8 F11C      		adc r15,__zero_reg__
+ 461               	.LVL23:
+ 462               	.LBB30:
+ 121:uart.c        **** 
+ 122:uart.c        ****         tempChar = pgm_read_byte(&(data[pos]));
+ 463               		.loc 1 122 0
+ 464 01fa FE01      		movw r30,r28
+ 465               	/* #APP */
+ 466               	 ;  122 "uart.c" 1
+ 467 01fc D490      		lpm r13, Z
+ 468               		
+ 469               	 ;  0 "" 2
+ 470               	.LVL24:
+ 471               	/* #NOAPP */
+ 472               	.L10:
+ 473               	.LBE30:
+ 117:uart.c        **** 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+ 474               		.loc 1 117 0 discriminator 1
+ 475 01fe 4091 0000 		lds r20,TXFifo+4
+ 476 0202 5091 0000 		lds r21,TXFifo+4+1
+ 477 0206 6091 0000 		lds r22,TXFifo+4+2
+ 478 020a 7091 0000 		lds r23,TXFifo+4+3
+ 479 020e 8A01      		movw r16,r20
+ 480 0210 9B01      		movw r18,r22
+ 481 0212 0F5F      		subi r16,lo8(-(1))
+ 482 0214 1F4F      		sbci r17,hi8(-(1))
+ 483 0216 2F4F      		sbci r18,hlo8(-(1))
+ 484 0218 3F4F      		sbci r19,hhi8(-(1))
+ 485 021a D901      		movw r26,r18
+ 486 021c C801      		movw r24,r16
+ 487 021e 8825      		eor r24,r8
+ 488 0220 9925      		eor r25,r9
+ 489 0222 AA25      		eor r26,r10
+ 490 0224 BB25      		eor r27,r11
+ 491 0226 8F77      		andi r24,lo8(127)
+ 492 0228 9070      		andi r25,hi8(127)
+ 493 022a A070      		andi r26,hlo8(127)
+ 494 022c B070      		andi r27,hhi8(127)
+ 495 022e 0097      		sbiw r24,0
+ 496 0230 A105      		cpc r26,__zero_reg__
+ 497 0232 B105      		cpc r27,__zero_reg__
+ 498 0234 01F0      		breq .L11
+ 117:uart.c        **** 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+ 499               		.loc 1 117 0 is_stmt 0 discriminator 2
+ 500 0236 DD20      		tst r13
+ 501 0238 01F4      		brne .L12
+ 502               	.L11:
+ 503               	.LVL25:
+ 504               	.LBB31:
+ 505               	.LBB32:
+ 506               	.LBB33:
+  50:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     cli();
+ 507               		.loc 2 50 0 is_stmt 1
+ 508               	/* #APP */
+ 509               	 ;  50 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h" 
+ 510 023a F894      		cli
+ 511               	 ;  0 "" 2
+ 512               	.LVL26:
+ 513               	/* #NOAPP */
+ 514               	.LBE33:
+ 515               	.LBE32:
+ 123:uart.c        **** 	}
+ 124:uart.c        ****     
+ 125:uart.c        **** 	//Ensure that no interrupts can fiddle with the UCSRB while we set the drie flag.
+ 126:uart.c        **** 	ATOMIC_BLOCK(ATOMIC_FORCEON)
+ 127:uart.c        **** 	{
+ 128:uart.c        **** 		UCSRB |= _BV(UDRIE);
+ 516               		.loc 1 128 0
+ 517 023c 559A      		sbi 42-32,5
+ 518               	.LVL27:
+ 519               	.LBB34:
+ 520               	.LBB35:
+  56:/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h ****     sei();
+ 521               		.loc 2 56 0
+ 522               	/* #APP */
+ 523               	 ;  56 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/util/atomic.h" 
+ 524 023e 7894      		sei
+ 525               	 ;  0 "" 2
+ 526               		.loc 2 57 0
+ 527               	/* #NOAPP */
+ 528               	.LBE35:
+ 529               	.LBE34:
+ 530               	.LBE31:
+ 129:uart.c        **** 	}
+ 130:uart.c        ****     
+ 131:uart.c        **** 	return pos;
+ 132:uart.c        **** }
+ 531               		.loc 1 132 0
+ 532 0240 C701      		movw r24,r14
+ 533               	/* epilogue start */
+ 534 0242 DF91      		pop r29
+ 535 0244 CF91      		pop r28
+ 536 0246 1F91      		pop r17
+ 537 0248 0F91      		pop r16
+ 538 024a FF90      		pop r15
+ 539 024c EF90      		pop r14
+ 540               	.LVL28:
+ 541 024e DF90      		pop r13
+ 542               	.LVL29:
+ 543 0250 BF90      		pop r11
+ 544 0252 AF90      		pop r10
+ 545 0254 9F90      		pop r9
+ 546 0256 8F90      		pop r8
+ 547 0258 0895      		ret
+ 548               		.cfi_endproc
+ 549               	.LFE9:
+ 551               	.global	receive_char
+ 553               	receive_char:
+ 554               	.LFB10:
+ 133:uart.c        **** 
+ 134:uart.c        **** 
+ 135:uart.c        **** // Receives a character from the SW buffer
+ 136:uart.c        **** int receive_char(char *data)
+ 137:uart.c        **** {
+ 555               		.loc 1 137 0
+ 556               		.cfi_startproc
+ 557               	.LVL30:
+ 558 025a 0F93      		push r16
+ 559               	.LCFI27:
+ 560               		.cfi_def_cfa_offset 3
+ 561               		.cfi_offset 16, -2
+ 562 025c 1F93      		push r17
+ 563               	.LCFI28:
+ 564               		.cfi_def_cfa_offset 4
+ 565               		.cfi_offset 17, -3
+ 566               	/* prologue: function */
+ 567               	/* frame size = 0 */
+ 568               	/* stack size = 2 */
+ 569               	.L__stack_usage = 2
+ 138:uart.c        **** 	char tempValue;
+ 139:uart.c        **** 	if(!RINGFIFO_EMPTY(RXFifo))
+ 570               		.loc 1 139 0
+ 571 025e 4091 0000 		lds r20,RXFifo+8
+ 572 0262 5091 0000 		lds r21,RXFifo+8+1
+ 573 0266 6091 0000 		lds r22,RXFifo+8+2
+ 574 026a 7091 0000 		lds r23,RXFifo+8+3
+ 575 026e 0091 0000 		lds r16,RXFifo+4
+ 576 0272 1091 0000 		lds r17,RXFifo+4+1
+ 577 0276 2091 0000 		lds r18,RXFifo+4+2
+ 578 027a 3091 0000 		lds r19,RXFifo+4+3
+ 579 027e 4017      		cp r20,r16
+ 580 0280 5107      		cpc r21,r17
+ 581 0282 6207      		cpc r22,r18
+ 582 0284 7307      		cpc r23,r19
+ 583 0286 01F0      		breq .L15
+ 140:uart.c        **** 	{
+ 141:uart.c        **** 		RINGFIFO_RD(RXFifo, tempValue);
+ 584               		.loc 1 141 0
+ 585 0288 8A01      		movw r16,r20
+ 586 028a 9B01      		movw r18,r22
+ 587 028c 0F5F      		subi r16,lo8(-(1))
+ 588 028e 1F4F      		sbci r17,hi8(-(1))
+ 589 0290 2F4F      		sbci r18,hlo8(-(1))
+ 590 0292 3F4F      		sbci r19,hhi8(-(1))
+ 591 0294 0093 0000 		sts RXFifo+8,r16
+ 592 0298 1093 0000 		sts RXFifo+8+1,r17
+ 593 029c 2093 0000 		sts RXFifo+8+2,r18
+ 594 02a0 3093 0000 		sts RXFifo+8+3,r19
+ 595 02a4 4F77      		andi r20,lo8(127)
+ 596 02a6 5070      		andi r21,hi8(127)
+ 597 02a8 6070      		andi r22,hlo8(127)
+ 598 02aa 7070      		andi r23,hhi8(127)
+ 599 02ac 4050      		subi r20,lo8(-(RXFifo))
+ 600 02ae 5040      		sbci r21,hi8(-(RXFifo))
+ 601 02b0 FA01      		movw r30,r20
+ 602 02b2 2485      		ldd r18,Z+12
+ 603               	.LVL31:
+ 142:uart.c        **** 		data[0] = tempValue;
+ 604               		.loc 1 142 0
+ 605 02b4 FC01      		movw r30,r24
+ 606 02b6 2083      		st Z,r18
+ 143:uart.c        **** 		return 1;
+ 607               		.loc 1 143 0
+ 608 02b8 81E0      		ldi r24,lo8(1)
+ 609 02ba 90E0      		ldi r25,hi8(1)
+ 610               	.LVL32:
+ 611 02bc 00C0      		rjmp .L14
+ 612               	.LVL33:
+ 613               	.L15:
+ 144:uart.c        **** 	}
+ 145:uart.c        **** 	else
+ 146:uart.c        **** 	{
+ 147:uart.c        **** 		return 0;
+ 614               		.loc 1 147 0
+ 615 02be 80E0      		ldi r24,lo8(0)
+ 616 02c0 90E0      		ldi r25,hi8(0)
+ 617               	.LVL34:
+ 618               	.L14:
+ 619               	/* epilogue start */
+ 148:uart.c        **** 	}
+ 149:uart.c        **** }
+ 620               		.loc 1 149 0
+ 621 02c2 1F91      		pop r17
+ 622 02c4 0F91      		pop r16
+ 623 02c6 0895      		ret
+ 624               		.cfi_endproc
+ 625               	.LFE10:
+ 627               	.global	receive_string
+ 629               	receive_string:
+ 630               	.LFB11:
+ 150:uart.c        **** 
+ 151:uart.c        **** // Receives a string from the SW buffer, 
+ 152:uart.c        **** // data: Pointer to where the data will be received
+ 153:uart.c        **** // Return value is number of chars that were read from the buffer
+ 154:uart.c        **** int receive_string(char * data, int max_chars)
+ 155:uart.c        **** {
+ 631               		.loc 1 155 0
+ 632               		.cfi_startproc
+ 633               	.LVL35:
+ 634 02c8 CF93      		push r28
+ 635               	.LCFI29:
+ 636               		.cfi_def_cfa_offset 3
+ 637               		.cfi_offset 28, -2
+ 638 02ca DF93      		push r29
+ 639               	.LCFI30:
+ 640               		.cfi_def_cfa_offset 4
+ 641               		.cfi_offset 29, -3
+ 642               	/* prologue: function */
+ 643               	/* frame size = 0 */
+ 644               	/* stack size = 2 */
+ 645               	.L__stack_usage = 2
+ 646 02cc EB01      		movw r28,r22
+ 647               	.LVL36:
+ 156:uart.c        **** 	char tempValue;
+ 157:uart.c        **** 	int charsRead = 0;
+ 648               		.loc 1 157 0
+ 649 02ce FC01      		movw r30,r24
+ 650 02d0 20E0      		ldi r18,lo8(0)
+ 651 02d2 30E0      		ldi r19,hi8(0)
+ 158:uart.c        **** 	while(!RINGFIFO_EMPTY(RXFifo) && charsRead < max_chars)
+ 652               		.loc 1 158 0
+ 653 02d4 00C0      		rjmp .L17
+ 654               	.LVL37:
+ 655               	.L19:
+ 159:uart.c        **** 	{
+ 160:uart.c        **** 		RINGFIFO_RD(RXFifo, tempValue);
+ 656               		.loc 1 160 0
+ 657 02d6 AC01      		movw r20,r24
+ 658 02d8 BD01      		movw r22,r26
+ 659 02da 4F5F      		subi r20,lo8(-(1))
+ 660 02dc 5F4F      		sbci r21,hi8(-(1))
+ 661 02de 6F4F      		sbci r22,hlo8(-(1))
+ 662 02e0 7F4F      		sbci r23,hhi8(-(1))
+ 663 02e2 4093 0000 		sts RXFifo+8,r20
+ 664 02e6 5093 0000 		sts RXFifo+8+1,r21
+ 665 02ea 6093 0000 		sts RXFifo+8+2,r22
+ 666 02ee 7093 0000 		sts RXFifo+8+3,r23
+ 667 02f2 8F77      		andi r24,lo8(127)
+ 668 02f4 9070      		andi r25,hi8(127)
+ 669 02f6 A070      		andi r26,hlo8(127)
+ 670 02f8 B070      		andi r27,hhi8(127)
+ 671 02fa 8050      		subi r24,lo8(-(RXFifo))
+ 672 02fc 9040      		sbci r25,hi8(-(RXFifo))
+ 673 02fe DC01      		movw r26,r24
+ 674 0300 1C96      		adiw r26,12
+ 675 0302 8C91      		ld r24,X
+ 676               	.LVL38:
+ 161:uart.c        **** 		data[charsRead] = tempValue;
+ 677               		.loc 1 161 0
+ 678 0304 8193      		st Z+,r24
+ 162:uart.c        **** 		charsRead++;
+ 679               		.loc 1 162 0
+ 680 0306 2F5F      		subi r18,lo8(-(1))
+ 681 0308 3F4F      		sbci r19,hi8(-(1))
+ 682               	.LVL39:
+ 683               	.L17:
+ 158:uart.c        **** 	while(!RINGFIFO_EMPTY(RXFifo) && charsRead < max_chars)
+ 684               		.loc 1 158 0 discriminator 1
+ 685 030a 8091 0000 		lds r24,RXFifo+8
+ 686 030e 9091 0000 		lds r25,RXFifo+8+1
+ 687 0312 A091 0000 		lds r26,RXFifo+8+2
+ 688 0316 B091 0000 		lds r27,RXFifo+8+3
+ 689 031a 4091 0000 		lds r20,RXFifo+4
+ 690 031e 5091 0000 		lds r21,RXFifo+4+1
+ 691 0322 6091 0000 		lds r22,RXFifo+4+2
+ 692 0326 7091 0000 		lds r23,RXFifo+4+3
+ 693 032a 8417      		cp r24,r20
+ 694 032c 9507      		cpc r25,r21
+ 695 032e A607      		cpc r26,r22
+ 696 0330 B707      		cpc r27,r23
+ 697 0332 01F0      		breq .L18
+ 158:uart.c        **** 	while(!RINGFIFO_EMPTY(RXFifo) && charsRead < max_chars)
+ 698               		.loc 1 158 0 is_stmt 0 discriminator 2
+ 699 0334 2C17      		cp r18,r28
+ 700 0336 3D07      		cpc r19,r29
+ 701 0338 04F0      		brlt .L19
+ 702               	.L18:
+ 163:uart.c        **** 	}
+ 164:uart.c        **** 
+ 165:uart.c        **** 	return charsRead;
+ 166:uart.c        **** }
+ 703               		.loc 1 166 0 is_stmt 1
+ 704 033a C901      		movw r24,r18
+ 705               	/* epilogue start */
+ 706 033c DF91      		pop r29
+ 707 033e CF91      		pop r28
+ 708 0340 0895      		ret
+ 709               		.cfi_endproc
+ 710               	.LFE11:
+ 712               	.global	SetEcho
+ 714               	SetEcho:
+ 715               	.LFB12:
+ 167:uart.c        **** 
+ 168:uart.c        **** // Set whether or not to echo received chars
+ 169:uart.c        **** void SetEcho(unsigned char echo)
+ 170:uart.c        **** {
+ 716               		.loc 1 170 0
+ 717               		.cfi_startproc
+ 718               	.LVL40:
+ 719               	/* prologue: function */
+ 720               	/* frame size = 0 */
+ 721               	/* stack size = 0 */
+ 722               	.L__stack_usage = 0
+ 171:uart.c        **** 	m_Echo = echo;
+ 723               		.loc 1 171 0
+ 724 0342 8093 0000 		sts m_Echo,r24
+ 725               	/* epilogue start */
+ 172:uart.c        **** }
+ 726               		.loc 1 172 0
+ 727 0346 0895      		ret
+ 728               		.cfi_endproc
+ 729               	.LFE12:
+ 731               	.global	HasChars
+ 733               	HasChars:
+ 734               	.LFB13:
+ 173:uart.c        **** 
+ 174:uart.c        **** uint8_t HasChars()
+ 175:uart.c        **** {
+ 735               		.loc 1 175 0
+ 736               		.cfi_startproc
+ 737 0348 0F93      		push r16
+ 738               	.LCFI31:
+ 739               		.cfi_def_cfa_offset 3
+ 740               		.cfi_offset 16, -2
+ 741 034a 1F93      		push r17
+ 742               	.LCFI32:
+ 743               		.cfi_def_cfa_offset 4
+ 744               		.cfi_offset 17, -3
+ 745               	/* prologue: function */
+ 746               	/* frame size = 0 */
+ 747               	/* stack size = 2 */
+ 748               	.L__stack_usage = 2
+ 176:uart.c        **** 	return !RINGFIFO_EMPTY(RXFifo);
+ 749               		.loc 1 176 0
+ 750 034c 81E0      		ldi r24,lo8(1)
+ 751 034e 0091 0000 		lds r16,RXFifo+8
+ 752 0352 1091 0000 		lds r17,RXFifo+8+1
+ 753 0356 2091 0000 		lds r18,RXFifo+8+2
+ 754 035a 3091 0000 		lds r19,RXFifo+8+3
+ 755 035e 4091 0000 		lds r20,RXFifo+4
+ 756 0362 5091 0000 		lds r21,RXFifo+4+1
+ 757 0366 6091 0000 		lds r22,RXFifo+4+2
+ 758 036a 7091 0000 		lds r23,RXFifo+4+3
+ 759 036e 0417      		cp r16,r20
+ 760 0370 1507      		cpc r17,r21
+ 761 0372 2607      		cpc r18,r22
+ 762 0374 3707      		cpc r19,r23
+ 763 0376 01F4      		brne .L22
+ 764 0378 80E0      		ldi r24,lo8(0)
+ 765               	.L22:
+ 766               	/* epilogue start */
+ 177:uart.c        **** }
+ 767               		.loc 1 177 0
+ 768 037a 1F91      		pop r17
+ 769 037c 0F91      		pop r16
+ 770 037e 0895      		ret
+ 771               		.cfi_endproc
+ 772               	.LFE13:
+ 774               	.global	__vector_14
+ 776               	__vector_14:
+ 777               	.LFB14:
+ 178:uart.c        **** 
+ 179:uart.c        **** // Interrupt handler for the Data Register Empty Interrupt
+ 180:uart.c        **** // Transmits the first character in the SW Buffer
+ 181:uart.c        **** // and disables the interrupt if there are no more characters to send.
+ 182:uart.c        **** ISR(USART_UDRE_vect)
+ 183:uart.c        **** {
+ 778               		.loc 1 183 0
+ 779               		.cfi_startproc
+ 780 0380 1F92      		push r1
+ 781               	.LCFI33:
+ 782               		.cfi_def_cfa_offset 3
+ 783               		.cfi_offset 1, -2
+ 784 0382 0F92      		push r0
+ 785               	.LCFI34:
+ 786               		.cfi_def_cfa_offset 4
+ 787               		.cfi_offset 0, -3
+ 788 0384 0FB6      		in r0,__SREG__
+ 789 0386 0F92      		push r0
+ 790 0388 1124      		clr __zero_reg__
+ 791 038a 0F93      		push r16
+ 792               	.LCFI35:
+ 793               		.cfi_def_cfa_offset 5
+ 794               		.cfi_offset 16, -4
+ 795 038c 1F93      		push r17
+ 796               	.LCFI36:
+ 797               		.cfi_def_cfa_offset 6
+ 798               		.cfi_offset 17, -5
+ 799 038e 2F93      		push r18
+ 800               	.LCFI37:
+ 801               		.cfi_def_cfa_offset 7
+ 802               		.cfi_offset 18, -6
+ 803 0390 3F93      		push r19
+ 804               	.LCFI38:
+ 805               		.cfi_def_cfa_offset 8
+ 806               		.cfi_offset 19, -7
+ 807 0392 4F93      		push r20
+ 808               	.LCFI39:
+ 809               		.cfi_def_cfa_offset 9
+ 810               		.cfi_offset 20, -8
+ 811 0394 5F93      		push r21
+ 812               	.LCFI40:
+ 813               		.cfi_def_cfa_offset 10
+ 814               		.cfi_offset 21, -9
+ 815 0396 6F93      		push r22
+ 816               	.LCFI41:
+ 817               		.cfi_def_cfa_offset 11
+ 818               		.cfi_offset 22, -10
+ 819 0398 7F93      		push r23
+ 820               	.LCFI42:
+ 821               		.cfi_def_cfa_offset 12
+ 822               		.cfi_offset 23, -11
+ 823 039a 8F93      		push r24
+ 824               	.LCFI43:
+ 825               		.cfi_def_cfa_offset 13
+ 826               		.cfi_offset 24, -12
+ 827 039c 9F93      		push r25
+ 828               	.LCFI44:
+ 829               		.cfi_def_cfa_offset 14
+ 830               		.cfi_offset 25, -13
+ 831 039e AF93      		push r26
+ 832               	.LCFI45:
+ 833               		.cfi_def_cfa_offset 15
+ 834               		.cfi_offset 26, -14
+ 835 03a0 BF93      		push r27
+ 836               	.LCFI46:
+ 837               		.cfi_def_cfa_offset 16
+ 838               		.cfi_offset 27, -15
+ 839 03a2 EF93      		push r30
+ 840               	.LCFI47:
+ 841               		.cfi_def_cfa_offset 17
+ 842               		.cfi_offset 30, -16
+ 843 03a4 FF93      		push r31
+ 844               	.LCFI48:
+ 845               		.cfi_def_cfa_offset 18
+ 846               		.cfi_offset 31, -17
+ 847               	/* prologue: Signal */
+ 848               	/* frame size = 0 */
+ 849               	/* stack size = 17 */
+ 850               	.L__stack_usage = 17
+ 184:uart.c        **** 	char tempValue;
+ 185:uart.c        **** 	if(!RINGFIFO_EMPTY(TXFifo))
+ 851               		.loc 1 185 0
+ 852 03a6 8091 0000 		lds r24,TXFifo+8
+ 853 03aa 9091 0000 		lds r25,TXFifo+8+1
+ 854 03ae A091 0000 		lds r26,TXFifo+8+2
+ 855 03b2 B091 0000 		lds r27,TXFifo+8+3
+ 856 03b6 4091 0000 		lds r20,TXFifo+4
+ 857 03ba 5091 0000 		lds r21,TXFifo+4+1
+ 858 03be 6091 0000 		lds r22,TXFifo+4+2
+ 859 03c2 7091 0000 		lds r23,TXFifo+4+3
+ 860 03c6 8417      		cp r24,r20
+ 861 03c8 9507      		cpc r25,r21
+ 862 03ca A607      		cpc r26,r22
+ 863 03cc B707      		cpc r27,r23
+ 864 03ce 01F0      		breq .L24
+ 186:uart.c        **** 	{
+ 187:uart.c        **** 		RINGFIFO_RD(TXFifo, tempValue);
+ 865               		.loc 1 187 0
+ 866 03d0 8C01      		movw r16,r24
+ 867 03d2 9D01      		movw r18,r26
+ 868 03d4 0F5F      		subi r16,lo8(-(1))
+ 869 03d6 1F4F      		sbci r17,hi8(-(1))
+ 870 03d8 2F4F      		sbci r18,hlo8(-(1))
+ 871 03da 3F4F      		sbci r19,hhi8(-(1))
+ 872 03dc 0093 0000 		sts TXFifo+8,r16
+ 873 03e0 1093 0000 		sts TXFifo+8+1,r17
+ 874 03e4 2093 0000 		sts TXFifo+8+2,r18
+ 875 03e8 3093 0000 		sts TXFifo+8+3,r19
+ 876 03ec 8F77      		andi r24,lo8(127)
+ 877 03ee 9070      		andi r25,hi8(127)
+ 878 03f0 A070      		andi r26,hlo8(127)
+ 879 03f2 B070      		andi r27,hhi8(127)
+ 880 03f4 8050      		subi r24,lo8(-(TXFifo))
+ 881 03f6 9040      		sbci r25,hi8(-(TXFifo))
+ 882 03f8 FC01      		movw r30,r24
+ 883 03fa 8485      		ldd r24,Z+12
+ 884               	.LVL41:
+ 188:uart.c        **** 		UDR = tempValue;
+ 885               		.loc 1 188 0
+ 886 03fc 8CB9      		out 44-32,r24
+ 887               	.LVL42:
+ 888               	.L24:
+ 189:uart.c        **** 	}
+ 190:uart.c        **** 
+ 191:uart.c        **** 	// Clear the Data register empty interrupt if there are no more data to be transmitted
+ 192:uart.c        **** 	// This will be set by the sender functions once more data is loaded to the buffer.
+ 193:uart.c        **** 	if(RINGFIFO_EMPTY(TXFifo))
+ 889               		.loc 1 193 0
+ 890 03fe 8091 0000 		lds r24,TXFifo+8
+ 891 0402 9091 0000 		lds r25,TXFifo+8+1
+ 892 0406 A091 0000 		lds r26,TXFifo+8+2
+ 893 040a B091 0000 		lds r27,TXFifo+8+3
+ 894 040e 8417      		cp r24,r20
+ 895 0410 9507      		cpc r25,r21
+ 896 0412 A607      		cpc r26,r22
+ 897 0414 B707      		cpc r27,r23
+ 898 0416 01F4      		brne .L23
+ 194:uart.c        **** 	{
+ 195:uart.c        **** 		UCSRB &= ~_BV(UDRIE);
+ 899               		.loc 1 195 0
+ 900 0418 5598      		cbi 42-32,5
+ 901               	.L23:
+ 902               	/* epilogue start */
+ 196:uart.c        **** 	}
+ 197:uart.c        **** }
+ 903               		.loc 1 197 0
+ 904 041a FF91      		pop r31
+ 905 041c EF91      		pop r30
+ 906 041e BF91      		pop r27
+ 907 0420 AF91      		pop r26
+ 908 0422 9F91      		pop r25
+ 909 0424 8F91      		pop r24
+ 910 0426 7F91      		pop r23
+ 911 0428 6F91      		pop r22
+ 912 042a 5F91      		pop r21
+ 913 042c 4F91      		pop r20
+ 914 042e 3F91      		pop r19
+ 915 0430 2F91      		pop r18
+ 916 0432 1F91      		pop r17
+ 917 0434 0F91      		pop r16
+ 918 0436 0F90      		pop r0
+ 919 0438 0FBE      		out __SREG__,r0
+ 920 043a 0F90      		pop r0
+ 921 043c 1F90      		pop r1
+ 922 043e 1895      		reti
+ 923               		.cfi_endproc
+ 924               	.LFE14:
+ 926               	.global	__vector_13
+ 928               	__vector_13:
+ 929               	.LFB15:
+ 198:uart.c        **** 
+ 199:uart.c        **** // Interrupt handler for the Receive Completed interrupt
+ 200:uart.c        **** // Re
+ 201:uart.c        **** ISR(USART_RXC_vect)
+ 202:uart.c        **** {
+ 930               		.loc 1 202 0
+ 931               		.cfi_startproc
+ 932 0440 1F92      		push r1
+ 933               	.LCFI49:
+ 934               		.cfi_def_cfa_offset 3
+ 935               		.cfi_offset 1, -2
+ 936 0442 0F92      		push r0
+ 937               	.LCFI50:
+ 938               		.cfi_def_cfa_offset 4
+ 939               		.cfi_offset 0, -3
+ 940 0444 0FB6      		in r0,__SREG__
+ 941 0446 0F92      		push r0
+ 942 0448 1124      		clr __zero_reg__
+ 943 044a CF92      		push r12
+ 944               	.LCFI51:
+ 945               		.cfi_def_cfa_offset 5
+ 946               		.cfi_offset 12, -4
+ 947 044c DF92      		push r13
+ 948               	.LCFI52:
+ 949               		.cfi_def_cfa_offset 6
+ 950               		.cfi_offset 13, -5
+ 951 044e EF92      		push r14
+ 952               	.LCFI53:
+ 953               		.cfi_def_cfa_offset 7
+ 954               		.cfi_offset 14, -6
+ 955 0450 FF92      		push r15
+ 956               	.LCFI54:
+ 957               		.cfi_def_cfa_offset 8
+ 958               		.cfi_offset 15, -7
+ 959 0452 0F93      		push r16
+ 960               	.LCFI55:
+ 961               		.cfi_def_cfa_offset 9
+ 962               		.cfi_offset 16, -8
+ 963 0454 1F93      		push r17
+ 964               	.LCFI56:
+ 965               		.cfi_def_cfa_offset 10
+ 966               		.cfi_offset 17, -9
+ 967 0456 2F93      		push r18
+ 968               	.LCFI57:
+ 969               		.cfi_def_cfa_offset 11
+ 970               		.cfi_offset 18, -10
+ 971 0458 3F93      		push r19
+ 972               	.LCFI58:
+ 973               		.cfi_def_cfa_offset 12
+ 974               		.cfi_offset 19, -11
+ 975 045a 4F93      		push r20
+ 976               	.LCFI59:
+ 977               		.cfi_def_cfa_offset 13
+ 978               		.cfi_offset 20, -12
+ 979 045c 5F93      		push r21
+ 980               	.LCFI60:
+ 981               		.cfi_def_cfa_offset 14
+ 982               		.cfi_offset 21, -13
+ 983 045e 6F93      		push r22
+ 984               	.LCFI61:
+ 985               		.cfi_def_cfa_offset 15
+ 986               		.cfi_offset 22, -14
+ 987 0460 7F93      		push r23
+ 988               	.LCFI62:
+ 989               		.cfi_def_cfa_offset 16
+ 990               		.cfi_offset 23, -15
+ 991 0462 8F93      		push r24
+ 992               	.LCFI63:
+ 993               		.cfi_def_cfa_offset 17
+ 994               		.cfi_offset 24, -16
+ 995 0464 9F93      		push r25
+ 996               	.LCFI64:
+ 997               		.cfi_def_cfa_offset 18
+ 998               		.cfi_offset 25, -17
+ 999 0466 AF93      		push r26
+ 1000               	.LCFI65:
+ 1001               		.cfi_def_cfa_offset 19
+ 1002               		.cfi_offset 26, -18
+ 1003 0468 BF93      		push r27
+ 1004               	.LCFI66:
+ 1005               		.cfi_def_cfa_offset 20
+ 1006               		.cfi_offset 27, -19
+ 1007 046a EF93      		push r30
+ 1008               	.LCFI67:
+ 1009               		.cfi_def_cfa_offset 21
+ 1010               		.cfi_offset 30, -20
+ 1011 046c FF93      		push r31
+ 1012               	.LCFI68:
+ 1013               		.cfi_def_cfa_offset 22
+ 1014               		.cfi_offset 31, -21
+ 1015               	/* prologue: Signal */
+ 1016               	/* frame size = 0 */
+ 1017               	/* stack size = 21 */
+ 1018               	.L__stack_usage = 21
+ 203:uart.c        **** 	// Status must be read before data
+ 204:uart.c        **** 	char Status = UCSRA;
+ 1019               		.loc 1 204 0
+ 1020 046e 9BB1      		in r25,43-32
+ 1021               	.LVL43:
+ 205:uart.c        **** 	char tempValue = UDR;
+ 1022               		.loc 1 205 0
+ 1023 0470 8CB1      		in r24,44-32
+ 1024               	.LVL44:
+ 206:uart.c        **** 	// If there is no error when receiving
+ 207:uart.c        **** 	if(!(Status & _BV(FE)) && !(Status & _BV(DOR)) && !(Status & _BV(PE)))
+ 1025               		.loc 1 207 0
+ 1026 0472 94FD      		sbrc r25,4
+ 1027 0474 00C0      		rjmp .L26
+ 1028               		.loc 1 207 0 is_stmt 0 discriminator 1
+ 1029 0476 93FD      		sbrc r25,3
+ 1030 0478 00C0      		rjmp .L26
+ 1031 047a 92FD      		sbrc r25,2
+ 1032 047c 00C0      		rjmp .L26
+ 208:uart.c        **** 	{
+ 209:uart.c        **** 		// If there is room in the buffer
+ 210:uart.c        **** 		if(!RINGFIFO_FULL(RXFifo))
+ 1033               		.loc 1 210 0 is_stmt 1
+ 1034 047e C090 0000 		lds r12,RXFifo+4
+ 1035 0482 D090 0000 		lds r13,RXFifo+4+1
+ 1036 0486 E090 0000 		lds r14,RXFifo+4+2
+ 1037 048a F090 0000 		lds r15,RXFifo+4+3
+ 1038 048e 9701      		movw r18,r14
+ 1039 0490 8601      		movw r16,r12
+ 1040 0492 0F5F      		subi r16,lo8(-(1))
+ 1041 0494 1F4F      		sbci r17,hi8(-(1))
+ 1042 0496 2F4F      		sbci r18,hlo8(-(1))
+ 1043 0498 3F4F      		sbci r19,hhi8(-(1))
+ 1044 049a 4091 0000 		lds r20,RXFifo+8
+ 1045 049e 5091 0000 		lds r21,RXFifo+8+1
+ 1046 04a2 6091 0000 		lds r22,RXFifo+8+2
+ 1047 04a6 7091 0000 		lds r23,RXFifo+8+3
+ 1048 04aa 4027      		eor r20,r16
+ 1049 04ac 5127      		eor r21,r17
+ 1050 04ae 6227      		eor r22,r18
+ 1051 04b0 7327      		eor r23,r19
+ 1052 04b2 4F77      		andi r20,lo8(127)
+ 1053 04b4 5070      		andi r21,hi8(127)
+ 1054 04b6 6070      		andi r22,hlo8(127)
+ 1055 04b8 7070      		andi r23,hhi8(127)
+ 1056 04ba 4115      		cp r20,__zero_reg__
+ 1057 04bc 5105      		cpc r21,__zero_reg__
+ 1058 04be 6105      		cpc r22,__zero_reg__
+ 1059 04c0 7105      		cpc r23,__zero_reg__
+ 1060 04c2 01F0      		breq .L26
+ 211:uart.c        **** 		{
+ 212:uart.c        **** 			RINGFIFO_WR(RXFifo, tempValue);
+ 1061               		.loc 1 212 0
+ 1062 04c4 B701      		movw r22,r14
+ 1063 04c6 A601      		movw r20,r12
+ 1064 04c8 4F77      		andi r20,lo8(127)
+ 1065 04ca 5070      		andi r21,hi8(127)
+ 1066 04cc 6070      		andi r22,hlo8(127)
+ 1067 04ce 7070      		andi r23,hhi8(127)
+ 1068 04d0 4050      		subi r20,lo8(-(RXFifo))
+ 1069 04d2 5040      		sbci r21,hi8(-(RXFifo))
+ 1070 04d4 FA01      		movw r30,r20
+ 1071 04d6 8487      		std Z+12,r24
+ 1072 04d8 0093 0000 		sts RXFifo+4,r16
+ 1073 04dc 1093 0000 		sts RXFifo+4+1,r17
+ 1074 04e0 2093 0000 		sts RXFifo+4+2,r18
+ 1075 04e4 3093 0000 		sts RXFifo+4+3,r19
+ 213:uart.c        **** 			if(m_Echo != 0)
+ 1076               		.loc 1 213 0
+ 1077 04e8 9091 0000 		lds r25,m_Echo
+ 1078               	.LVL45:
+ 1079 04ec 9923      		tst r25
+ 1080 04ee 01F0      		breq .L26
+ 214:uart.c        **** 			{
+ 215:uart.c        **** 				send_char(tempValue);
+ 1081               		.loc 1 215 0
+ 1082 04f0 0E94 0000 		call send_char
+ 1083               	.LVL46:
+ 1084               	.L26:
+ 1085               	/* epilogue start */
+ 216:uart.c        **** 			}
+ 217:uart.c        **** 		}
+ 218:uart.c        **** 	}
+ 219:uart.c        **** }...
+ 1086               		.loc 1 219 0
+ 1087 04f4 FF91      		pop r31
+ 1088 04f6 EF91      		pop r30
+ 1089 04f8 BF91      		pop r27
+ 1090 04fa AF91      		pop r26
+ 1091 04fc 9F91      		pop r25
+ 1092 04fe 8F91      		pop r24
+ 1093 0500 7F91      		pop r23
+ 1094 0502 6F91      		pop r22
+ 1095 0504 5F91      		pop r21
+ 1096 0506 4F91      		pop r20
+ 1097 0508 3F91      		pop r19
+ 1098 050a 2F91      		pop r18
+ 1099 050c 1F91      		pop r17
+ 1100 050e 0F91      		pop r16
+ 1101 0510 FF90      		pop r15
+ 1102 0512 EF90      		pop r14
+ 1103 0514 DF90      		pop r13
+ 1104 0516 CF90      		pop r12
+ 1105 0518 0F90      		pop r0
+ 1106 051a 0FBE      		out __SREG__,r0
+ 1107 051c 0F90      		pop r0
+ 1108 051e 1F90      		pop r1
+ 1109 0520 1895      		reti
+ 1110               		.cfi_endproc
+ 1111               	.LFE15:
+ 1113               		.comm m_Echo,1,1
+ 1114               		.comm TXFifo,140,1
+ 1115               		.comm RXFifo,140,1
+ 1116               	.Letext0:
+ 1117               		.file 3 "/usr/local/CrossPack-AVR-20130212/lib/gcc/avr/4.6.2/../../../../avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 uart.c
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:2      *ABS*:0000003f __SREG__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:3      *ABS*:0000003e __SP_H__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:4      *ABS*:0000003d __SP_L__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:5      *ABS*:00000034 __CCP__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:6      *ABS*:00000000 __tmp_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:7      *ABS*:00000001 __zero_reg__
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:18     .text:00000000 USARTInit
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:2      *ABS*:0000003f __SREG__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:3      *ABS*:0000003e __SP_H__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:4      *ABS*:0000003d __SP_L__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:5      *ABS*:00000034 __CCP__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:6      *ABS*:00000000 __tmp_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:7      *ABS*:00000001 __zero_reg__
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:15     .text:00000000 usart_init
                             *COM*:0000008c RXFifo
                             *COM*:0000008c TXFifo
                             *COM*:00000001 m_Echo
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:62     .text:00000056 SendChar
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:157    .text:000000de SendString
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:332    .text:000001bc ReceiveChar
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:395    .text:0000022c ReceiveString
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:477    .text:000002b2 SetEcho
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:492    .text:000002b8 HasChars
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:522    .text:000002ea __vector_14
-C:\Users\JOHAN~1.STR\AppData\Local\Temp/cccn1QqW.s:612    .text:00000396 __vector_13
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:64     .text:00000056 send_char
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:195    .text:000000ea send_string
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:364    .text:000001a0 send_string_p
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:553    .text:0000025a receive_char
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:629    .text:000002c8 receive_string
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:714    .text:00000342 SetEcho
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:733    .text:00000348 HasChars
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:776    .text:00000380 __vector_14
+/var/folders/_t/3n28601j4f36k4h8t71c5mvr0000gn/T//cc0Y3pLu.s:928    .text:00000440 __vector_13
 
 UNDEFINED SYMBOLS
+__do_copy_data
 __do_clear_bss

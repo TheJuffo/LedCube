@@ -20,6 +20,10 @@
 #define GOL_WRAP 0x01
 
 
+unsigned char gol_count_neighbors (int x, int y, int z);
+void gol_nextgen (void);
+int gol_count_changes (void);
+
 
 void gol_play (int iterations, uint16_t delay)
 {
@@ -27,7 +31,7 @@ void gol_play (int iterations, uint16_t delay)
 	
 	for (i = 0; i < iterations; i++)
 	{
-		DebugBlink(LED_GREEN);
+		debug_blink(LED_GREEN);
 	
 		gol_nextgen();
 		

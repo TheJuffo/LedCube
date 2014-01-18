@@ -4,15 +4,45 @@
 #include <avr/io.h>
 #include <util/atomic.h>
 
-void USARTInit()
+// Define USART Baudrate
+#define BAUD 115200
+#define MYUBRR (((((F_CPU * 10) / (16L * BAUD)) + 5) / 10) - 1)
+
+#define RINGFIFO_SIZE (128) // serial buffer in bytes (power 2)
+#define RINGFIFO_MASK (RINGFIFO_SIZE - 1ul) // buffer size mask
+
+// Buffer read / write macros
+#define RINGFIFO_RESET(ringFifo)      {ringFifo.rdIdx = ringFifo.wrIdx = 0;}
+#define RINGFIFO_WR(ringFifo, dataIn) {ringFifo.data[RINGFIFO_MASK & ringFifo.wrIdx++] = (dataIn);}
+#define RINGFIFO_RD(ringFifo, dataOut){ringFifo.rdIdx++; dataOut = ringFifo.data[RINGFIFO_MASK & (ringFifo.rdIdx-1)];}
+#define RINGFIFO_EMPTY(ringFifo)      (ringFifo.rdIdx == ringFifo.wrIdx)
+#define RINGFIFO_FULL(ringFifo)       ((RINGFIFO_MASK & ringFifo.rdIdx) == (RINGFIFO_MASK & (ringFifo.wrIdx+1)))
+#define RINGFIFO_COUNT(ringFifo)      (RINGFIFO_MASK & (ringFifo.wrIdx - ringFifo.rdIdx))
+
+// buffer type
+typedef struct{
+    uint32_t size;
+    uint32_t wrIdx;
+    uint32_t rdIdx;
+    uint8_t data[RINGFIFO_SIZE];
+} RingFifo_t;
+
+RingFifo_t RXFifo;
+RingFifo_t TXFifo;
+
+
+// Member variables
+char m_Echo;
+
+void usart_init()
 {
 	RINGFIFO_RESET(RXFifo);
 	RINGFIFO_RESET(TXFifo);
 
     // Initiate RS232
     // USART Baud rate is defined in MYUBRR
-    UBRRH = (unsigned char)(MYUBRR >> 8);
-    UBRRL = (unsigned char)(MYUBRR);
+    UBRRH = MYUBRR >> 8;
+    UBRRL = MYUBRR;
     // UCSRC - USART control register
 	// bit 7		register select, must be 1
     // bit 6		sync/ascyn 0 = async,  1 = sync
@@ -23,12 +53,15 @@ void USARTInit()
     UCSRC  = 0b10000110;
     // Enable RS232, rx, tx, Data Register empty interrupt and rx complete interrupt
     UCSRB = _BV(RXEN) | _BV(TXEN) | _BV(UDRIE) | _BV(RXCIE);
+    //UDR = 0x00; // send an empty byte to indicate powerup.
+
 
 	// Local echo on
 	m_Echo = 1;
 }
 
-int SendChar(char data)
+
+int send_char(char data)
 {
 	if(!RINGFIFO_FULL(TXFifo))
 	{
@@ -47,33 +80,20 @@ int SendChar(char data)
 	}
 }
 
-int SendString(const char * data, uint8_t prgMem)
+
+int send_string(const char *data)
 {
 	int pos = 0;
 	uint8_t tempChar;
 
-	if(prgMem == 0)
-	{
-		tempChar = data[pos];
-	}
-	else
-	{
-		tempChar = pgm_read_byte(&(data[pos]));
-	}
+    tempChar = data[pos];
 	
 	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
 	{
 		RINGFIFO_WR(TXFifo, data[pos]);
 		pos++;
 
-		if(prgMem == 0)
-		{
-			tempChar = data[pos];
-		}
-		else
-		{
-			tempChar = pgm_read_byte(&(data[pos]));
-		}
+        tempChar = data[pos];
 	}
 
 	//Ensure that no interrupts can fiddle with the UCSRB while we set the drie flag.
@@ -85,8 +105,35 @@ int SendString(const char * data, uint8_t prgMem)
 	return pos;
 }
 
+
+int send_string_p(const char * data)
+{
+    int pos = 0;
+	uint8_t tempChar;
+    
+	
+    tempChar = pgm_read_byte(&(data[pos]));
+	
+	while(!RINGFIFO_FULL(TXFifo) && tempChar != 0)
+	{
+		RINGFIFO_WR(TXFifo, data[pos]);
+		pos++;
+
+        tempChar = pgm_read_byte(&(data[pos]));
+	}
+    
+	//Ensure that no interrupts can fiddle with the UCSRB while we set the drie flag.
+	ATOMIC_BLOCK(ATOMIC_FORCEON)
+	{
+		UCSRB |= _BV(UDRIE);
+	}
+    
+	return pos;
+}
+
+
 // Receives a character from the SW buffer
-int ReceiveChar(char *data)
+int receive_char(char *data)
 {
 	char tempValue;
 	if(!RINGFIFO_EMPTY(RXFifo))
@@ -101,14 +148,15 @@ int ReceiveChar(char *data)
 	}
 }
 
+
 // Receives a string from the SW buffer, 
-// data: Pointer to a 
+// data: Pointer to where the data will be received
 // Return value is number of chars that were read from the buffer
-int ReceiveString(char * data, uint8_t maxChars)
+int receive_string(char * data, int max_chars)
 {
 	char tempValue;
 	int charsRead = 0;
-	while(!RINGFIFO_EMPTY(RXFifo) && charsRead < maxChars)
+	while(!RINGFIFO_EMPTY(RXFifo) && charsRead < max_chars)
 	{
 		RINGFIFO_RD(RXFifo, tempValue);
 		data[charsRead] = tempValue;
@@ -118,16 +166,19 @@ int ReceiveString(char * data, uint8_t maxChars)
 	return charsRead;
 }
 
+
 // Set whether or not to echo received chars
 void SetEcho(unsigned char echo)
 {
 	m_Echo = echo;
 }
 
+
 uint8_t HasChars()
 {
 	return !RINGFIFO_EMPTY(RXFifo);
 }
+
 
 // Interrupt handler for the Data Register Empty Interrupt
 // Transmits the first character in the SW Buffer
@@ -149,6 +200,7 @@ ISR(USART_UDRE_vect)
 	}
 }
 
+
 // Interrupt handler for the Receive Completed interrupt
 // Re
 ISR(USART_RXC_vect)
@@ -165,7 +217,7 @@ ISR(USART_RXC_vect)
 			RINGFIFO_WR(RXFifo, tempValue);
 			if(m_Echo != 0)
 			{
-				SendChar(tempValue);
+				send_char(tempValue);
 			}
 		}
 	}
