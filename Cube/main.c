@@ -12,6 +12,10 @@
 #include "uart.h"
 //#include <stdbool.h>
 
+const char [CUBE_SIZE] layer_lookup = {2, 1, 0, 3, 4, 5, 6, 7 };
+//const char [CUBE_SIZE] shift_lookup = {
+
+
 // Main loop
 // the AVR enters this function at boot time
 int main (void)
@@ -118,7 +122,7 @@ ISR(TIMER2_COMP_vect)
         SHIFTCLK_ADDR |= SHIFTCLK_MASK;
     }
     
-    LAYER_SELECT = (0x01 << current_layer); // Transistor ON for current layer}
+    LAYER_SELECT = (0x01 << layer_lookup[current_layer]); // Transistor ON for current layer}
 }
 /*
  * This routine does several things
