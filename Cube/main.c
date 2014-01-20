@@ -12,8 +12,8 @@
 #include "uart.h"
 //#include <stdbool.h>
 
-const char [CUBE_SIZE] layer_lookup = {2, 1, 0, 3, 4, 5, 6, 7 };
-//const char [CUBE_SIZE] shift_lookup = {
+char layer_lookup[CUBE_SIZE] = { 2, 1, 0, 3, 4, 5, 6, 7 };
+char shift_lookup[CUBE_SIZE] = { 4, 3, 2, 1, 0, 5, 6, 7 };
 
 
 // Main loop
@@ -112,12 +112,12 @@ ISR(TIMER2_COMP_vect)
     
     // Loop through all 8 bytes of data in the current layer in reverse order
     // and shift it onto the layer.
-    for (i = 7; i >= 0; i--)
+    for (i = 0; i < CUBE_SIZE; i++)
     {
         // Set the shift clock to 0
         SHIFTCLK_ADDR &= ~SHIFTCLK_MASK;
         // Set the data on the data-bus of the latch array.
-        DATA_BUS = cube[current_layer][i];
+        DATA_BUS = cube[current_layer][shift_lookup[i]];
         // Set the shift clock to 1 to create a rising edge and shift in the data on the data bus.
         SHIFTCLK_ADDR |= SHIFTCLK_MASK;
     }
